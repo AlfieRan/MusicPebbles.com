@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { UseProfile } from "./hooks/useProfile";
+import { UseProfile } from "../utils/hooks/useProfile";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loading } from "../components/dashboard/loading";

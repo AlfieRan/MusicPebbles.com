@@ -1,5 +1,5 @@
 import { Box, Center, Link, Text } from "@chakra-ui/react";
-import { UseProfile } from "./hooks/useProfile";
+import { UseProfile } from "../utils/hooks/useProfile";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 

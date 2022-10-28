@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { profile } from "../../utils/types/oauth";
+import { profile } from "../types/oauth";
 
 export function UseProfile() {
     const [profile, setProfile] = useState<profile | undefined>(undefined);
