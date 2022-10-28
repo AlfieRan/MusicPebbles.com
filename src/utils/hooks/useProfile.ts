@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { profile } from "../types/oauth";
+import { profileType } from "../types/oauth";
 
-export function UseProfile() {
-    const [profile, setProfile] = useState<profile | undefined>(undefined);
+export function useProfile() {
+    const [profile, setProfile] = useState<profileType | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
 

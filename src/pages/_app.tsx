@@ -1,7 +1,9 @@
 import React from "react";
+import { Flex } from "@chakra-ui/react";
 import { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/provider";
 import { extendTheme } from "@chakra-ui/react";
+import "tailwindcss/tailwind.css";
 
 const theme = extendTheme({
     styles: {
@@ -29,8 +31,15 @@ const theme = extendTheme({
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
+        <>
+            <header>
+                <title>Bubbles</title>
+            </header>
             <ChakraProvider theme={theme}>
-                <Component {...pageProps} />
+                <Flex w={"100%"} h={"100vh"} flexGrow={1}>
+                    <Component {...pageProps} />
+                </Flex>
             </ChakraProvider>
+        </>
     );
 }

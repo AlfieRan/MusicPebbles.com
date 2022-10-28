@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "../../../server/sessions/session";
-import { profile } from "../../../utils/types/oauth";
+import { profileType } from "../../../utils/types/oauth";
 
 export default async function me(req: NextApiRequest, res: NextApiResponse) {
     const userProfile = await getSession(req);
@@ -9,7 +9,7 @@ export default async function me(req: NextApiRequest, res: NextApiResponse) {
         return;
     }
 
-    const simpleProfile: profile = {
+    const simpleProfile: profileType = {
         display_name: userProfile.display_name,
         id: userProfile.id,
         image_url: userProfile.image_url,

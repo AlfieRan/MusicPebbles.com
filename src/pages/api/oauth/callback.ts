@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import formurlencoded from "form-urlencoded";
 import {
-    profile,
+    profileType,
     profileFull,
     SpotifyCallbackResponse,
     SpotifyTokenResponse,
@@ -101,7 +101,7 @@ export default async function callback(
         refresh_token: accessToken.refresh_token,
     };
 
-    const profile: profile = {
+    const profile: profileType = {
         display_name: fullProfile.display_name,
         id: fullProfile.id,
         image_url: fullProfile.image_url,

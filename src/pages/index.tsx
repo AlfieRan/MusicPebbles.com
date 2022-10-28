@@ -1,20 +1,20 @@
 import { Box, Center, Link, Text } from "@chakra-ui/react";
-import { UseProfile } from "../utils/hooks/useProfile";
+import { useProfile } from "../utils/hooks/useProfile";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Page = () => {
-    const useProfile = UseProfile();
+    const profile = useProfile();
     const router = useRouter();
 
     useEffect(() => {
-        if (useProfile.profile) {
+        if (profile.profile) {
             router.push("/dashboard").catch(console.error);
         }
-    }, [useProfile]);
+    }, [profile]);
 
     return (
-        <Box h={"100vh"} w={"100%"}>
+        <Box h={"100%"} w={"100%"}>
             <Center h={"full"} w={"full"} flexDir={"column"}>
                 <Text my={5}>Bubbles :)</Text>
                 <Link

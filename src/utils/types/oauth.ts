@@ -19,7 +19,7 @@ export interface profileFull {
     refresh_token: string;
 }
 
-export interface profile {
+export interface profileType {
     display_name: string;
     id: string;
     image_url: string;
