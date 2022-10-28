@@ -40,6 +40,7 @@
   "scripts": {
     "lint": "yarn next lint",
     "dev": "yarn next dev",
-    "build": "yarn next build"
+    "build": "yarn next build",
+    "start": "yarn next start"
   }
 }
