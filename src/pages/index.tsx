@@ -28,7 +28,7 @@ const Page = () => {
                     _hover={{ bg: "blue.400", transform: "scale(1.03)" }}
                     _active={{ bg: "blue.700", transform: "scale(0.97)" }}
                 >
-                    Login
+                    Login using Spotify
                 </Link>
             </Center>
         </Box>
