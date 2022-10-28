@@ -1,9 +1,18 @@
 import { Button, Flex, Link, Text } from "@chakra-ui/react";
 import { useProfile } from "../../utils/hooks/useProfile";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
     const profile = useProfile();
+    const router = useRouter();
+
+    async function logout() {
+        await fetch("/api/oauth/logout", {
+            method: "POST",
+        });
+        router.push("/").catch((err) => console.error(err));
+    }
 
     return (
         <AnimatePresence>
@@ -71,6 +80,8 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                                     {profile.profile?.display_name}
                                 </Text>
                             </Flex>
+                        </Flex>
+                        <Flex flexDir={"column"} my={1}>
                             <Text fontSize={"sm"} mb={1} opacity={0.7}>
                                 This site was made by{" "}
                                 <Link
@@ -81,12 +92,18 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                                     Alfie Ranstead.{" "}
                                 </Link>
                             </Text>
-                        </Flex>
-                        <Flex flexDir={"column"} my={1}>
+
                             <Button
                                 bg={"red.500"}
-                                _hover={{ bg: "red.600" }}
-                                _active={{ bg: "red.700" }}
+                                _hover={{
+                                    bg: "red.600",
+                                    transform: "scale(1.02)",
+                                }}
+                                _active={{
+                                    bg: "red.700",
+                                    transform: "scale(0.98)",
+                                }}
+                                onClick={logout}
                             >
                                 Log out?
                             </Button>

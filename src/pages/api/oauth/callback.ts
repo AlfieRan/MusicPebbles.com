@@ -121,16 +121,14 @@ export default async function callback(
     console.log(`User: ${profile.id} logged in`);
 
     // now we can set up the cookie
-    const AuthJWT = await getAccessToken(profile.id);
-    // await redisClient.set(profile.id + "_jwt", AuthJWT);
-    const cookie = await createCookie(profile.id);
+    const cookie = await createLoginCookie(profile.id);
 
     // set the cookie and redirect user
     res.setHeader("Set-Cookie", cookie);
     res.redirect("/dashboard");
 }
 
-async function createCookie(id: string) {
+async function createLoginCookie(id: string) {
     const Auth = await getAccessToken(id);
     await redisClient.set("jwt_" + Auth, id);
     return generateCookie(Auth, dayjs().add(1, "week").toDate(), "auth");

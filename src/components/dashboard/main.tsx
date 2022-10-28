@@ -20,34 +20,40 @@ export function Main(props: { profile: profileType }) {
             <Hovering hoveringState={hovering} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
             <motion.div
-                className={"overflow-hidden border-white"}
-                animate={{
-                    scale: [1.3, 1.5, 1.5, 1],
-                    borderRadius: ["0%", "50%", "50%", "50%"],
-                }}
-                transition={{
-                    duration: 1.7,
-                    ease: "easeInOut",
-                    times: [0, 0.3, 0.4, 1],
-                    borderWidth: {
-                        duration: 0.1,
-                    },
-                }}
-                initial={{ borderRadius: "0%" }}
-                whileHover={{ borderWidth: 2 }}
-                onClick={changeHidden}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
             >
-                <Image
-                    className={"z-0 scale-105 hover:scale-110 active:scale-100"}
-                    src={props.profile.image_url}
-                    alt={"Profile Picture of user"}
-                    onMouseOver={() =>
-                        setHovering({ hovering: true, type: "profile" })
-                    }
-                    onMouseLeave={() => setHovering({ hovering: false })}
-                    width={200}
-                    height={200}
-                />
+                <motion.div
+                    className={"overflow-hidden border-white"}
+                    animate={{
+                        scale: [1.3, 1.5, 1.5, 1],
+                        borderRadius: ["0%", "50%", "50%", "50%"],
+                    }}
+                    transition={{
+                        duration: 1.7,
+                        delay: 0.5,
+                        ease: "easeInOut",
+                        times: [0, 0.3, 0.4, 1],
+                        borderWidth: {
+                            duration: 0.1,
+                        },
+                    }}
+                    initial={{ borderRadius: "0%" }}
+                    onClick={changeHidden}
+                >
+                    <Image
+                        className={"z-0"}
+                        src={props.profile.image_url}
+                        alt={"Profile Picture of user"}
+                        onMouseOver={() =>
+                            setHovering({ hovering: true, type: "profile" })
+                        }
+                        onMouseLeave={() => setHovering({ hovering: false })}
+                        width={200}
+                        height={200}
+                    />
+                </motion.div>
             </motion.div>
         </Center>
     );
