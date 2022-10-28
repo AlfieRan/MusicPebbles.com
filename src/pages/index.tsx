@@ -11,7 +11,7 @@ const Page = () => {
         if (useProfile.profile) {
             router.push("/dashboard").catch(console.error);
         }
-    }, [useProfile]);
+    }, [useProfile, router]);
 
     return (
         <Box h={"100vh"} w={"100%"}>

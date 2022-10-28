@@ -20,7 +20,7 @@ const Page = () => {
         } else {
             setCurComponent(<Loading />);
         }
-    }, [profileState]);
+    }, [profileState, router]);
 
     return (
         <Box h={"100vh"} w={"100%"}>
