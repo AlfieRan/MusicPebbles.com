@@ -1,28 +1,50 @@
-import { Center } from "@chakra-ui/react";
+import { Center, Box } from "@chakra-ui/react";
 import Image from "next/image";
 import { profileType } from "../../utils/types/oauth";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { Settings } from "./settings";
+import { artistsType } from "../../utils/types/spotify";
+import { ArtistBubbleWrap } from "../bubbles/artist";
 
 export function Main(props: { profile: profileType }) {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
+    const [artists, setArtists] = useState<artistsType>([]);
 
     function changeHidden() {
         setShowingSettings(!showingSettings);
     }
 
+    useEffect(() => {
+        (async () => {
+            const res = await fetch("/api/user/getArtists", { method: "GET" });
+            const data = await res.json();
+            if (res.status === 200) {
+                setArtists(data);
+            } else {
+                console.log(data);
+            }
+        })();
+    }, []);
+
     return (
-        <Center h={"full"} w={"full"} flexDir={"column"}>
+        <Center
+            h={"full"}
+            w={"full"}
+            flexDir={"column"}
+            overflowX={"hidden"}
+            overflowY={"scroll"}
+        >
             <Hovering hoveringState={hovering} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
             <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3 }}
+                className={"my-20 min-h-0"}
             >
                 <motion.div
                     className={"overflow-hidden border-white"}
@@ -55,6 +77,9 @@ export function Main(props: { profile: profileType }) {
                     />
                 </motion.div>
             </motion.div>
+            <Box minH={0}>
+                <ArtistBubbleWrap artists={artists} setHovering={setHovering} />
+            </Box>
         </Center>
     );
 }

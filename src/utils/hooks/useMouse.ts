@@ -8,8 +8,17 @@ export function useMouse() {
     };
 
     const updateMouse = (e: MouseEvent) => {
-        mouse.x.set(e.pageX);
-        mouse.y.set(e.pageY);
+        mouse.x.set(
+            e.pageX > window.innerWidth - 200
+                ? window.innerWidth - 0.2 * e.pageX
+                : e.pageX
+        );
+        mouse.y.set(
+            e.pageY > window.innerHeight - 200
+                ? window.innerHeight - 0.2 * e.pageY
+                : e.pageY
+        );
+        console.log(e.pageX, 2 * e.pageX - window.innerWidth);
     };
 
     useEffect(() => {

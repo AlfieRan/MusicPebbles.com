@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { serialize } from "cookie";
 import {
     ClientID,
+    ClientIDSecretPair,
     ClientSecret,
     RedirectUri,
     redisClient,
@@ -33,9 +34,6 @@ export default async function callback(
     }
 
     // we're good, so post that code to spotify
-    const ClientIDSecretPair =
-        "Basic " +
-        Buffer.from(ClientID + ":" + ClientSecret).toString("base64");
 
     const data = {
         grant_type: "authorization_code",
@@ -101,27 +99,21 @@ export default async function callback(
         refresh_token: accessToken.refresh_token,
     };
 
-    const profile: profileType = {
-        display_name: fullProfile.display_name,
-        id: fullProfile.id,
-        image_url: fullProfile.image_url,
-    };
-
     // it's time to set the redis profile
     redisClient.setex(
-        profile.id + "_access",
+        fullProfile.id + "_access",
         accessToken.expires_in,
         accessToken.access_token
     );
     redisClient.setex(
-        profile.id + "_profile",
+        fullProfile.id + "_profile",
         3600 * 24 * 7,
-        JSON.stringify(profile)
+        JSON.stringify(fullProfile)
     );
-    console.log(`User: ${profile.id} logged in`);
+    console.log(`User: ${fullProfile.id} logged in`);
 
     // now we can set up the cookie
-    const cookie = await createLoginCookie(profile.id);
+    const cookie = await createLoginCookie(fullProfile.id);
 
     // set the cookie and redirect user
     res.setHeader("Set-Cookie", cookie);

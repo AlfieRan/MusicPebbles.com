@@ -16,3 +16,5 @@ export const ClientSecret = env("SPOTIFY_CLIENT_SECRET");
 export const RedirectUri = env("SPOTIFY_REDIRECT_URI");
 export const StateKey = env("SPOTIFY_STATE_KEY");
 export const JWTSecret = env("JWT_SECRET");
+export const ClientIDSecretPair =
+    "Basic " + Buffer.from(ClientID + ":" + ClientSecret).toString("base64");
