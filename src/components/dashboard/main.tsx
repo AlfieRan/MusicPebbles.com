@@ -1,5 +1,4 @@
-import { Center, Box } from "@chakra-ui/react";
-import Image from "next/image";
+import { Center, Text } from "@chakra-ui/react";
 import { profileType } from "../../utils/types/oauth";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -7,28 +6,25 @@ import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { Settings } from "./settings";
 import { artistsType } from "../../utils/types/spotify";
-import { ArtistBubbleWrap } from "../bubbles/artist";
+import { useBubbles } from "../../utils/hooks/useBubbles";
+import { Bubble } from "../bubbles/master";
+import { useArtists } from "../../utils/hooks/useArtists";
+
+// Here's the plan:
+// 1. Create an array of "bubbles"
+// 2. These bubbles should include a name, an image and context for the hover window
+// 3. The bubbles should be able to be dragged around the screen - except for the profile bubble
+// 4. Some function should then be able to take the bubbles and give each of them a position
+// 5. The bubbles should then be displayed with those positions.
 
 export function Main(props: { profile: profileType }) {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
-    const [artists, setArtists] = useState<artistsType>([]);
+    const bubbles = useBubbles();
 
     function changeHidden() {
         setShowingSettings(!showingSettings);
     }
-
-    useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/user/getArtists", { method: "GET" });
-            const data = await res.json();
-            if (res.status === 200) {
-                setArtists(data);
-            } else {
-                console.log(data);
-            }
-        })();
-    }, []);
 
     return (
         <Center
@@ -47,9 +43,11 @@ export function Main(props: { profile: profileType }) {
                 className={"my-20 min-h-0"}
             >
                 <motion.div
-                    className={"overflow-hidden border-white"}
+                    className={
+                        "flex overflow-hidden border-white bg-gray-600 h-48 w-48 justify-center items-center"
+                    }
                     animate={{
-                        scale: [1.3, 1.5, 1.5, 1],
+                        scale: [1.3, 1.5, 1.5, 0],
                         borderRadius: ["0%", "50%", "50%", "50%"],
                     }}
                     transition={{
@@ -64,22 +62,36 @@ export function Main(props: { profile: profileType }) {
                     initial={{ borderRadius: "0%" }}
                     onClick={changeHidden}
                 >
-                    <Image
-                        className={"z-0"}
-                        src={props.profile.image_url}
-                        alt={"Profile Picture of user"}
-                        onMouseOver={() =>
-                            setHovering({ hovering: true, type: "profile" })
-                        }
-                        onMouseLeave={() => setHovering({ hovering: false })}
-                        width={200}
-                        height={200}
-                    />
+                    <Text>Bubbles</Text>
                 </motion.div>
             </motion.div>
-            <Box minH={0}>
-                <ArtistBubbleWrap artists={artists} setHovering={setHovering} />
-            </Box>
+            <motion.div
+                className={
+                    "flex absolute w-fit h-fit justify-center items-center"
+                }
+                animate={{
+                    scale: [0, 1.1, 1],
+                    opacity: [0, 1, 1],
+                }}
+                transition={{
+                    duration: 1,
+                    ease: "easeInOut",
+                    times: [0, 0.6, 1],
+                    delay: 2,
+                }}
+            >
+                {bubbles.bubbles.map((bubble) => (
+                    <Bubble
+                        setHovering={setHovering}
+                        context={bubble}
+                        key={
+                            bubble.type === "artist"
+                                ? bubble.artist.id
+                                : "profile"
+                        }
+                    />
+                ))}
+            </motion.div>
         </Center>
     );
 }

@@ -1,7 +1,7 @@
 import { useSpring } from "framer-motion";
 import { useEffect } from "react";
 
-export function useMouse() {
+export function useMouse(padding: number = 150) {
     const mouse = {
         x: useSpring(0, { stiffness: 75, damping: 15 }),
         y: useSpring(0, { stiffness: 100, damping: 15 }),
@@ -9,16 +9,15 @@ export function useMouse() {
 
     const updateMouse = (e: MouseEvent) => {
         mouse.x.set(
-            e.pageX > window.innerWidth - 200
-                ? window.innerWidth - 0.2 * e.pageX
+            e.pageX > window.innerWidth - padding
+                ? window.innerWidth - padding
                 : e.pageX
         );
         mouse.y.set(
-            e.pageY > window.innerHeight - 200
-                ? window.innerHeight - 0.2 * e.pageY
+            e.pageY > window.innerHeight - padding
+                ? window.innerHeight - padding
                 : e.pageY
         );
-        console.log(e.pageX, 2 * e.pageX - window.innerWidth);
     };
 
     useEffect(() => {

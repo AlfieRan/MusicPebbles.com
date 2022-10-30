@@ -13,8 +13,6 @@ export async function getAccessCode(
         refresh_token: userProfile.refresh_token,
     };
 
-    console.log("RequestData", RequestData);
-
     const reqResult = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
