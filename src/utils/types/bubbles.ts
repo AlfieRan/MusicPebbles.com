@@ -5,26 +5,27 @@ export interface bubblePosType {
     y: number;
 }
 
-export interface profileBubbleType {
-    type: "profile";
-    pos: bubblePosType;
-    radius: number;
-    updatePos: (pos: bubblePosType) => void;
-}
-
-export interface artistBubbleType {
-    type: "artist";
-    artist: artistType;
-    pos: bubblePosType;
-    radius: number;
-    updatePos: (pos: bubblePosType) => void;
-}
-
-export type bubbleType = profileBubbleType | artistBubbleType;
-
 export interface artistBubbleContextType {
     type: "artist";
     artist: artistType;
 }
 
-export type bubbleContextType = artistBubbleContextType;
+export interface profileBubbleContextType {
+    type: "profile";
+}
+
+export type bubblePhysicsType = {
+    pos: bubblePosType;
+    velocity: bubblePosType;
+    radius: number;
+    updatePos: (pos: bubblePosType) => void;
+};
+
+export type bubbleType = {
+    details: artistBubbleContextType | profileBubbleContextType;
+    physics: bubblePhysicsType;
+};
+
+export type bubbleContextType =
+    | artistBubbleContextType
+    | profileBubbleContextType;

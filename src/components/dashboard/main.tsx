@@ -1,21 +1,12 @@
 import { Center, Text } from "@chakra-ui/react";
 import { profileType } from "../../utils/types/oauth";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { Settings } from "./settings";
-import { artistsType } from "../../utils/types/spotify";
 import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubbles/master";
-import { useArtists } from "../../utils/hooks/useArtists";
-
-// Here's the plan:
-// 1. Create an array of "bubbles"
-// 2. These bubbles should include a name, an image and context for the hover window
-// 3. The bubbles should be able to be dragged around the screen - except for the profile bubble
-// 4. Some function should then be able to take the bubbles and give each of them a position
-// 5. The bubbles should then be displayed with those positions.
 
 export function Main(props: { profile: profileType }) {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
@@ -70,7 +61,7 @@ export function Main(props: { profile: profileType }) {
                     "flex absolute w-fit h-fit justify-center items-center"
                 }
                 animate={{
-                    scale: [0, 1.1, 1],
+                    scale: [0, 1.05, 1],
                     opacity: [0, 1, 1],
                 }}
                 transition={{
@@ -85,8 +76,8 @@ export function Main(props: { profile: profileType }) {
                         setHovering={setHovering}
                         context={bubble}
                         key={
-                            bubble.type === "artist"
-                                ? bubble.artist.id
+                            bubble.details.type === "artist"
+                                ? bubble.details.artist.id
                                 : "profile"
                         }
                         changeSettings={changeHidden}

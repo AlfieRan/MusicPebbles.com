@@ -8,15 +8,15 @@ export function Bubble(props: {
     context: bubbleType;
     changeSettings?: () => void;
 }) {
-    if (props.context.type === "artist") {
+    if (props.context.details.type === "artist") {
         return (
             <ArtistBubble
                 context={props.context}
-                key={props.context.artist.id}
+                key={props.context.details.artist.id}
                 setHovering={props.setHovering}
             />
         );
-    } else if (props.context.type === "profile") {
+    } else if (props.context.details.type === "profile") {
         return (
             <ProfileBubble
                 context={props.context}
