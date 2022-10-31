@@ -1,14 +1,14 @@
 import { Center, Text } from "@chakra-ui/react";
 import { profileType } from "../../utils/types/oauth";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { Settings } from "./settings";
 import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubbles/master";
 
-export function Main(props: { profile: profileType }) {
+export function Main() {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
     const bubbles = useBubbles();
@@ -16,6 +16,12 @@ export function Main(props: { profile: profileType }) {
     function changeHidden() {
         setShowingSettings(!showingSettings);
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            bubbles.start();
+        }, 4000);
+    }, []);
 
     return (
         <Center
@@ -35,14 +41,22 @@ export function Main(props: { profile: profileType }) {
             >
                 <motion.div
                     className={
-                        "flex overflow-hidden border-white bg-gray-600 h-48 w-48 justify-center items-center"
+                        "flex overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
                     }
                     animate={{
-                        scale: [1.3, 1.5, 1.5, 0],
-                        borderRadius: ["0%", "50%", "50%", "50%"],
+                        scale: [5, 1.3, 1.5, 1.5, 0],
+                        borderRadius: ["0%", "0%", "50%", "50%", "50%"],
+                        borderWidth: ["0px", "1px", "2px", "1px", "1px"],
+                        background: [
+                            "#161616",
+                            "#161616",
+                            "#4b5563",
+                            "#4b5563",
+                            "#4b5563",
+                        ],
                     }}
                     transition={{
-                        duration: 1.7,
+                        duration: 4,
                         delay: 0.5,
                         ease: "easeInOut",
                         times: [0, 0.3, 0.4, 1],
@@ -51,7 +65,6 @@ export function Main(props: { profile: profileType }) {
                         },
                     }}
                     initial={{ borderRadius: "0%" }}
-                    onClick={changeHidden}
                 >
                     <Text>Bubbles</Text>
                 </motion.div>
@@ -68,7 +81,7 @@ export function Main(props: { profile: profileType }) {
                     duration: 1,
                     ease: "easeInOut",
                     times: [0, 0.6, 1],
-                    delay: 2,
+                    delay: 3,
                 }}
             >
                 {bubbles.bubbles.map((bubble) => (

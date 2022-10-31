@@ -20,7 +20,7 @@ const Page = () => {
         } else if (profileState.profile && curComponent.type !== "main") {
             setCurComponent({
                 type: "main",
-                component: <Main profile={profileState.profile} />,
+                component: <Main />,
             });
         }
     }, [profileState]);

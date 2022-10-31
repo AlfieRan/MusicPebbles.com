@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useScreen } from "./useScreen";
 import { min } from "../basics";
 import { useArtists } from "./useArtists";
-import { useInterval } from "@chakra-ui/react";
 
 export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
     const screen = useScreen();
@@ -19,11 +18,6 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
             pos: { x: 0, y: 0 },
             velocity: { x: 0, y: 0 },
             radius: min(screen.width, screen.height) / 7,
-            updatePos: () => {
-                console.log(
-                    "Attempted to update profile bubble position, but it is not movable."
-                );
-            },
         },
     };
 
@@ -56,11 +50,6 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
                         velocity: { x: 0, y: 0 },
                         pos: getNewPos(100, newBubblesState, screen),
                         radius: min(screen.width, screen.height) / 13,
-                        updatePos: (pos) => {
-                            const newBubblesState = [...bubblesState];
-                            newBubblesState[i + 1].physics.pos = pos;
-                            setBubblesState(newBubblesState);
-                        },
                     },
                 };
                 newBubblesState.push(newBubble);
@@ -70,95 +59,91 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
         }
 
         setBubblesState(newBubblesState.slice(0, numToDisplay));
-    }, [bubbleContext]);
+    }, [bubbleContext, numToDisplay]);
 
     function tick() {
+        console.log("tick");
         const newBubblesState = [...bubblesState];
         for (let i = 0; i < newBubblesState.length; i++) {
-            const bubble = newBubblesState[i];
-            if (bubble.details.type === "profile") {
+            console.log("ticking bubble: " + i);
+            if (newBubblesState[i].details.type === "profile") {
                 continue;
             }
 
-            const newVelocity = {
-                x: bringCloser(
-                    bubble.physics.velocity.x,
-                    -bubble.physics.pos.x / 100,
-                    1 / tickrate
-                ),
-                y: bringCloser(
-                    bubble.physics.velocity.y,
-                    -bubble.physics.pos.y / 100,
-                    1 / tickrate
-                ),
+            const bubble = newBubblesState[i];
+            const Forces = {
+                x: 0,
+                y: 0,
             };
 
-            const newPos = {
-                x: bubble.physics.pos.x + newVelocity.x,
-                y: bubble.physics.pos.y + newVelocity.y,
-            };
+            // Attract to center
+            Forces.x += bubble.physics.pos.x > 0 ? -0.0001 : 0.0001;
+            Forces.y += bubble.physics.pos.y > 0 ? -0.0001 : 0.0001;
 
-            // Check if bubble is out of bounds
-            if (newPos.x > screen.width / 2 - bubble.physics.radius) {
-                newPos.x = screen.width / 2 - bubble.physics.radius - 5;
-                newVelocity.x *= -1;
-            } else if (newPos.x < -screen.width / 2 + bubble.physics.radius) {
-                newPos.x = -screen.width / 2 + bubble.physics.radius + 5;
-                newVelocity.x *= -1;
-            }
-
-            if (newPos.y > screen.height / 2 - bubble.physics.radius) {
-                newPos.y = screen.height / 2 - bubble.physics.radius - 5;
-                newVelocity.y *= -1;
-            } else if (newPos.y < -screen.height / 2 + bubble.physics.radius) {
-                newPos.y = -screen.height / 2 + bubble.physics.radius + 5;
-                newVelocity.y *= -1;
-            }
+            // Repel from collided bubbles
+            const closestBubble = getClosest(
+                bubble.physics.pos,
+                newBubblesState,
+                bubble
+            );
 
             if (
-                willCollide(
-                    newPos,
-                    bubble.physics.radius,
-                    newBubblesState,
-                    bubble
-                )
+                closestBubble.dist <
+                bubble.physics.radius + closestBubble.bubble.physics.radius
             ) {
-                if (
-                    willCollide(
-                        { x: newPos.x, y: bubble.physics.pos.y },
-                        bubble.physics.radius,
-                        newBubblesState,
-                        bubble
-                    )
-                ) {
-                    newVelocity.x *= -1;
-                    newPos.x = bubble.physics.pos.x + newVelocity.x;
-                }
-                if (
-                    willCollide(
-                        { x: bubble.physics.pos.x, y: newPos.y },
-                        bubble.physics.radius,
-                        newBubblesState,
-                        bubble
-                    )
-                ) {
-                    newVelocity.y *= -1;
-                    newPos.y = bubble.physics.pos.y + newVelocity.y;
-                }
+                // is currently colliding, so repel
+                // get angle to closest bubble
+                const angle = Math.atan2(
+                    closestBubble.bubble.physics.pos.y - bubble.physics.pos.y,
+                    closestBubble.bubble.physics.pos.x - bubble.physics.pos.x
+                );
+                // apply force
+                Forces.x += Math.cos(angle);
+                Forces.y += Math.sin(angle);
             }
 
-            bubble.physics.pos = newPos;
-            bubble.physics.velocity = newVelocity;
+            // if collided with edges, repel
+            // if (bubble.physics.pos.x < -screen.width / 2) {
+            //     Forces.x += 1;
+            // } else if (bubble.physics.pos.x > screen.width / 2) {
+            //     Forces.x -= 1;
+            // }
+            //
+            // if (bubble.physics.pos.y < -screen.height / 2) {
+            //     Forces.y += 1;
+            // } else if (bubble.physics.pos.y > screen.height / 2) {
+            //     Forces.y -= 1;
+            // }
+
+            // apply forces
+            bubble.physics.velocity.x += Forces.x;
+            bubble.physics.velocity.y += Forces.y;
+
+            // update position
+            bubble.physics.pos.x += bubble.physics.velocity.x;
+            bubble.physics.pos.y += bubble.physics.velocity.y;
+
+            // set new state
             newBubblesState[i] = bubble;
         }
         setBubblesState(newBubblesState);
     }
 
-    useInterval(tick, 1000 / tickrate);
+    function start(): () => void {
+        console.log("Starting bubbles");
+        const interval = setInterval(tick, 1000 / tickrate);
+
+        function stop() {
+            clearInterval(interval);
+        }
+
+        return stop;
+    }
 
     return {
         bubbles: bubblesState,
         updateContext: setBubbleContext,
+        start: start,
     };
 }
 
@@ -166,24 +151,10 @@ function willCollide(
     pos: bubblePosType,
     radius: number,
     bubbleState: bubbleType[],
-    bubblePassed?: bubbleType
+    skipBubble?: bubbleType
 ) {
-    for (let i = 0; i < bubbleState.length; i++) {
-        const bubble = bubbleState[i];
-
-        if (bubblePassed?.details === bubble.details) {
-            continue;
-        }
-
-        const dist = Math.sqrt(
-            Math.pow(pos.x - bubble.physics.pos.x, 2) +
-                Math.pow(pos.y - bubble.physics.pos.y, 2)
-        );
-        if (dist < radius + bubble.physics.radius) {
-            return true;
-        }
-    }
-    return false;
+    const closestBubble = getClosest(pos, bubbleState, skipBubble);
+    return closestBubble.dist < radius + closestBubble.bubble.physics.radius;
 }
 
 function getNewPos(
@@ -216,13 +187,28 @@ function getRandomPos(screen: { width: number; height: number }) {
     };
 }
 
-function bringCloser(num: number, aim: number, strength: number) {
-    if (num > aim) {
-        return num - diff(num, aim) * strength;
-    }
-    return num + diff(num, aim) * strength;
-}
+function getClosest(
+    pos: bubblePosType,
+    bubbleState: bubbleType[],
+    skipBubble?: bubbleType
+): { bubble: bubbleType; dist: number } {
+    let closestBubble = bubbleState[0];
+    let closestDist = 100000;
+    for (let i = 0; i < bubbleState.length; i++) {
+        const bubble = bubbleState[i];
 
-function diff(a: number, b: number) {
-    return Math.abs(a - b);
+        if (skipBubble?.details === bubble.details) {
+            continue;
+        }
+
+        const dist = Math.sqrt(
+            Math.pow(pos.x - bubble.physics.pos.x, 2) +
+                Math.pow(pos.y - bubble.physics.pos.y, 2)
+        );
+        if (dist < closestDist) {
+            closestBubble = bubble;
+            closestDist = dist;
+        }
+    }
+    return { bubble: closestBubble, dist: closestDist };
 }

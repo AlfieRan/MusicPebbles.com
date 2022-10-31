@@ -18,7 +18,6 @@ export type bubblePhysicsType = {
     pos: bubblePosType;
     velocity: bubblePosType;
     radius: number;
-    updatePos: (pos: bubblePosType) => void;
 };
 
 export type bubbleType = {
