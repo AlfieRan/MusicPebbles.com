@@ -26,7 +26,7 @@ export function Bubble(props: {
             />
         );
     } else {
-        console.log("Unknown bubble type attempted to be rendered");
+        console.log("Unknown bubble type attempted to be rendered.");
         return <></>;
     }
 }
