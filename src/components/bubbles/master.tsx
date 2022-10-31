@@ -6,6 +6,7 @@ import { ProfileBubble } from "./profile";
 export function Bubble(props: {
     setHovering: setHoveringType;
     context: bubbleType;
+    changeSettings?: () => void;
 }) {
     if (props.context.type === "artist") {
         return (
@@ -21,6 +22,7 @@ export function Bubble(props: {
                 context={props.context}
                 key={"profile"}
                 setHovering={props.setHovering}
+                changeSettings={props.changeSettings}
             />
         );
     } else {

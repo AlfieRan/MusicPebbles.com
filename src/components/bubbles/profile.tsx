@@ -7,6 +7,7 @@ import { useProfile } from "../../utils/hooks/useProfile";
 export function ProfileBubble(props: {
     setHovering: setHoveringType;
     context: profileBubbleType;
+    changeSettings?: () => void;
 }) {
     const profile = useProfile();
     const diameter = props.context.radius * 2;
@@ -37,6 +38,7 @@ export function ProfileBubble(props: {
                     })
                 }
                 onMouseLeave={() => props.setHovering({ hovering: false })}
+                onClick={() => props.changeSettings?.()}
             />
         </Center>
     );

@@ -89,6 +89,7 @@ export function Main(props: { profile: profileType }) {
                                 ? bubble.artist.id
                                 : "profile"
                         }
+                        changeSettings={changeHidden}
                     />
                 ))}
             </motion.div>
