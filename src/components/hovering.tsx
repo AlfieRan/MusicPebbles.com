@@ -3,21 +3,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMouse } from "../utils/hooks/useMouse";
 import { useProfile } from "../utils/hooks/useProfile";
 import { Flex, Text } from "@chakra-ui/react";
+import { useScreen } from "../utils/hooks/useScreen";
 
 export default function Hovering(props: { hoveringState: hoveringType }) {
     const mouse = useMouse();
     const profile = useProfile();
+    const screen = useScreen();
+    const showRanking =
+        props.hoveringState.hovering &&
+        props.hoveringState.type === "artist" &&
+        props.hoveringState.artist.ranking !== undefined;
 
     return (
         <AnimatePresence>
             {props.hoveringState.hovering && (
                 <motion.div
                     className={
-                        "bg-MidGrey top-0 left-0 absolute w-fit h-fit pointer-events-none z-50 overflow-hidden"
+                        "bg-MidGrey absolute w-fit h-fit pointer-events-none z-50 overflow-hidden"
                     }
                     style={{
                         x: mouse.x,
                         y: mouse.y,
+                        left: mouse.x.get() > screen.width / 2 ? -200 : 0,
+                        top: mouse.y.get() > screen.height / 2 ? -150 : 30,
                     }}
                     exit={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -27,6 +35,7 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                     {props.hoveringState.type === "profile" && (
                         <Flex
                             bg={"MidGrey"}
+                            top={-200}
                             m={1}
                             px={3}
                             py={1}
@@ -42,13 +51,19 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                     {props.hoveringState.type === "artist" && (
                         <Flex
                             bg={"MidGrey"}
+                            top={-200}
                             m={1}
                             px={3}
                             py={1}
                             borderRadius={"xl"}
                             flexDir={"column"}
                         >
-                            <Text>{props.hoveringState.artist?.name}</Text>
+                            <Flex>
+                                <Text hidden={!showRanking} mr={2}>
+                                    {props.hoveringState.artist?.ranking ?? ""}.
+                                </Text>
+                                <Text>{props.hoveringState.artist?.name}</Text>
+                            </Flex>
                             <Text fontSize={"sm"} opacity={0.65}>
                                 {props.hoveringState.artist?.genres.length > 0
                                     ? props.hoveringState.artist?.genres

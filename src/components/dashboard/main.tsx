@@ -1,27 +1,29 @@
-import { Center, Text } from "@chakra-ui/react";
-import { profileType } from "../../utils/types/oauth";
+import { Box, Center, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { Settings } from "./settings";
 import { useBubbles } from "../../utils/hooks/useBubbles";
-import { Bubble } from "../bubbles/master";
+import { Bubble } from "../bubble";
+import { useScreen } from "../../utils/hooks/useScreen";
 
 export function Main() {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
     const bubbles = useBubbles();
+    const screen = useScreen();
+    const [showNum, setShowNum] = useState<number>(10);
+
+    useEffect(() => {
+        if (screen.width && screen.height) {
+            setShowNum(Math.floor((screen.width * screen.height) / 40000));
+        }
+    }, [screen]);
 
     function changeHidden() {
         setShowingSettings(!showingSettings);
     }
-
-    useEffect(() => {
-        setTimeout(() => {
-            bubbles.start();
-        }, 4000);
-    }, []);
 
     return (
         <Center
@@ -34,40 +36,33 @@ export function Main() {
             <Hovering hoveringState={hovering} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
             <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className={"my-20 min-h-0"}
+                className={
+                    "flex overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
+                }
+                animate={{
+                    scale: [5, 1.3, 1.5, 1.5, 0],
+                    borderRadius: ["0%", "0%", "50%", "50%", "50%"],
+                    borderWidth: ["0px", "1px", "2px", "1px", "1px"],
+                    background: [
+                        "#161616",
+                        "#161616",
+                        "#4b5563",
+                        "#4b5563",
+                        "#4b5563",
+                    ],
+                }}
+                transition={{
+                    duration: 4,
+                    delay: 0.5,
+                    ease: "easeInOut",
+                    times: [0, 0.3, 0.4, 1],
+                    borderWidth: {
+                        duration: 0.1,
+                    },
+                }}
+                initial={{ borderRadius: "0%" }}
             >
-                <motion.div
-                    className={
-                        "flex overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
-                    }
-                    animate={{
-                        scale: [5, 1.3, 1.5, 1.5, 0],
-                        borderRadius: ["0%", "0%", "50%", "50%", "50%"],
-                        borderWidth: ["0px", "1px", "2px", "1px", "1px"],
-                        background: [
-                            "#161616",
-                            "#161616",
-                            "#4b5563",
-                            "#4b5563",
-                            "#4b5563",
-                        ],
-                    }}
-                    transition={{
-                        duration: 4,
-                        delay: 0.5,
-                        ease: "easeInOut",
-                        times: [0, 0.3, 0.4, 1],
-                        borderWidth: {
-                            duration: 0.1,
-                        },
-                    }}
-                    initial={{ borderRadius: "0%" }}
-                >
-                    <Text>Bubbles</Text>
-                </motion.div>
+                <Text>Bubbles</Text>
             </motion.div>
             <motion.div
                 className={
@@ -84,7 +79,7 @@ export function Main() {
                     delay: 3,
                 }}
             >
-                {bubbles.bubbles.map((bubble) => (
+                {bubbles.bubbles.slice(0, showNum).map((bubble) => (
                     <Bubble
                         setHovering={setHovering}
                         context={bubble}

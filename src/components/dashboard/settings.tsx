@@ -57,9 +57,6 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                                     transition={"all 0.15s ease-in-out"}
                                     onClick={() => {
                                         props.changeHidden();
-                                        console.log(
-                                            "clicked, hidden should update to true"
-                                        );
                                     }}
                                 >
                                     X

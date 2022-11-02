@@ -5,6 +5,7 @@ export interface imageType {
 }
 
 export interface artistType {
+    ranking?: number;
     external_urls: {
         spotify: string;
     };

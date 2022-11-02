@@ -4,7 +4,7 @@ import { useScreen } from "./useScreen";
 import { min } from "../basics";
 import { useArtists } from "./useArtists";
 
-export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
+export function useBubbles(tickrate: number = 24) {
     const screen = useScreen();
     const [bubbleContext, setBubbleContext] = useState<bubbleContextType[]>([]);
     const [bubblesState, setBubblesState] = useState<bubbleType[]>([]);
@@ -34,7 +34,7 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
         console.log("useBubbles useEffect");
         const newBubblesState: bubbleType[] = [profileBubble];
 
-        for (let i = 0; i < numToDisplay; i++) {
+        for (let i = 0; i < bubbleContext.length; i++) {
             const bubbleContextItem = bubbleContext[i];
             if (!bubbleContextItem) {
                 continue;
@@ -44,12 +44,14 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
                 const newBubble: bubbleType = {
                     details: {
                         type: "artist",
-                        artist: bubbleContextItem.artist,
+                        artist: { ...bubbleContextItem.artist, ranking: i + 1 },
                     },
                     physics: {
                         velocity: { x: 0, y: 0 },
                         pos: getNewPos(100, newBubblesState, screen),
-                        radius: min(screen.width, screen.height) / 13,
+                        radius:
+                            min(screen.width, screen.height) /
+                            (13 * (1 + i / 25)),
                     },
                 };
                 newBubblesState.push(newBubble);
@@ -58,14 +60,12 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
             }
         }
 
-        setBubblesState(newBubblesState.slice(0, numToDisplay));
-    }, [bubbleContext, numToDisplay]);
+        setBubblesState(newBubblesState);
+    }, [bubbleContext, screen]);
 
     function tick() {
-        console.log("tick");
         const newBubblesState = [...bubblesState];
         for (let i = 0; i < newBubblesState.length; i++) {
-            console.log("ticking bubble: " + i);
             if (newBubblesState[i].details.type === "profile") {
                 continue;
             }
@@ -103,25 +103,27 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
             }
 
             // if collided with edges, repel
-            // if (bubble.physics.pos.x < -screen.width / 2) {
-            //     Forces.x += 1;
-            // } else if (bubble.physics.pos.x > screen.width / 2) {
-            //     Forces.x -= 1;
-            // }
-            //
-            // if (bubble.physics.pos.y < -screen.height / 2) {
-            //     Forces.y += 1;
-            // } else if (bubble.physics.pos.y > screen.height / 2) {
-            //     Forces.y -= 1;
-            // }
+            if (bubble.physics.pos.x < -screen.width / 2) {
+                Forces.x += 1;
+            } else if (bubble.physics.pos.x > screen.width / 2) {
+                Forces.x -= 1;
+            }
+
+            if (bubble.physics.pos.y < -screen.height / 2) {
+                Forces.y += 1;
+            } else if (bubble.physics.pos.y > screen.height / 2) {
+                Forces.y -= 1;
+            }
 
             // apply forces
             bubble.physics.velocity.x += Forces.x;
             bubble.physics.velocity.y += Forces.y;
 
             // update position
-            bubble.physics.pos.x += bubble.physics.velocity.x;
-            bubble.physics.pos.y += bubble.physics.velocity.y;
+            bubble.physics.pos.x +=
+                bubble.physics.velocity.x / (1000000 * tickrate);
+            bubble.physics.pos.y +=
+                bubble.physics.velocity.y / (1000000 * tickrate);
 
             // set new state
             newBubblesState[i] = bubble;
@@ -129,21 +131,11 @@ export function useBubbles(numToDisplay: number = 10, tickrate: number = 24) {
         setBubblesState(newBubblesState);
     }
 
-    function start(): () => void {
-        console.log("Starting bubbles");
-        const interval = setInterval(tick, 1000 / tickrate);
-
-        function stop() {
-            clearInterval(interval);
-        }
-
-        return stop;
-    }
+    // const interval = setInterval(tick, 1000 / tickrate);
 
     return {
         bubbles: bubblesState,
         updateContext: setBubbleContext,
-        start: start,
     };
 }
 
@@ -162,15 +154,11 @@ function getNewPos(
     bubbleState: bubbleType[],
     screen: { width: number; height: number }
 ): bubblePosType {
-    const maxTries = 100;
+    const maxTries = 1000;
     let tries = 0;
     let newPos = { x: 0, y: 0 };
     while (willCollide(newPos, radius, bubbleState)) {
-        const pos = getRandomPos(screen);
-        newPos = {
-            x: pos.x > 0 ? pos.x - 100 : pos.x + 100,
-            y: pos.y > 0 ? pos.y - 100 : pos.y + 100,
-        };
+        newPos = getRandomPos(screen, radius);
         tries++;
         if (tries > maxTries) {
             console.log("Failed to find new position for bubble.");
@@ -180,10 +168,20 @@ function getNewPos(
     return newPos;
 }
 
-function getRandomPos(screen: { width: number; height: number }) {
+function getRandomPos(
+    screen: {
+        width: number;
+        height: number;
+    },
+    radius?: number
+): bubblePosType {
+    const altered = {
+        width: screen.width - (radius ?? 0) * 2,
+        height: screen.height - (radius ?? 0) * 2,
+    };
     return {
-        x: Math.random() * screen.width - screen.width / 2,
-        y: Math.random() * screen.height - screen.height / 2,
+        x: Math.random() * altered.width - altered.width / 2,
+        y: Math.random() * altered.height - altered.height / 2,
     };
 }
 

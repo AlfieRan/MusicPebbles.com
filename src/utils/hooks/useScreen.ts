@@ -11,6 +11,22 @@ export function useScreen() {
             width: window.innerWidth,
             height: window.innerHeight,
         });
+
+        window.addEventListener("resize", () => {
+            setScreen({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        });
+
+        return () => {
+            window.removeEventListener("resize", () => {
+                setScreen({
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                });
+            });
+        };
     }, []);
 
     return screen;
