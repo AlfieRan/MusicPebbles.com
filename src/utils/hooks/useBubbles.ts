@@ -40,6 +40,7 @@ export function useBubbles(tickrate: number = 24) {
                 continue;
             }
 
+            console.log("bubbleContextItem: ", i);
             if (bubbleContextItem.type === "artist") {
                 const newBubble: bubbleType = {
                     details: {
@@ -48,7 +49,7 @@ export function useBubbles(tickrate: number = 24) {
                     },
                     physics: {
                         velocity: { x: 0, y: 0 },
-                        pos: getNewPos(100, newBubblesState, screen),
+                        pos: getNewPos(100, newBubblesState, screen, i),
                         radius:
                             min(screen.width, screen.height) /
                             (13 * (1 + i / 25)),
@@ -63,76 +64,6 @@ export function useBubbles(tickrate: number = 24) {
         setBubblesState(newBubblesState);
     }, [bubbleContext, screen]);
 
-    function tick() {
-        const newBubblesState = [...bubblesState];
-        for (let i = 0; i < newBubblesState.length; i++) {
-            if (newBubblesState[i].details.type === "profile") {
-                continue;
-            }
-
-            const bubble = newBubblesState[i];
-            const Forces = {
-                x: 0,
-                y: 0,
-            };
-
-            // Attract to center
-            Forces.x += bubble.physics.pos.x > 0 ? -0.0001 : 0.0001;
-            Forces.y += bubble.physics.pos.y > 0 ? -0.0001 : 0.0001;
-
-            // Repel from collided bubbles
-            const closestBubble = getClosest(
-                bubble.physics.pos,
-                newBubblesState,
-                bubble
-            );
-
-            if (
-                closestBubble.dist <
-                bubble.physics.radius + closestBubble.bubble.physics.radius
-            ) {
-                // is currently colliding, so repel
-                // get angle to closest bubble
-                const angle = Math.atan2(
-                    closestBubble.bubble.physics.pos.y - bubble.physics.pos.y,
-                    closestBubble.bubble.physics.pos.x - bubble.physics.pos.x
-                );
-                // apply force
-                Forces.x += Math.cos(angle);
-                Forces.y += Math.sin(angle);
-            }
-
-            // if collided with edges, repel
-            if (bubble.physics.pos.x < -screen.width / 2) {
-                Forces.x += 1;
-            } else if (bubble.physics.pos.x > screen.width / 2) {
-                Forces.x -= 1;
-            }
-
-            if (bubble.physics.pos.y < -screen.height / 2) {
-                Forces.y += 1;
-            } else if (bubble.physics.pos.y > screen.height / 2) {
-                Forces.y -= 1;
-            }
-
-            // apply forces
-            bubble.physics.velocity.x += Forces.x;
-            bubble.physics.velocity.y += Forces.y;
-
-            // update position
-            bubble.physics.pos.x +=
-                bubble.physics.velocity.x / (1000000 * tickrate);
-            bubble.physics.pos.y +=
-                bubble.physics.velocity.y / (1000000 * tickrate);
-
-            // set new state
-            newBubblesState[i] = bubble;
-        }
-        setBubblesState(newBubblesState);
-    }
-
-    // const interval = setInterval(tick, 1000 / tickrate);
-
     return {
         bubbles: bubblesState,
         updateContext: setBubbleContext,
@@ -145,27 +76,92 @@ function willCollide(
     bubbleState: bubbleType[],
     skipBubble?: bubbleType
 ) {
-    const closestBubble = getClosest(pos, bubbleState, skipBubble);
-    return closestBubble.dist < radius + closestBubble.bubble.physics.radius;
+    for (let i = 0; i < bubbleState.length; i++) {
+        const bubble = bubbleState[i];
+        if (bubble === skipBubble) {
+            continue;
+        }
+        const dist = Math.sqrt(
+            (pos.x - bubble.physics.pos.x) ** 2 +
+                (pos.y - bubble.physics.pos.y) ** 2
+        );
+        if (dist < (radius + bubble.physics.radius) * 0.75) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function getNewPos(
     radius: number,
     bubbleState: bubbleType[],
-    screen: { width: number; height: number }
+    screen: { width: number; height: number },
+    index?: number
 ): bubblePosType {
-    const maxTries = 1000;
+    // get the center profile bubble
+    const profileBubble = bubbleState[0];
+
     let tries = 0;
-    let newPos = { x: 0, y: 0 };
-    while (willCollide(newPos, radius, bubbleState)) {
-        newPos = getRandomPos(screen, radius);
+    while (tries < 100) {
+        // choose a random angle
+        let angle = 0;
+        if (index) {
+            angle =
+                index % 4 === 0
+                    ? (Math.random() * Math.PI) / 2
+                    : (index + 1) % 4 === 0
+                    ? (Math.random() * Math.PI) / 2 + Math.PI / 2
+                    : (index + 2) % 4 === 0
+                    ? (Math.random() * Math.PI) / 2 + Math.PI
+                    : (Math.random() * Math.PI) / 2 + (3 * Math.PI) / 2;
+        } else {
+            angle = Math.random() * 2 * Math.PI;
+        }
+
+        // place the bubble at the closest point on this angle that doesn't collide with any other bubbles
+        let dist = (profileBubble.physics.radius + radius) * 0.85;
+        let pos = {
+            x: Math.cos(angle) * dist,
+            y: Math.sin(angle) * dist,
+        };
+        let keepGoing = true;
+        while (keepGoing) {
+            dist += 1;
+            pos = {
+                x: Math.cos(angle) * dist,
+                y: Math.sin(angle) * dist,
+            };
+            keepGoing = willCollide(pos, radius, bubbleState);
+        }
+
+        // if the bubble is too close to the edge, call this function again
+        const edgeDist = 50;
+        if (
+            !(
+                pos.x < -screen.width / 2 + edgeDist ||
+                pos.x > screen.width / 2 - edgeDist ||
+                pos.y < -screen.height / 2 + edgeDist ||
+                pos.y > screen.height / 2 - edgeDist
+            )
+        ) {
+            return pos;
+        }
+
         tries++;
-        if (tries > maxTries) {
-            console.log("Failed to find new position for bubble.");
-            break;
+    }
+
+    // if we've tried 100 times and still haven't found a good spot, just put it somewhere random
+    tries = 0;
+    let pos = getRandomPos(screen, radius);
+    while (willCollide(pos, radius, bubbleState)) {
+        pos = getRandomPos(screen, radius);
+        tries++;
+        if (tries > 100) {
+            return pos;
         }
     }
-    return newPos;
+    console.log("Failed to find a spot for bubble.");
+    return pos;
 }
 
 function getRandomPos(
@@ -183,30 +179,4 @@ function getRandomPos(
         x: Math.random() * altered.width - altered.width / 2,
         y: Math.random() * altered.height - altered.height / 2,
     };
-}
-
-function getClosest(
-    pos: bubblePosType,
-    bubbleState: bubbleType[],
-    skipBubble?: bubbleType
-): { bubble: bubbleType; dist: number } {
-    let closestBubble = bubbleState[0];
-    let closestDist = 100000;
-    for (let i = 0; i < bubbleState.length; i++) {
-        const bubble = bubbleState[i];
-
-        if (skipBubble?.details === bubble.details) {
-            continue;
-        }
-
-        const dist = Math.sqrt(
-            Math.pow(pos.x - bubble.physics.pos.x, 2) +
-                Math.pow(pos.y - bubble.physics.pos.y, 2)
-        );
-        if (dist < closestDist) {
-            closestBubble = bubble;
-            closestDist = dist;
-        }
-    }
-    return { bubble: closestBubble, dist: closestDist };
 }

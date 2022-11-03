@@ -7,10 +7,19 @@ import { Settings } from "./settings";
 import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubble";
 import { useScreen } from "../../utils/hooks/useScreen";
+import { artistEmptyObject, artistType } from "../../utils/types/spotify";
+import { ArtistOverlay } from "./artistOverlay";
 
 export function Main() {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
+    const [showingArtist, setShowingArtist] = useState<{
+        hidden: boolean;
+        artistInfo: artistType;
+    }>({
+        hidden: true,
+        artistInfo: artistEmptyObject,
+    });
     const bubbles = useBubbles();
     const screen = useScreen();
     const [showNum, setShowNum] = useState<number>(10);
@@ -25,6 +34,13 @@ export function Main() {
         setShowingSettings(!showingSettings);
     }
 
+    function changeArtistHidden(artistInfo: artistType) {
+        setShowingArtist({
+            hidden: !showingArtist.hidden,
+            artistInfo: artistInfo,
+        });
+    }
+
     return (
         <Center
             h={"full"}
@@ -35,6 +51,11 @@ export function Main() {
         >
             <Hovering hoveringState={hovering} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
+            <ArtistOverlay
+                hidden={showingArtist.hidden}
+                changeHidden={changeArtistHidden}
+                artistInfo={showingArtist.artistInfo}
+            />
             <motion.div
                 className={
                     "flex overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
@@ -89,6 +110,7 @@ export function Main() {
                                 : "profile"
                         }
                         changeSettings={changeHidden}
+                        changeArtist={changeArtistHidden}
                     />
                 ))}
             </motion.div>

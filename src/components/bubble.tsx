@@ -3,11 +3,13 @@ import { bubbleType } from "../utils/types/bubbles";
 import { Center } from "@chakra-ui/react";
 import { useProfile } from "../utils/hooks/useProfile";
 import Image from "next/image";
+import { artistType } from "../utils/types/spotify";
 
 export function Bubble(props: {
     setHovering: setHoveringType;
     context: bubbleType;
     changeSettings?: () => void;
+    changeArtist?: (artistInfo: artistType) => void;
 }) {
     const profile = useProfile();
     const diameter = props.context.physics.radius * 2;
@@ -35,6 +37,14 @@ export function Bubble(props: {
                     }
                 }}
                 onMouseLeave={() => props.setHovering({ hovering: false })}
+                onClick={() => {
+                    if (
+                        props.changeArtist &&
+                        props.context.details.type === "artist"
+                    ) {
+                        props.changeArtist(props.context.details.artist);
+                    }
+                }}
             />
         );
     } else if (props.context.details.type === "profile") {

@@ -24,3 +24,21 @@ export interface artistType {
 }
 
 export type artistsType = artistType[];
+
+export const artistEmptyObject: artistType = {
+    name: "",
+    id: "",
+    images: [],
+    genres: [],
+    popularity: 0,
+    followers: {
+        href: null,
+        total: 0,
+    },
+    external_urls: {
+        spotify: "",
+    },
+    href: "",
+    type: "",
+    uri: "",
+};
