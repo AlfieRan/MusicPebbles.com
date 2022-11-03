@@ -73,6 +73,7 @@ export default async function callback(
     }
 
     // Now it's time to get the users profile so we can store it in redis
+    let failed = false;
     const profileResponse = await fetch("https://api.spotify.com/v1/me", {
         method: "GET",
         headers: {
@@ -84,7 +85,9 @@ export default async function callback(
         .catch((error) => {
             console.log("SPOTIFY CALLBACK ERROR - ", error);
             res.status(500).json({ error: "Internal server error" });
+            failed = true;
         });
+    if (failed) return;
 
     if (profileResponse.statusCode >= 400) {
         console.log("SPOTIFY CALLBACK ERROR - ", profileResponse);
