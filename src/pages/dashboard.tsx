@@ -26,13 +26,7 @@ const Page = () => {
     }, [profileState]);
 
     return (
-        <Box
-            h={"100%"}
-            w={"100%"}
-            minH={0}
-            overflowY={"scroll"}
-            overflowX={"hidden"}
-        >
+        <Box h={"100%"} w={"100%"} minH={0} overflow={"hidden"}>
             {curComponent.component}
         </Box>
     );

@@ -80,6 +80,9 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                                 {props.hoveringState.artist?.followers.total.toLocaleString()}{" "}
                                 followers
                             </Text>
+                            <Text fontSize={"sm"} opacity={0.65} mt={2}>
+                                Click for more info.
+                            </Text>
                         </Flex>
                     )}
                 </motion.div>

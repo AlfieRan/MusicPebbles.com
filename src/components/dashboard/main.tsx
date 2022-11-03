@@ -1,4 +1,4 @@
-import { Box, Center, Text } from "@chakra-ui/react";
+import { Center, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
@@ -42,13 +42,7 @@ export function Main() {
     }
 
     return (
-        <Center
-            h={"full"}
-            w={"full"}
-            flexDir={"column"}
-            overflowX={"hidden"}
-            overflowY={"scroll"}
-        >
+        <Center h={"full"} w={"full"} flexDir={"column"} overflow={"hidden"}>
             <Hovering hoveringState={hovering} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
             <ArtistOverlay

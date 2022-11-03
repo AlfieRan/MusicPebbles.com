@@ -36,13 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <title>Bubbles</title>
             </header>
             <ChakraProvider theme={theme}>
-                <Flex
-                    w={"100%"}
-                    h={"100vh"}
-                    overflowY={"scroll"}
-                    overflowX={"hidden"}
-                    minH={0}
-                >
+                <Flex w={"100%"} h={"100vh"} overflow={"hidden"} minH={0}>
                     <Component {...pageProps} />
                 </Flex>
             </ChakraProvider>
