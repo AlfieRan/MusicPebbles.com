@@ -21,9 +21,9 @@ export function useMouse() {
         }
 
         if (clientY > screen.height / 2 && offset.y.get() >= 0) {
-            offset.y.set(-150);
+            offset.y.set(-170);
         } else if (clientY < screen.height / 2 && offset.y.get() < 0) {
-            offset.y.set(40);
+            offset.y.set(30);
         }
 
         mouse.x.set(clientX + offset.x.get());

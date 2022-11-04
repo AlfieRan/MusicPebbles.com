@@ -14,7 +14,9 @@ function createState(): string {
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (ClientID === "" || ClientSecret === "" || RedirectUri === "") {
         console.log("WARNING - Missing environment variables");
-        res.status(500).json({ error: "Internal server error" });
+        res.redirect(
+            "/error?error=Missing server environment variables, please report to dev."
+        );
         return;
     }
 

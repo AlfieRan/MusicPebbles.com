@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import formurlencoded from "form-urlencoded";
 import {
-    profileType,
     profileFull,
     SpotifyCallbackResponse,
     SpotifyTokenResponse,
@@ -10,9 +9,7 @@ import { getAccessToken } from "../../../server/utils/jwt";
 import dayjs from "dayjs";
 import { serialize } from "cookie";
 import {
-    ClientID,
     ClientIDSecretPair,
-    ClientSecret,
     RedirectUri,
     redisClient,
 } from "../../../server/constants";
@@ -21,6 +18,7 @@ export default async function callback(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    let failed = false;
     // check if an error was returned
     const response: SpotifyCallbackResponse = {
         code: req.query.code,
@@ -29,7 +27,7 @@ export default async function callback(
     } as SpotifyCallbackResponse;
 
     if (response.error) {
-        res.status(400).json({ error: response.error });
+        res.redirect("/login?error=" + response.error);
         return;
     }
 
@@ -55,12 +53,15 @@ export default async function callback(
         .then((response) => response.json())
         .catch((error) => {
             console.log("SPOTIFY CALLBACK ERROR - ", error);
-            res.status(500).json({ error: "Internal server error" });
+            res.redirect(`/error?error=${error}`);
+            failed = true;
         });
+
+    if (failed) return;
 
     if (accessTokenResponse.statusCode >= 400) {
         console.log("SPOTIFY CALLBACK ERROR - ", accessTokenResponse);
-        res.status(500).json({ error: "Internal server error" });
+        res.redirect(`/error?error=${accessTokenResponse}`);
         return;
     }
 
@@ -68,12 +69,12 @@ export default async function callback(
         accessTokenResponse as SpotifyTokenResponse;
 
     if (accessToken.access_token === "") {
-        console.log("SPOTIFY CALLBACK ERROR - ", accessTokenResponse);
-        res.status(500).json({ error: "Internal server error" });
+        res.redirect(
+            `/error?error=No access token returned, please try again.`
+        );
     }
 
     // Now it's time to get the users profile so we can store it in redis
-    let failed = false;
     const profileResponse = await fetch("https://api.spotify.com/v1/me", {
         method: "GET",
         headers: {
@@ -84,14 +85,14 @@ export default async function callback(
         .then((response) => response.json())
         .catch((error) => {
             console.log("SPOTIFY CALLBACK ERROR - ", error);
-            res.status(500).json({ error: "Internal server error" });
+            res.redirect(`/error?error=${error}`);
             failed = true;
         });
     if (failed) return;
 
     if (profileResponse.statusCode >= 400) {
         console.log("SPOTIFY CALLBACK ERROR - ", profileResponse);
-        res.status(500).json({ error: "Internal server error" });
+        res.redirect(`/error?error=${profileResponse}`);
         return;
     }
 
