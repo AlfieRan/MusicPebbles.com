@@ -40,6 +40,7 @@ export default async function artists(
         await redisClient.lpush("errors", JSON.stringify(errorObj));
 
         res.redirect("/api/error?error=" + JSON.stringify(errorObj));
+
         return;
     }
 }
