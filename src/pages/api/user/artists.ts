@@ -4,6 +4,7 @@ import { profileFull } from "../../../utils/types/oauth";
 import { getAccessCode } from "../../../server/sessions/access";
 import { wrapRedis } from "../../../server/utils/redis";
 import { artistsType } from "../../../utils/types/spotify";
+import { ApiError } from "../../../utils/types/errors";
 
 export default async function artists(
     req: NextApiRequest,
@@ -30,7 +31,14 @@ export default async function artists(
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Internal server error" });
+        const errorObj: ApiError = {
+            api: "internal",
+            error: JSON.stringify(error),
+            statusCode: 500,
+        };
+
+        res.redirect("/api/error?error=" + JSON.stringify(errorObj));
+        return;
     }
 }
 
