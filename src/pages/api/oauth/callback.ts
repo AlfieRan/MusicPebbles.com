@@ -64,7 +64,7 @@ export default async function callback(
             const errorData: ApiError = {
                 error: "spotify_callback_error",
                 api: "spotify",
-                statusCode: error.response.status,
+                statusCode: error.response.statusCode,
                 apiResponse: error.response.data,
             };
             await redisClient.lpush("errors", JSON.stringify(errorData));
@@ -115,7 +115,7 @@ export default async function callback(
             const errorData: ApiError = {
                 error: "spotify_callback_error",
                 api: "spotify",
-                statusCode: error.response.status,
+                statusCode: error.response.statusCode,
                 apiResponse: error.response.data,
             };
             await redisClient.lpush("errors", JSON.stringify(errorData));
