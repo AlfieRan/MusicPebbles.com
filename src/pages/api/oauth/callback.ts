@@ -101,17 +101,15 @@ export default async function callback(
     }
 
     // Now it's time to get the users profile so we can store it in redis
-    const profileResponse = await fetch("https://api.spotify.com/v1/me", {
-        method: "GET",
-        headers: {
-            Authorization: "Bearer " + accessToken.access_token,
-            ContentType: "application/json",
-        },
-    })
-        .then((response) => response.json())
-        .catch(async (error) => {
-            console.log("SPOTIFY CALLBACK ERROR - ", error);
-            // create an error object and push it to redis
+    const profileResponseRequest =
+        (await fetch("https://api.spotify.com/v1/me", {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + accessToken.access_token,
+                ContentType: "application/json",
+            },
+        }).catch(async (error) => {
+            console.log("SPOTIFY CALLBACK ERROR - ", error, error.response);
             const errorData: ApiError = {
                 error: "spotify_callback_error",
                 api: "spotify",
@@ -119,11 +117,28 @@ export default async function callback(
                 apiResponse: error.response.data,
             };
             await redisClient.lpush("errors", JSON.stringify(errorData));
-
             res.redirect(`/error?error=${error}`);
-            failed = true;
-        });
-    if (failed) return;
+            return;
+        })) ?? undefined;
+
+    if (profileResponseRequest === undefined) return;
+
+    const profileResponse = (await profileResponseRequest.json()).catch(
+        async (error: any) => {
+            console.log("SPOTIFY CALLBACK ERROR - ", error, error.response);
+            const errorData: ApiError = {
+                error: "spotify_callback_error",
+                api: "spotify",
+                statusCode: profileResponseRequest.status,
+                apiResponse: JSON.stringify(profileResponseRequest.body),
+            };
+            await redisClient.lpush("errors", JSON.stringify(errorData));
+            res.redirect(`/error?error=${error}`);
+            return undefined;
+        }
+    );
+
+    if (profileResponse === undefined) return;
 
     if (profileResponse.statusCode >= 400) {
         console.log("SPOTIFY CALLBACK ERROR - ", profileResponse);
