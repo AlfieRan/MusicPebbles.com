@@ -174,7 +174,7 @@ export default async function callback(
         3600 * 24 * 7,
         JSON.stringify(fullProfile)
     );
-    console.log(`User: ${fullProfile.id} logged in`);
+    console.log(`User: ${fullProfile.id} just logged in`);
 
     // now we can set up the cookie
     const cookie = await createLoginCookie(fullProfile.id);
