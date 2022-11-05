@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
-import { Settings } from "./settings";
+import { Overlay } from "./overlay";
 import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubble";
 import { useScreen } from "../../utils/hooks/useScreen";
@@ -47,7 +47,7 @@ export function Main() {
     return (
         <Center h={"full"} w={"full"} flexDir={"column"} overflow={"hidden"}>
             <Hovering hoveringState={hovering} />
-            <Settings hidden={!showingSettings} changeHidden={changeHidden} />
+            <Overlay hidden={!showingSettings} changeHidden={changeHidden} />
             <ArtistOverlay
                 hidden={showingArtist.hidden}
                 changeHidden={changeArtistHidden}

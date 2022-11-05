@@ -16,14 +16,14 @@ export function useMouse() {
 
         if (clientX > screen.width / 2 && offset.x.get() >= 0) {
             offset.x.set(-200);
-        } else if (clientX < screen.width / 2 && offset.x.get() < 0) {
+        } else if (clientX < screen.width / 2 && offset.x.get() <= 0) {
             offset.x.set(20);
         }
 
         if (clientY > screen.height / 2 && offset.y.get() >= 0) {
             offset.y.set(-170);
-        } else if (clientY < screen.height / 2 && offset.y.get() < 0) {
-            offset.y.set(30);
+        } else if (clientY < screen.height / 2 && offset.y.get() <= 0) {
+            offset.y.set(15);
         }
 
         mouse.x.set(clientX + offset.x.get());
