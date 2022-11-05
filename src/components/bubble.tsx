@@ -68,26 +68,18 @@ export function Bubble(props: {
         console.log("Unknown bubble type attempted to be rendered.");
     }
 
+    const Margin = 4;
     return (
         <Center
             flexDir={"column"}
             borderRadius={"full"}
             position={"absolute"}
-            borderWidth={artistRating === undefined || artistRating > 3 ? 0 : 3}
-            borderColor={
-                artistRating === 1
-                    ? "#FFD700"
-                    : artistRating === 2
-                    ? "#C0C0C0"
-                    : artistRating === 3
-                    ? "#CD7F32"
-                    : "transparent"
-            }
             top={props.context.physics.pos.y - props.context.physics.radius}
             left={props.context.physics.pos.x - props.context.physics.radius}
             zIndex={20}
-            w={`${diameter}px`}
-            h={`${diameter}px`}
+            m={`${Margin}px`}
+            w={`${diameter - Margin}px`}
+            h={`${diameter - Margin}px`}
             minH={0}
             overflow={"hidden"}
             bg={"MidBlue"}

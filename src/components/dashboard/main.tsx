@@ -22,11 +22,14 @@ export function Main() {
     });
     const bubbles = useBubbles();
     const screen = useScreen();
-    const [showNum, setShowNum] = useState<number>(10);
+    const [showNum, setShowNum] = useState<number>(50);
 
     useEffect(() => {
         if (screen.width && screen.height) {
-            setShowNum(Math.floor((screen.width * screen.height) / 40000));
+            setShowNum(
+                Math.min(Math.floor((screen.width * screen.height) / 10000), 47)
+            );
+            console.log("Showing " + showNum + " bubbles");
         }
     }, [screen]);
 

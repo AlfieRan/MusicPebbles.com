@@ -13,6 +13,7 @@ import {
     RedirectUri,
     redisClient,
 } from "../../../server/constants";
+import { ApiError } from "../../../utils/types/errors";
 
 export default async function callback(
     req: NextApiRequest,
@@ -51,9 +52,26 @@ export default async function callback(
         }
     )
         .then((response) => response.json())
-        .catch((error) => {
-            console.log("SPOTIFY CALLBACK ERROR - ", error);
-            res.redirect(`/error?error=${error}`);
+        .catch(async (error) => {
+            console.log(
+                "SPOTIFY CALLBACK ERROR - ",
+                error,
+                "raw response: ",
+                error.response
+            );
+
+            // create an error object and push it to redis
+            const errorData: ApiError = {
+                error: "spotify_callback_error",
+                api: "spotify",
+                statusCode: error.response.status,
+                apiResponse: error.response.data,
+            };
+            await redisClient.lpush("errors", JSON.stringify(errorData));
+
+            res.redirect(
+                `/error?error=${`spotify_callback_error: ${error}\nraw response: ${error.response}`}`
+            );
             failed = true;
         });
 
@@ -61,6 +79,14 @@ export default async function callback(
 
     if (accessTokenResponse.statusCode >= 400) {
         console.log("SPOTIFY CALLBACK ERROR - ", accessTokenResponse);
+        const errorData: ApiError = {
+            error: "spotify_callback_error",
+            api: "spotify",
+            statusCode: accessTokenResponse.statusCode,
+            apiResponse: accessTokenResponse,
+        };
+        await redisClient.lpush("errors", JSON.stringify(errorData));
+
         res.redirect(`/error?error=${accessTokenResponse}`);
         return;
     }
@@ -83,8 +109,17 @@ export default async function callback(
         },
     })
         .then((response) => response.json())
-        .catch((error) => {
+        .catch(async (error) => {
             console.log("SPOTIFY CALLBACK ERROR - ", error);
+            // create an error object and push it to redis
+            const errorData: ApiError = {
+                error: "spotify_callback_error",
+                api: "spotify",
+                statusCode: error.response.status,
+                apiResponse: error.response.data,
+            };
+            await redisClient.lpush("errors", JSON.stringify(errorData));
+
             res.redirect(`/error?error=${error}`);
             failed = true;
         });
@@ -92,6 +127,16 @@ export default async function callback(
 
     if (profileResponse.statusCode >= 400) {
         console.log("SPOTIFY CALLBACK ERROR - ", profileResponse);
+
+        // create an error object and push it to redis
+        const errorData: ApiError = {
+            error: "spotify_callback_error",
+            api: "spotify",
+            statusCode: profileResponse.statusCode,
+            apiResponse: profileResponse,
+        };
+        await redisClient.lpush("errors", JSON.stringify(errorData));
+
         res.redirect(`/error?error=${profileResponse}`);
         return;
     }

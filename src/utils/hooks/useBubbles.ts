@@ -4,7 +4,7 @@ import { useScreen } from "./useScreen";
 import { min } from "../basics";
 import { useArtists } from "./useArtists";
 
-export function useBubbles(tickrate: number = 24) {
+export function useBubbles() {
     const screen = useScreen();
     const [bubbleContext, setBubbleContext] = useState<bubbleContextType[]>([]);
     const [bubblesState, setBubblesState] = useState<bubbleType[]>([]);
@@ -17,7 +17,7 @@ export function useBubbles(tickrate: number = 24) {
         physics: {
             pos: { x: 0, y: 0 },
             velocity: { x: 0, y: 0 },
-            radius: min(screen.width, screen.height) / 7,
+            radius: min(screen.width, screen.height) / 7 + 35,
         },
     };
 
@@ -31,8 +31,15 @@ export function useBubbles(tickrate: number = 24) {
     }, [artists]);
 
     useEffect(() => {
-        console.log("useBubbles useEffect");
+        console.log("Rendering Bubbles...");
         const newBubblesState: bubbleType[] = [profileBubble];
+        let unusedAngles: number[] = (() => {
+            const angles = [];
+            for (let i = 0; i < 36; i++) {
+                angles.push((i * Math.PI) / 18);
+            }
+            return angles;
+        })();
 
         for (let i = 0; i < bubbleContext.length; i++) {
             const bubbleContextItem = bubbleContext[i];
@@ -40,8 +47,9 @@ export function useBubbles(tickrate: number = 24) {
                 continue;
             }
 
-            console.log("bubbleContextItem: ", i);
             if (bubbleContextItem.type === "artist") {
+                const radius =
+                    min(screen.width, screen.height) / (13 * (1 + i / 25)) + 10;
                 const newBubble: bubbleType = {
                     details: {
                         type: "artist",
@@ -49,10 +57,17 @@ export function useBubbles(tickrate: number = 24) {
                     },
                     physics: {
                         velocity: { x: 0, y: 0 },
-                        pos: getNewPos(100, newBubblesState, screen, i),
-                        radius:
-                            min(screen.width, screen.height) /
-                            (13 * (1 + i / 25)),
+                        pos: (() => {
+                            const pos = getNewPos(
+                                radius,
+                                newBubblesState,
+                                screen,
+                                unusedAngles
+                            );
+                            unusedAngles = pos.unusedAngles;
+                            return pos.pos;
+                        })(),
+                        radius,
                     },
                 };
                 newBubblesState.push(newBubble);
@@ -85,7 +100,7 @@ function willCollide(
             (pos.x - bubble.physics.pos.x) ** 2 +
                 (pos.y - bubble.physics.pos.y) ** 2
         );
-        if (dist < (radius + bubble.physics.radius) * 0.75) {
+        if (dist < radius + bubble.physics.radius) {
             return true;
         }
     }
@@ -96,24 +111,19 @@ function getNewPos(
     radius: number,
     bubbleState: bubbleType[],
     screen: { width: number; height: number },
-    index?: number
-): bubblePosType {
+    unusedAngles?: number[]
+): { pos: bubblePosType; unusedAngles: number[] } {
     // get the center profile bubble
     const profileBubble = bubbleState[0];
 
     let tries = 0;
     while (tries < 100) {
-        // choose a random angle
+        // choose a random angle, have to use a weird method to get a uniform distribution, since Math.random() is not uniform enough
         let angle = 0;
-        if (index) {
-            angle =
-                index % 4 === 0
-                    ? (Math.random() * Math.PI) / 2
-                    : (index + 1) % 4 === 0
-                    ? (Math.random() * Math.PI) / 2 + Math.PI / 2
-                    : (index + 2) % 4 === 0
-                    ? (Math.random() * Math.PI) / 2 + Math.PI
-                    : (Math.random() * Math.PI) / 2 + (3 * Math.PI) / 2;
+        if (unusedAngles && unusedAngles.length > 0) {
+            const i = Math.floor(Math.random() * unusedAngles.length);
+            angle = unusedAngles[i];
+            unusedAngles.splice(i, 1);
         } else {
             angle = Math.random() * 2 * Math.PI;
         }
@@ -135,7 +145,7 @@ function getNewPos(
         }
 
         // if the bubble is too close to the edge, call this function again
-        const edgeDist = 50;
+        const edgeDist = 75;
         if (
             !(
                 pos.x < -screen.width / 2 + edgeDist ||
@@ -144,7 +154,7 @@ function getNewPos(
                 pos.y > screen.height / 2 - edgeDist
             )
         ) {
-            return pos;
+            return { pos, unusedAngles: unusedAngles ?? [] };
         }
 
         tries++;
@@ -157,11 +167,11 @@ function getNewPos(
         pos = getRandomPos(screen, radius);
         tries++;
         if (tries > 100) {
-            return pos;
+            return { pos, unusedAngles: unusedAngles ?? [] };
         }
     }
     console.log("Failed to find a spot for bubble.");
-    return pos;
+    return { pos, unusedAngles: unusedAngles ?? [] };
 }
 
 function getRandomPos(
