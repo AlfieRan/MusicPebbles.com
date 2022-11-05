@@ -5,6 +5,7 @@ import { getAccessCode } from "../../../server/sessions/access";
 import { wrapRedis } from "../../../server/utils/redis";
 import { artistsType } from "../../../utils/types/spotify";
 import { ApiError } from "../../../utils/types/errors";
+import { redisClient } from "../../../server/constants";
 
 export default async function artists(
     req: NextApiRequest,
@@ -36,6 +37,7 @@ export default async function artists(
             error: JSON.stringify(error),
             statusCode: 500,
         };
+        await redisClient.lpush("errors", JSON.stringify(errorObj));
 
         res.redirect("/api/error?error=" + JSON.stringify(errorObj));
         return;
