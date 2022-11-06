@@ -76,7 +76,7 @@ export function Bubble(props: {
                     src={profile.profile?.image_url ?? ""}
                     width={diameter}
                     height={diameter}
-                    alt={"Profile Picture of " + profile.profile?.display_name}
+                    alt={profile.profile?.display_name}
                     onMouseOver={() =>
                         props.setHovering({
                             hovering: true,
