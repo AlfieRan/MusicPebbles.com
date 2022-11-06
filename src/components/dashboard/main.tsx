@@ -8,17 +8,15 @@ import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubble";
 import { useScreen } from "../../utils/hooks/useScreen";
 import { artistEmptyObject, artistType } from "../../utils/types/spotify";
-import { ArtistOverlay } from "./artistOverlay";
+import { Overlay } from "../overlay/overlay";
+import { infoOverlayType } from "../../utils/types/overlay";
 
 export function Main() {
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
-    const [showingArtist, setShowingArtist] = useState<{
-        hidden: boolean;
-        artistInfo: artistType;
-    }>({
+    const [showingOverlay, setShowingOverlay] = useState<infoOverlayType>({
         hidden: true,
-        artistInfo: artistEmptyObject,
+        info: { type: "artist", artist: artistEmptyObject },
     });
     const bubbles = useBubbles();
     const screen = useScreen();
@@ -38,9 +36,16 @@ export function Main() {
     }
 
     function changeArtistHidden(artistInfo: artistType) {
-        setShowingArtist({
-            hidden: !showingArtist.hidden,
-            artistInfo: artistInfo,
+        setShowingOverlay({
+            hidden: !showingOverlay.hidden,
+            info: { type: "artist", artist: artistInfo },
+        });
+    }
+
+    function changeNicheHidden() {
+        setShowingOverlay({
+            hidden: !showingOverlay.hidden,
+            info: { type: "niche" },
         });
     }
 
@@ -48,10 +53,10 @@ export function Main() {
         <Center h={"full"} w={"full"} flexDir={"column"} overflow={"hidden"}>
             <Hovering hoveringState={hovering} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
-            <ArtistOverlay
-                hidden={showingArtist.hidden}
+            <Overlay
                 changeHidden={changeArtistHidden}
-                artistInfo={showingArtist.artistInfo}
+                changeNicheHidden={changeNicheHidden}
+                info={showingOverlay}
             />
             <motion.div
                 className={
@@ -103,7 +108,7 @@ export function Main() {
                         context={bubble}
                         key={
                             bubble.details.type === "artist"
-                                ? bubble.details.artist.id
+                                ? bubble.details.artist.id + "bubble"
                                 : bubble.details.type === "profile"
                                 ? "profile"
                                 : bubble.details.type === "niche"
@@ -112,6 +117,7 @@ export function Main() {
                         }
                         changeSettings={changeHidden}
                         changeArtist={changeArtistHidden}
+                        changeNiche={changeNicheHidden}
                     />
                 ))}
             </motion.div>

@@ -11,6 +11,7 @@ export function Bubble(props: {
     context: bubbleType;
     changeSettings?: () => void;
     changeArtist?: (artistInfo: artistType) => void;
+    changeNiche?: () => void;
 }) {
     const profile = useProfile();
     const uniqueness = useUniqueness();
@@ -103,6 +104,7 @@ export function Bubble(props: {
                     });
                 }}
                 onMouseLeave={() => props.setHovering({ hovering: false })}
+                onClick={props.changeNiche}
             >
                 <Text
                     textAlign={"center"}

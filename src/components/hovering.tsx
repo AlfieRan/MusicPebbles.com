@@ -100,17 +100,7 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                             maxW={"300px"}
                             fontSize={"md"}
                         >
-                            <Text>
-                                {uniqueness.rating >= 80
-                                    ? "Do you only listen to artists who live in caves? Your taste is way too underground for any normal person, please just go outside."
-                                    : uniqueness.rating >= 60
-                                    ? "Your taste is pretty underground, but you're not too far gone. Stay off reddit and you might be somewhat tolerable."
-                                    : uniqueness.rating >= 40
-                                    ? "Your taste is pretty mainstream, but you also appreciate some smaller artists. You may not be normal in many ways but at least your music taste is."
-                                    : uniqueness.rating >= 20
-                                    ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
-                                    : "Your taste is so mainstream that it's almost underground. You're definitely a lizard pretending to be a person. (Hi Zuck!)"}
-                            </Text>
+                            <Text>{uniqueness.details}</Text>
                         </Flex>
                     )}
                 </motion.div>
