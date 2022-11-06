@@ -36,8 +36,6 @@ export function useUniqueness() {
             details: getUniquenessDetails(rating),
             artists: sortedArtists,
         });
-        // TODO: add some sort of influence from artists' followers
-        // TODO: add influence based upon which number of artist it is
     }, [artists]);
 
     return uniqueness;
