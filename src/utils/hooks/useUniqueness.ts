@@ -86,7 +86,7 @@ function getArtistUniqueness(artist: artistType): number {
 }
 
 function adjustPopularity(popularity: number) {
-    return 0.01 * popularity ** 2;
+    return 0.005 * popularity ** 2 + 0.5 * popularity;
 }
 
 function getUniquenessDetails(rating: number) {
