@@ -12,6 +12,7 @@ export default async function errors(
         );
         res.status(200).json(errors);
     } catch (error) {
+        console.log("Error at /api/admin/errors: " + error);
         res.status(500).json({ error });
     }
 }

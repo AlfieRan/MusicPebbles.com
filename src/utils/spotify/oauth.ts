@@ -10,11 +10,6 @@ export function OauthLoginUrl(
         "user-modify-playback-state",
         "user-read-currently-playing",
         "user-top-read",
-        "user-read-recently-played",
-        "playlist-read-private",
-        "playlist-read-collaborative",
-        "playlist-modify-public",
-        "playlist-modify-private",
     ];
     const url = new URL("https://accounts.spotify.com/authorize");
     url.searchParams.append("client_id", ClientId);

@@ -87,7 +87,9 @@ export default async function callback(
             await redisClient.lpush("errors", JSON.stringify(errorData));
 
             res.redirect(
-                `/error?error=${`spotify_callback_error: ${error}\nraw response: ${error.response}`}`
+                `/error?error=${`spotify_callback_error: ${JSON.stringify(
+                    error
+                )}\nraw response: ${error.response}`}`
             );
             failed = true;
         });
@@ -106,11 +108,11 @@ export default async function callback(
             error: "spotify_callback_error",
             api: "spotify",
             statusCode: accessTokenResponse.statusCode,
-            apiResponse: accessTokenResponse,
+            apiResponse: accessTokenResponse.statusText,
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
 
-        res.redirect(`/error?error=${accessTokenResponse}`);
+        res.redirect(`/error?error=${JSON.stringify(accessTokenResponse)}`);
         return;
     }
 
@@ -152,13 +154,16 @@ export default async function callback(
                 apiResponse: error.response.data,
             };
             await redisClient.lpush("errors", JSON.stringify(errorData));
-            res.redirect(`/error?error=${error}`);
+            res.redirect(`/error?error=${JSON.stringify(error)}`);
             return;
         })) ?? undefined;
 
     if (profileResponseRequest === undefined) return;
 
-    if (profileResponseRequest.status >= 400) {
+    if (
+        profileResponseRequest.status >= 400 &&
+        profileResponseRequest.status !== 403
+    ) {
         if (intenseLogging)
             console.log(
                 "Profile request failed...\nAssembling error object..."
@@ -171,7 +176,18 @@ export default async function callback(
             apiResponse: JSON.stringify(profileResponseRequest.body),
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
-        res.redirect(`/error?error=${profileResponseRequest}`);
+        res.redirect(`/error?error=${JSON.stringify(profileResponseRequest)}`);
+        return;
+    }
+
+    if (profileResponseRequest.status === 403) {
+        if (intenseLogging)
+            console.log(
+                "Profile request failed with 403, redirecting to error screen..."
+            );
+        res.redirect(
+            `/error?error=Spotify returned a 403, which means you were not logged in properly. Please try again.`
+        );
         return;
     }
 
@@ -193,7 +209,7 @@ export default async function callback(
             console.log(
                 "Pushed error obj to redis, Redirecting to error screen..."
             );
-        res.redirect(`/error?error=${e}`);
+        res.redirect(`/error?error=${JSON.stringify(e)}`);
         tmp = undefined;
     }
 
@@ -223,7 +239,7 @@ export default async function callback(
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
 
-        res.redirect(`/error?error=${profileResponse}`);
+        res.redirect(`/error?error=${JSON.stringify(profileResponse)}`);
         return;
     }
 

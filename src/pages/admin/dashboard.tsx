@@ -14,7 +14,7 @@ const Page = () => {
             const res = await fetch("/api/admin/errors");
             const errors = await res.json();
 
-            if (!res.ok) {
+            if (res.status !== 200) {
                 setFailed({ failed: true, error: errors.error });
                 return;
             }
@@ -33,7 +33,7 @@ const Page = () => {
                 <Flex direction="column" align="center" pt={"xl"}>
                     <Text fontSize={"xl"}>Something went wrong :(</Text>
                     <Text textColor={"red.500"} fontSize={"sm"}>
-                        {failed.error}
+                        {JSON.stringify(failed.error)}
                     </Text>
                 </Flex>
             ) : (
@@ -44,7 +44,7 @@ const Page = () => {
                     <Flex mx={"xl"} maxW={"80vw"}>
                         {errors.map((error) => (
                             <Flex
-                                key={error.error + error.api}
+                                key={JSON.stringify(error.error) + error.api}
                                 flexDir={"column"}
                                 mx={"lg"}
                                 my={"md"}
@@ -69,7 +69,7 @@ const Page = () => {
                                         : 500}
                                 </Text>
                                 <Text mx={"sm"} fontSize={"sm"}>
-                                    Error: {error.error}
+                                    Error: {JSON.stringify(error.error)}
                                 </Text>
                                 <Text hidden={error.api !== "spotify"}>
                                     {error.api === "spotify"

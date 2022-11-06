@@ -14,6 +14,7 @@ export function useUniqueness() {
         const rating = 100 - Math.ceil(sum / artists.length);
         setUniqueness({ rating, artists });
         // TODO: add some sort of influence from artists' followers
+        // TODO: add influence based upon which number of artist it is
     }, [artists]);
 
     return uniqueness;
