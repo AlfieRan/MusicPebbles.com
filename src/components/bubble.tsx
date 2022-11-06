@@ -46,7 +46,7 @@ export function Bubble(props: {
             />
         );
     } else if (props.context.details.type === "profile") {
-        if (profile.profile?.image_url === undefined || true) {
+        if (profile.profile?.image_url === undefined) {
             middle = (
                 <Center
                     w={diameter}
