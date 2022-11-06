@@ -45,7 +45,7 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
             <Flex flexDir={"column"} fontSize={"md"}>
                 <Text>{uniqueness.details}</Text>
             </Flex>
-            {/*TODO: change this to show top 5 artists*/}
+            {/*TODO: change this to show top 5 artists */}
             <Flex mt={3}>Balls</Flex>
         </Flex>
     );
