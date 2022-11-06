@@ -101,7 +101,7 @@ function getUniquenessDetails(rating: number) {
         : rating >= 45
         ? "Your taste is pretty mainstream, but you also appreciate some smaller artists. You may not be normal in many ways but at least your music taste is."
         : rating >= 30
-        ? "'My favourite artist is this really underground group called Coldplay, you should check them out.' You're pretty normal, but you're also pretty boring."
+        ? "'My favourite artist is this really underground group called The Beatles, you should check them out.' You're pretty normal, but you're also pretty boring."
         : rating >= 20
         ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
         : rating >= 10
