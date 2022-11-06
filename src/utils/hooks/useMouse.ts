@@ -16,7 +16,7 @@ export function useMouse() {
         const Mult = getMultiplier();
 
         if (pageX > window.innerWidth / 2 && offset.x.get() >= 0) {
-            offset.x.set(-200);
+            offset.x.set(-225);
         } else if (pageX < window.innerWidth / 2 && offset.x.get() < 0) {
             offset.x.set(20);
         }

@@ -21,6 +21,7 @@ export default async function callback(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    // TODO: clean this up and make it more readable before production
     let failed = false;
     if (intenseLogging)
         console.log("Callback request received, checking state...");
@@ -246,7 +247,10 @@ export default async function callback(
     const fullProfile: profileFull = {
         display_name: profileResponse.display_name,
         id: profileResponse.id,
-        image_url: profileResponse.images[0].url,
+        image_url:
+            profileResponse.images.length > 0
+                ? profileResponse.images[0].url
+                : undefined,
         refresh_token: accessToken.refresh_token,
     };
 

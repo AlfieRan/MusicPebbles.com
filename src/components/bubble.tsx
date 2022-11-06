@@ -46,23 +46,49 @@ export function Bubble(props: {
             />
         );
     } else if (props.context.details.type === "profile") {
-        middle = (
-            <Image
-                src={profile.profile?.image_url ?? ""}
-                width={diameter}
-                height={diameter}
-                alt={"Profile Picture of " + profile.profile?.display_name}
-                onMouseOver={() =>
-                    props.setHovering({
-                        hovering: true,
-                        type: "profile",
-                    })
-                }
-                onMouseLeave={() => props.setHovering({ hovering: false })}
-                onClick={() => props.changeSettings?.()}
-                priority
-            />
-        );
+        if (profile.profile?.image_url === undefined || true) {
+            middle = (
+                <Center
+                    w={diameter}
+                    h={diameter}
+                    onMouseOver={() =>
+                        props.setHovering({
+                            hovering: true,
+                            type: "profile",
+                        })
+                    }
+                    onMouseLeave={() => props.setHovering({ hovering: false })}
+                    onClick={() => props.changeSettings?.()}
+                    bg={"green.300"}
+                >
+                    <Text
+                        textAlign={"center"}
+                        fontSize={"3xl"}
+                        fontWeight={"bold"}
+                    >
+                        {profile.profile?.display_name ?? "Loading..."}
+                    </Text>
+                </Center>
+            );
+        } else {
+            middle = (
+                <Image
+                    src={profile.profile?.image_url ?? ""}
+                    width={diameter}
+                    height={diameter}
+                    alt={"Profile Picture of " + profile.profile?.display_name}
+                    onMouseOver={() =>
+                        props.setHovering({
+                            hovering: true,
+                            type: "profile",
+                        })
+                    }
+                    onMouseLeave={() => props.setHovering({ hovering: false })}
+                    onClick={() => props.changeSettings?.()}
+                    priority
+                />
+            );
+        }
     } else if (props.context.details.type === "niche") {
         middle = (
             <Center

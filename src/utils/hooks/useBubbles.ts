@@ -58,6 +58,16 @@ export function useBubbles() {
             if (bubbleContextItem.type === "artist") {
                 const radius =
                     min(screen.width, screen.height) / (13 * (1 + i / 25)) + 10;
+                const pos = getNewPos(
+                    radius,
+                    newBubblesState,
+                    screen,
+                    unusedAngles
+                );
+                if (pos === undefined) {
+                    continue;
+                }
+                unusedAngles = pos.unusedAngles;
                 const newBubble: bubbleType = {
                     details: {
                         type: "artist",
@@ -68,38 +78,30 @@ export function useBubbles() {
                     },
                     physics: {
                         velocity: { x: 0, y: 0 },
-                        pos: (() => {
-                            const pos = getNewPos(
-                                radius,
-                                newBubblesState,
-                                screen,
-                                unusedAngles
-                            );
-                            unusedAngles = pos.unusedAngles;
-                            return pos.pos;
-                        })(),
+                        pos: pos.pos,
                         radius,
                     },
                 };
                 newBubblesState.push(newBubble);
             } else {
                 const radius = profileBubble.physics.radius * 0.6;
+                const pos = getNewPos(
+                    radius,
+                    newBubblesState,
+                    screen,
+                    unusedAngles
+                );
+                if (pos === undefined) {
+                    continue;
+                }
+                unusedAngles = pos.unusedAngles;
                 const newBubble: bubbleType = {
                     details: {
                         type: "niche",
                     },
                     physics: {
                         velocity: { x: 0, y: 0 },
-                        pos: (() => {
-                            const pos = getNewPos(
-                                radius,
-                                newBubblesState,
-                                screen,
-                                unusedAngles
-                            );
-                            unusedAngles = pos.unusedAngles;
-                            return pos.pos;
-                        })(),
+                        pos: pos.pos,
                         radius,
                     },
                 };
@@ -143,7 +145,7 @@ function getNewPos(
     bubbleState: bubbleType[],
     screen: { width: number; height: number },
     unusedAngles?: number[]
-): { pos: bubblePosType; unusedAngles: number[] } {
+): { pos: bubblePosType; unusedAngles: number[] } | undefined {
     // get the center profile bubble
     const profileBubble = bubbleState[0];
 
@@ -191,18 +193,9 @@ function getNewPos(
         tries++;
     }
 
-    // if we've tried 100 times and still haven't found a good spot, just put it somewhere random
-    tries = 0;
-    let pos = getRandomPos(screen, radius);
-    while (willCollide(pos, radius, bubbleState)) {
-        pos = getRandomPos(screen, radius);
-        tries++;
-        if (tries > 100) {
-            return { pos, unusedAngles: unusedAngles ?? [] };
-        }
-    }
+    // if we've tried 100 times and still haven't found a good spot, return undefined
     console.log("Failed to find a spot for bubble.");
-    return { pos, unusedAngles: unusedAngles ?? [] };
+    return undefined;
 }
 
 function getRandomPos(

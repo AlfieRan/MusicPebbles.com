@@ -15,12 +15,12 @@ export interface SpotifyTokenResponse {
 export interface profileFull {
     display_name: string;
     id: string;
-    image_url: string;
+    image_url: string | undefined;
     refresh_token: string;
 }
 
 export interface profileType {
     display_name: string;
     id: string;
-    image_url: string;
+    image_url: string | undefined;
 }
