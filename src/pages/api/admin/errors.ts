@@ -7,8 +7,9 @@ export default async function errors(
     res: NextApiResponse
 ) {
     try {
-        const errors: ApiError[] = JSON.parse(
-            (await redisClient.get("errors")) || "[]"
+        const rawErrors = (await redisClient.lrange("errors", 0, 10)) || [];
+        const errors: ApiError[] = rawErrors.map((rawError) =>
+            JSON.parse(rawError)
         );
         res.status(200).json(errors);
     } catch (error) {
