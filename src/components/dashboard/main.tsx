@@ -1,9 +1,9 @@
-import { Center, Text } from "@chakra-ui/react";
+import { Center, Flex, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
-import { Overlay } from "./overlay";
+import { Settings } from "./settings";
 import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubble";
 import { useScreen } from "../../utils/hooks/useScreen";
@@ -47,7 +47,7 @@ export function Main() {
     return (
         <Center h={"full"} w={"full"} flexDir={"column"} overflow={"hidden"}>
             <Hovering hoveringState={hovering} />
-            <Overlay hidden={!showingSettings} changeHidden={changeHidden} />
+            <Settings hidden={!showingSettings} changeHidden={changeHidden} />
             <ArtistOverlay
                 hidden={showingArtist.hidden}
                 changeHidden={changeArtistHidden}
@@ -104,7 +104,11 @@ export function Main() {
                         key={
                             bubble.details.type === "artist"
                                 ? bubble.details.artist.id
-                                : "profile"
+                                : bubble.details.type === "profile"
+                                ? "profile"
+                                : bubble.details.type === "niche"
+                                ? "niche"
+                                : "unknown" + Math.random()
                         }
                         changeSettings={changeHidden}
                         changeArtist={changeArtistHidden}

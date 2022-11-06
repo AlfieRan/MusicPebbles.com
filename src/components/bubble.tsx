@@ -1,9 +1,10 @@
 import { setHoveringType } from "../utils/types/state";
 import { bubbleType } from "../utils/types/bubbles";
-import { Center } from "@chakra-ui/react";
+import { Center, Text } from "@chakra-ui/react";
 import { useProfile } from "../utils/hooks/useProfile";
 import Image from "next/image";
 import { artistType } from "../utils/types/spotify";
+import { useUniqueness } from "../utils/hooks/useUniqueness";
 
 export function Bubble(props: {
     setHovering: setHoveringType;
@@ -12,11 +13,8 @@ export function Bubble(props: {
     changeArtist?: (artistInfo: artistType) => void;
 }) {
     const profile = useProfile();
+    const uniqueness = useUniqueness();
     const diameter = props.context.physics.radius * 2;
-    const artistRating =
-        props.context.details.type === "artist"
-            ? props.context.details.artist.ranking
-            : undefined;
     let middle = <></>;
 
     if (props.context.details.type === "artist") {
@@ -62,7 +60,32 @@ export function Bubble(props: {
                 }
                 onMouseLeave={() => props.setHovering({ hovering: false })}
                 onClick={() => props.changeSettings?.()}
+                priority
             />
+        );
+    } else if (props.context.details.type === "niche") {
+        middle = (
+            <Center
+                p={2}
+                w={"full"}
+                h={"full"}
+                bg={"#2993D5"}
+                onMouseOver={() => {
+                    props.setHovering({
+                        hovering: true,
+                        type: "niche",
+                    });
+                }}
+                onMouseLeave={() => props.setHovering({ hovering: false })}
+            >
+                <Text
+                    textAlign={"center"}
+                    fontWeight={"semibold"}
+                    color={"white"}
+                >
+                    Uniqueness: {uniqueness.rating}/100
+                </Text>
+            </Center>
         );
     } else {
         console.log("Unknown bubble type attempted to be rendered.");

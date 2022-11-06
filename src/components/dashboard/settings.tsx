@@ -4,20 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export function Overlay(props: { hidden: boolean; changeHidden: () => void }) {
+export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
     const profile = useProfile();
     const router = useRouter();
-    const [showingSettings, setShowingSettings] = useState<boolean>(false);
 
     async function logout() {
         await fetch("/api/oauth/logout", {
             method: "POST",
         });
         router.push("/").catch((err) => console.error(err));
-    }
-
-    function changeShowingSettings() {
-        setShowingSettings(!showingSettings);
     }
 
     return (
@@ -42,17 +37,7 @@ export function Overlay(props: { hidden: boolean; changeHidden: () => void }) {
                     >
                         <Flex flexDir={"column"}>
                             <Flex justifyContent={"space-between"} mb={1}>
-                                <Button
-                                    textAlign={"end"}
-                                    verticalAlign={"bottom"}
-                                    fontSize={"xl"}
-                                    bg={"rgba(0,0,0,0.2)"}
-                                    _hover={{ transform: "scale(1.05)" }}
-                                    _active={{ transform: "scale(0.95)" }}
-                                    onClick={changeShowingSettings}
-                                >
-                                    {showingSettings ? "Go Back" : "Settings️"}
-                                </Button>
+                                <Text>Settings</Text>
                                 <Button
                                     scale={0.9}
                                     bg={"blackAlpha.400"}
@@ -73,38 +58,22 @@ export function Overlay(props: { hidden: boolean; changeHidden: () => void }) {
                                 </Button>
                             </Flex>
                         </Flex>
-                        {showingSettings ? (
-                            <Flex flexDir={"column"}>
-                                <Flex>
-                                    <Text fontSize={"sm"} mt={1}>
-                                        You&apos;re currently logged in as{" "}
-                                    </Text>
-                                    <Text
-                                        fontSize={"sm"}
-                                        mt={1}
-                                        ml={1}
-                                        fontWeight={"bold"}
-                                    >
-                                        {profile.profile?.display_name}
-                                    </Text>
-                                </Flex>
-                            </Flex>
-                        ) : (
-                            <></>
-                        )}
-                        <Flex flexDir={"column"} my={1}>
-                            <Text fontSize={"sm"} mb={1} opacity={0.7}>
-                                This site was made by{" "}
-                                <Link
-                                    href={"https://www.alfieranstead.com/"}
-                                    isExternal
+                        <Flex flexDir={"column"}>
+                            <Flex>
+                                <Text fontSize={"sm"} mt={1}>
+                                    You&apos;re currently logged in as{" "}
+                                </Text>
+                                <Text
+                                    fontSize={"sm"}
+                                    mt={1}
+                                    ml={1}
+                                    fontWeight={"bold"}
                                 >
-                                    {" "}
-                                    Alfie Ranstead.{" "}
-                                </Link>
-                            </Text>
-
+                                    {profile.profile?.display_name}
+                                </Text>
+                            </Flex>
                             <Button
+                                mt={2}
                                 bg={"red.500"}
                                 _hover={{
                                     bg: "red.600",
@@ -119,6 +88,16 @@ export function Overlay(props: { hidden: boolean; changeHidden: () => void }) {
                                 Log out?
                             </Button>
                         </Flex>
+                        <Text fontSize={"sm"} mb={1} opacity={0.7}>
+                            This site was made by{" "}
+                            <Link
+                                href={"https://www.alfieranstead.com/"}
+                                isExternal
+                            >
+                                {" "}
+                                Alfie Ranstead.{" "}
+                            </Link>
+                        </Text>
                     </Flex>
                 </motion.div>
             )}

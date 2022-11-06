@@ -1,8 +1,7 @@
-import { Button, Flex, Link, Text } from "@chakra-ui/react";
-import { useProfile } from "../../utils/hooks/useProfile";
+import { Button, Flex, Text } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/router";
 import { artistType } from "../../utils/types/spotify";
+import Image from "next/image";
 
 export function ArtistOverlay(props: {
     hidden: boolean;
@@ -10,127 +9,187 @@ export function ArtistOverlay(props: {
     artistInfo: artistType;
 }) {
     return (
-        <AnimatePresence>
-            {!props.hidden && (
-                <motion.div
-                    className={"absolute z-50 w-fit h-fit"}
-                    exit={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                >
-                    <Flex
-                        bg={"MidGrey"}
-                        p={3}
-                        minH={"250px"}
-                        maxW={"400px"}
-                        borderRadius={"lg"}
-                        borderWidth={2}
-                        flexDir={"column"}
+        <>
+            <AnimatePresence>
+                {!props.hidden && (
+                    <motion.div
+                        className={
+                            "w-screen h-screen bg-[rgba(0,0,0,0.5)] top-0 left-0 fixed z-30"
+                        }
+                        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                        initial={{ opacity: 1, backdropFilter: "blur(10px)" }}
+                        animate={{ opacity: 1, backdropFilter: "blur(10px)" }}
+                        transition={{ duration: 0.15 }}
                     >
-                        <Flex flexDir={"column"}>
-                            <Flex justifyContent={"space-between"} mb={1}>
-                                <Text
-                                    textAlign={"start"}
-                                    verticalAlign={"bottom"}
-                                    fontSize={"2xl"}
-                                    mr={5}
-                                >
-                                    {props.artistInfo.name}
-                                </Text>
-                                <Button
-                                    scale={0.9}
-                                    bg={"blackAlpha.400"}
-                                    _hover={{
-                                        bg: "blackAlpha.600",
-                                        transform: "scale(1.05)",
-                                    }}
-                                    _active={{
-                                        bg: "blackAlpha.800",
-                                        transform: "scale(0.95)",
-                                    }}
-                                    transition={"all 0.15s ease-in-out"}
-                                    onClick={() => {
-                                        props.changeHidden(props.artistInfo);
-                                    }}
-                                >
-                                    X
-                                </Button>
-                            </Flex>
-                        </Flex>
-                        <Flex flexDir={"column"}>
-                            <Flex>
-                                <Text
-                                    fontSize={"sm"}
-                                    hidden={
-                                        props.artistInfo.ranking === undefined
-                                    }
-                                >
-                                    This is your{" "}
-                                    {parseRating(props.artistInfo.ranking ?? 1)}{" "}
-                                    most listened to artist recently.
-                                </Text>
+                        <Flex
+                            className={
+                                " w-screen h-screen absolute top-0 left-0 z-30"
+                            }
+                            hidden={props.hidden}
+                        />
+                    </motion.div>
+                )}
+                {!props.hidden && (
+                    <motion.div
+                        className={"absolute z-50 w-fit h-fit"}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                    >
+                        <Flex
+                            bg={"MidGrey"}
+                            borderRadius={"lg"}
+                            borderWidth={2}
+                            flexDir={{ base: "column", lg: "row" }}
+                            overflow={"hidden"}
+                        >
+                            <Flex
+                                overflow={"hidden"}
+                                zIndex={10}
+                                maxW={"400px"}
+                                maxH={"400px"}
+                            >
+                                <Image
+                                    src={props.artistInfo.images[0].url}
+                                    alt={props.artistInfo.name}
+                                    width={"400"}
+                                    height={"400"}
+                                />
                             </Flex>
                             <Flex
                                 flexDir={"column"}
-                                hidden={props.artistInfo.genres.length === 0}
-                                my={2}
+                                maxW={"400px"}
+                                maxH={"400px"}
                             >
-                                <Text fontSize={"lg"}>Genres</Text>
+                                <Flex flexDir={"column"} zIndex={20} mx={3}>
+                                    <Flex
+                                        justifyContent={"space-between"}
+                                        my={2}
+                                    >
+                                        <Text
+                                            textAlign={"start"}
+                                            verticalAlign={"bottom"}
+                                            fontSize={"2xl"}
+                                            mr={5}
+                                        >
+                                            {props.artistInfo.name}
+                                        </Text>
+                                        <Button
+                                            scale={0.9}
+                                            bg={"blackAlpha.400"}
+                                            _hover={{
+                                                bg: "blackAlpha.600",
+                                                transform: "scale(1.05)",
+                                            }}
+                                            _active={{
+                                                bg: "blackAlpha.800",
+                                                transform: "scale(0.95)",
+                                            }}
+                                            transition={"all 0.15s ease-in-out"}
+                                            onClick={() => {
+                                                props.changeHidden(
+                                                    props.artistInfo
+                                                );
+                                            }}
+                                        >
+                                            X
+                                        </Button>
+                                    </Flex>
+                                    <Flex>
+                                        <Text
+                                            fontSize={"sm"}
+                                            hidden={
+                                                props.artistInfo.ranking ===
+                                                undefined
+                                            }
+                                        >
+                                            This is your{" "}
+                                            {parseRating(
+                                                props.artistInfo.ranking ?? 1
+                                            )}{" "}
+                                            most listened to artist recently.
+                                        </Text>
+                                    </Flex>
+                                </Flex>
                                 <Flex
-                                    flexDir={"row"}
-                                    wrap={"wrap"}
-                                    fontSize={"sm"}
-                                    opacity={0.7}
+                                    flexDir={"column"}
+                                    zIndex={20}
+                                    mx={3}
+                                    my={2}
                                 >
-                                    {props.artistInfo.genres
-                                        .slice(
-                                            0,
-                                            props.artistInfo.genres.length > 3
-                                                ? 3
-                                                : props.artistInfo.genres.length
-                                        )
-                                        .map((genre) => (
-                                            <Text key={genre} mr={1}>
-                                                {genre};
-                                            </Text>
-                                        ))}
+                                    <Flex
+                                        flexDir={"column"}
+                                        hidden={
+                                            props.artistInfo.genres.length === 0
+                                        }
+                                        my={2}
+                                    >
+                                        <Text fontSize={"lg"}>Genres</Text>
+                                        <Flex
+                                            flexDir={"row"}
+                                            wrap={"wrap"}
+                                            fontSize={"sm"}
+                                            opacity={0.7}
+                                        >
+                                            {props.artistInfo.genres
+                                                .slice(
+                                                    0,
+                                                    props.artistInfo.genres
+                                                        .length > 3
+                                                        ? 3
+                                                        : props.artistInfo
+                                                              .genres.length
+                                                )
+                                                .map((genre) => (
+                                                    <Text key={genre} mr={1}>
+                                                        {genre};
+                                                    </Text>
+                                                ))}
+                                        </Flex>
+                                    </Flex>
+                                    <Flex
+                                        flexDir={"column"}
+                                        hidden={
+                                            props.artistInfo.genres.length !== 0
+                                        }
+                                        my={2}
+                                    >
+                                        <Text fontSize={"sm"}>
+                                            This artist has no available genres,
+                                            either spotify has messed up or your
+                                            taste is really niche!
+                                        </Text>
+                                    </Flex>
+                                    <Flex
+                                        flexDir={"column"}
+                                        hidden={
+                                            props.artistInfo.followers.total ===
+                                            0
+                                        }
+                                        my={2}
+                                    >
+                                        <Flex
+                                            flexDir={"row"}
+                                            wrap={"wrap"}
+                                            fontSize={"sm"}
+                                            opacity={0.7}
+                                        >
+                                            They have{" "}
+                                            {props.artistInfo.followers.total.toLocaleString()}{" "}
+                                            followers and have an overall
+                                            spotify popularity of{" "}
+                                            {props.artistInfo.popularity}
+                                            /100.
+                                        </Flex>
+                                    </Flex>
                                 </Flex>
                             </Flex>
-                            <Flex
-                                flexDir={"column"}
-                                hidden={props.artistInfo.genres.length !== 0}
-                                my={2}
-                            >
-                                <Text fontSize={"sm"}>
-                                    This artist has no available genres, either
-                                    spotify has messed up or your taste is
-                                    really niche!
-                                </Text>
-                            </Flex>
-                            <Flex
-                                flexDir={"column"}
-                                hidden={props.artistInfo.followers.total === 0}
-                                my={2}
-                            >
-                                <Flex
-                                    flexDir={"row"}
-                                    wrap={"wrap"}
-                                    fontSize={"sm"}
-                                    opacity={0.7}
-                                >
-                                    They have{" "}
-                                    {props.artistInfo.followers.total.toLocaleString()}{" "}
-                                    followers and have an overall spotify
-                                    popularity of {props.artistInfo.popularity}
-                                    /100.
-                                </Flex>
-                            </Flex>
                         </Flex>
-                    </Flex>
-                </motion.div>
-            )}
-        </AnimatePresence>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 }
 

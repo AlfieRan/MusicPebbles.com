@@ -1,4 +1,9 @@
-import { bubbleContextType, bubblePosType, bubbleType } from "../types/bubbles";
+import {
+    artistBubbleContextType,
+    bubbleContextType,
+    bubblePosType,
+    bubbleType,
+} from "../types/bubbles";
 import { useEffect, useState } from "react";
 import { useScreen } from "./useScreen";
 import { min } from "../basics";
@@ -21,13 +26,16 @@ export function useBubbles() {
         },
     };
 
+    const otherContexts: bubbleContextType[] = [{ type: "niche" }];
+
     useEffect(() => {
-        setBubbleContext(
-            artists.map((artist) => ({
+        const artistContexts: artistBubbleContextType[] = artists.map(
+            (artist) => ({
                 type: "artist",
                 artist: artist,
-            }))
+            })
         );
+        setBubbleContext([...otherContexts, ...artistContexts]);
     }, [artists]);
 
     useEffect(() => {
@@ -53,7 +61,10 @@ export function useBubbles() {
                 const newBubble: bubbleType = {
                     details: {
                         type: "artist",
-                        artist: { ...bubbleContextItem.artist, ranking: i + 1 },
+                        artist: {
+                            ...bubbleContextItem.artist,
+                            ranking: i + 1 - otherContexts.length,
+                        },
                     },
                     physics: {
                         velocity: { x: 0, y: 0 },
@@ -72,7 +83,27 @@ export function useBubbles() {
                 };
                 newBubblesState.push(newBubble);
             } else {
-                console.log("Unknown bubble type.");
+                const radius = profileBubble.physics.radius * 0.6;
+                const newBubble: bubbleType = {
+                    details: {
+                        type: "niche",
+                    },
+                    physics: {
+                        velocity: { x: 0, y: 0 },
+                        pos: (() => {
+                            const pos = getNewPos(
+                                radius,
+                                newBubblesState,
+                                screen,
+                                unusedAngles
+                            );
+                            unusedAngles = pos.unusedAngles;
+                            return pos.pos;
+                        })(),
+                        radius,
+                    },
+                };
+                newBubblesState.push(newBubble);
             }
         }
 

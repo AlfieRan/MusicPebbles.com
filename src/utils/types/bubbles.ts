@@ -14,6 +14,10 @@ export interface profileBubbleContextType {
     type: "profile";
 }
 
+export interface nicheBubbleContextType {
+    type: "niche";
+}
+
 export type bubblePhysicsType = {
     pos: bubblePosType;
     velocity: bubblePosType;
@@ -21,10 +25,14 @@ export type bubblePhysicsType = {
 };
 
 export type bubbleType = {
-    details: artistBubbleContextType | profileBubbleContextType;
+    details:
+        | artistBubbleContextType
+        | profileBubbleContextType
+        | nicheBubbleContextType;
     physics: bubblePhysicsType;
 };
 
 export type bubbleContextType =
     | artistBubbleContextType
-    | profileBubbleContextType;
+    | profileBubbleContextType
+    | nicheBubbleContextType;
