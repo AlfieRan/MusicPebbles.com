@@ -108,5 +108,5 @@ function getUniquenessDetails(rating: number) {
         ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
         : rating >= 10
         ? "Your taste is so mainstream that it's almost offensive. Please listen to something new right now."
-        : "How did you even get a score this low, I genuinely didn't know that was possible. You're definitely a lizard pretending to be a person. (Hi Zuck!)";
+        : "How did you even get a score this low, I genuinely didn't know that was possible. You're definitely a lizard pretending to be a person. (Hi Zuckberg!)";
 }
