@@ -26,7 +26,7 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
             {props.hoveringState.hovering && (
                 <motion.div
                     className={
-                        "bg-MidGrey absolute w-fit h-fit pointer-events-none z-40 m-2 overflow-hidden whitespace-nowrap"
+                        "bg-MidGrey absolute w-fit h-fit pointer-events-none z-40 m-1 overflow-hidden whitespace-nowrap"
                     }
                     style={{
                         x: mouse.x,

@@ -15,6 +15,11 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
         router.push("/").catch((err) => console.error(err));
     }
 
+    function resetTutorial() {
+        localStorage.setItem("tutorial", "false");
+        router.reload();
+    }
+
     return (
         <AnimatePresence>
             {!props.hidden && (
@@ -73,7 +78,46 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                                 </Text>
                             </Flex>
                             <Button
+                                fontSize={"sm"}
+                                borderWidth={2}
                                 mt={2}
+                                bg={""}
+                                _hover={{
+                                    transform: "scale(1.02)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.98)",
+                                }}
+                                onClick={resetTutorial}
+                            >
+                                Reset Tutorial 🔄
+                            </Button>{" "}
+                            <Link
+                                fontSize={"sm"}
+                                borderWidth={2}
+                                borderRadius={"md"}
+                                textAlign={"center"}
+                                fontWeight={"semibold"}
+                                py={2}
+                                mt={2}
+                                bg={""}
+                                _hover={{
+                                    transform: "scale(1.02)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.98)",
+                                }}
+                                href={
+                                    "https://github.com/sponsors/AlfieRan?o=esb"
+                                }
+                                isExternal
+                            >
+                                Donate 🥳
+                            </Link>
+                            <Button
+                                mt={2}
+                                py={1}
+                                fontSize={"sm"}
                                 bg={"red.500"}
                                 _hover={{
                                     bg: "red.600",
@@ -85,7 +129,7 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                                 }}
                                 onClick={logout}
                             >
-                                Log out?
+                                Log out 👋
                             </Button>
                         </Flex>
                         <Text fontSize={"sm"} mb={1} opacity={0.7}>

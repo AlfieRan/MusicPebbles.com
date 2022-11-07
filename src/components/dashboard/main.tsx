@@ -10,17 +10,23 @@ import { useScreen } from "../../utils/hooks/useScreen";
 import { artistEmptyObject, artistType } from "../../utils/types/spotify";
 import { Overlay } from "../overlay/overlay";
 import { infoOverlayType } from "../../utils/types/overlay";
+import Tutorial from "../tutorial";
+import { useTutorial } from "../../utils/hooks/useTutorial";
 
 export function Main() {
+    // state hooks
     const [hovering, setHovering] = useState<hoveringType>({ hovering: false });
     const [showingSettings, setShowingSettings] = useState<boolean>(false);
     const [showingOverlay, setShowingOverlay] = useState<infoOverlayType>({
         hidden: true,
         info: { type: "artist", artist: artistEmptyObject },
     });
+    const [showNum, setShowNum] = useState<number>(50);
+
+    // custom hooks
     const bubbles = useBubbles();
     const screen = useScreen();
-    const [showNum, setShowNum] = useState<number>(50);
+    const tutorial = useTutorial();
 
     useEffect(() => {
         if (screen.width && screen.height) {
@@ -52,6 +58,7 @@ export function Main() {
     return (
         <Center h={"full"} w={"full"} flexDir={"column"} overflow={"hidden"}>
             <Hovering hoveringState={hovering} />
+            <Tutorial hidden={!tutorial.showTutorial} skip={tutorial.skip} />
             <Settings hidden={!showingSettings} changeHidden={changeHidden} />
             <Overlay
                 changeHidden={changeArtistHidden}

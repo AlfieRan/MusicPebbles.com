@@ -95,13 +95,13 @@ function getUniquenessDetails(rating: number) {
         : rating >= 70
         ? "You definitely do something with computers for a living, probably modding discord servers. You're a little too niche for me."
         : rating >= 60
-        ? "Your taste is pretty underground, but you're not too far gone. Stay off reddit and you might be somewhat tolerable."
+        ? "Your taste is pretty underground, but you're not too far gone. Stay off tiktok and you might be somewhat tolerable."
         : rating >= 55
         ? "100% a soundcloud user. You're not too bad, but you're not great either. You're just kinda there."
         : rating >= 45
         ? "Your taste is pretty mainstream, but you also appreciate some smaller artists. You may not be normal in many ways but at least your music taste is."
         : rating >= 30
-        ? "'My favourite artist is this really underground group called The Beatles, you should check them out.' You're pretty normal, but you're also pretty boring."
+        ? `"My favourite artist is this really underground group called The Beatles, you should check them out." You're pretty normal, but you're also pretty boring.`
         : rating >= 20
         ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
         : rating >= 10
