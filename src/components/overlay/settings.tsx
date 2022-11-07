@@ -41,11 +41,11 @@ export function Settings(props: {
                 >
                     <Flex
                         bg={"MidGrey"}
-                        p={3}
+                        p={4}
                         minH={"250px"}
                         maxW={"500px"}
                         borderRadius={"lg"}
-                        borderWidth={2}
+                        boxShadow={"#555 0px 0px 15px"}
                         flexDir={"column"}
                         justifyContent={"space-between"}
                     >
@@ -88,7 +88,7 @@ export function Settings(props: {
                             </Flex>
                             <Link
                                 fontSize={"sm"}
-                                borderWidth={2}
+                                boxShadow={"#555 0px 0px 3px"}
                                 borderRadius={"md"}
                                 textAlign={"center"}
                                 fontWeight={"semibold"}
@@ -110,7 +110,7 @@ export function Settings(props: {
                             </Link>
                             <Button
                                 fontSize={"sm"}
-                                borderWidth={2}
+                                boxShadow={"#555 0px 0px 3px"}
                                 mt={2}
                                 bg={""}
                                 _hover={{
@@ -141,7 +141,7 @@ export function Settings(props: {
                                 Log out 👋
                             </Button>
                         </Flex>
-                        <Text fontSize={"sm"} mb={1} opacity={0.7}>
+                        <Text fontSize={"sm"} mt={2} opacity={0.7}>
                             This site was made by{" "}
                             <Link
                                 href={"https://www.alfieranstead.com/"}

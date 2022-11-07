@@ -13,12 +13,12 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
             bg={"MidGrey"}
             flexDir={"column"}
             borderRadius={"lg"}
-            borderWidth={2}
             maxW={"600px"}
-            px={3}
-            py={2}
+            boxShadow={"#555 0px 0px 15px"}
+            px={5}
+            py={4}
         >
-            <Flex flexDir={"row"} justifyContent={"space-between"} my={2}>
+            <Flex flexDir={"row"} justifyContent={"space-between"} mb={2}>
                 <Text
                     textAlign={"start"}
                     verticalAlign={"bottom"}
@@ -40,6 +40,7 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
                     }}
                     transition={"all 0.15s ease-in-out"}
                     onClick={props.changeHidden}
+                    textAlign={"center"}
                 >
                     X
                 </Button>
@@ -54,24 +55,28 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
                 fontSize={"xl"}
                 fontWeight={"semibold"}
             >
-                <Flex justifyContent={"space-between"}>
+                <Flex justifyContent={"space-between"} mb={1}>
                     <Text>Most Niche Artists</Text>
                     <Text>Niche Rating</Text>
                 </Flex>
                 {uniqueness.artists.slice(0, 5).map((artist, index) => (
                     <Flex
                         key={artist.artist.id}
-                        borderWidth={1}
-                        borderTopRadius={index === 0 ? "md" : ""}
-                        borderBottomRadius={index === 4 ? "md" : ""}
+                        bg={
+                            index % 2 === 0
+                                ? "blackAlpha.400"
+                                : "blackAlpha.100"
+                        }
+                        borderRadius={"md"}
+                        mb={index !== 4 ? 1.5 : 0}
+                        mt={index !== 0 ? 1.5 : 0}
                         justifyContent={"space-between"}
                     >
                         <Flex h={"full"}>
                             <Flex
                                 width={"75px"}
                                 height={"75px"}
-                                borderTopLeftRadius={index === 0 ? "md" : ""}
-                                borderBottomLeftRadius={index === 4 ? "md" : ""}
+                                borderLeftRadius={"md"}
                                 overflow={"hidden"}
                             >
                                 <Image
@@ -81,7 +86,11 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
                                     height={75}
                                 />
                             </Flex>
-                            <Flex flexDir={"column"} alignSelf={"center"}>
+                            <Flex
+                                flexDir={"column"}
+                                alignSelf={"center"}
+                                borderRightRadius={"md"}
+                            >
                                 <Text
                                     mx={2}
                                     fontWeight={"semibold"}

@@ -11,7 +11,7 @@ export function ArtistOverlay(props: {
         <Flex
             bg={"MidGrey"}
             borderRadius={"lg"}
-            borderWidth={2}
+            boxShadow={"#555 0px 0px 15px"}
             flexDir={{ base: "column", lg: "row" }}
             overflow={"hidden"}
             key={props.artistInfo.id + "overlay"}
