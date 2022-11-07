@@ -36,6 +36,7 @@ export default async function artists(
             api: "internal",
             error: JSON.stringify(error),
             statusCode: 500,
+            time: Date.now(),
         };
         await redisClient.lpush("errors", JSON.stringify(errorObj));
 
