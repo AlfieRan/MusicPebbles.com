@@ -16,7 +16,7 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
     }
 
     function resetTutorial() {
-        localStorage.setItem("tutorial", "false");
+        localStorage.setItem("skipTutorial", "false");
         router.reload();
     }
 
@@ -77,21 +77,6 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                                     {profile.profile?.display_name}
                                 </Text>
                             </Flex>
-                            <Button
-                                fontSize={"sm"}
-                                borderWidth={2}
-                                mt={2}
-                                bg={""}
-                                _hover={{
-                                    transform: "scale(1.02)",
-                                }}
-                                _active={{
-                                    transform: "scale(0.98)",
-                                }}
-                                onClick={resetTutorial}
-                            >
-                                Reset Tutorial 🔄
-                            </Button>{" "}
                             <Link
                                 fontSize={"sm"}
                                 borderWidth={2}
@@ -114,6 +99,21 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
                             >
                                 Donate 🥳
                             </Link>
+                            <Button
+                                fontSize={"sm"}
+                                borderWidth={2}
+                                mt={2}
+                                bg={""}
+                                _hover={{
+                                    transform: "scale(1.02)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.98)",
+                                }}
+                                onClick={resetTutorial}
+                            >
+                                Reset Tutorial 🔄
+                            </Button>{" "}
                             <Button
                                 mt={2}
                                 py={1}

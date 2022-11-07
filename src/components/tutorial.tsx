@@ -85,8 +85,9 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
                                 h={"150px"}
                                 borderRadius={"full"}
                                 overflow={"hidden"}
-                                _hover={{ transform: "scale(1.05)" }}
-                                _active={{ transform: "scale(0.95)" }}
+                                transform={"scale(0.95)"}
+                                _hover={{ transform: "scale(1.0)" }}
+                                _active={{ transform: "scale(0.90)" }}
                                 transition={"transform 0.1s"}
                             >
                                 <Button
@@ -105,8 +106,9 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
                                 h={"150px"}
                                 borderRadius={"full"}
                                 overflow={"hidden"}
-                                _hover={{ transform: "scale(1.05)" }}
-                                _active={{ transform: "scale(0.95)" }}
+                                transform={"scale(0.95)"}
+                                _hover={{ transform: "scale(1.0)" }}
+                                _active={{ transform: "scale(0.90)" }}
                                 transition={"transform 0.1s"}
                             >
                                 <Button
@@ -139,7 +141,7 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
                 >
                     <Center
                         key={"tutorialSlide1"}
-                        flexDir={"row"}
+                        flexDir={{ base: "column", md: "row" }}
                         minW={"350px"}
                         minH={"350px"}
                         overflow={"hidden"}
