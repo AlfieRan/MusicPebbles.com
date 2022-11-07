@@ -3,8 +3,12 @@ import { useProfile } from "../../utils/hooks/useProfile";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import BlurredBackground from "./blurredBackground";
 
-export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
+export function Settings(props: {
+    hidden: boolean;
+    changeHidden: (value?: boolean) => void;
+}) {
     const profile = useProfile();
     const router = useRouter();
 
@@ -22,8 +26,13 @@ export function Settings(props: { hidden: boolean; changeHidden: () => void }) {
 
     return (
         <AnimatePresence>
+            <BlurredBackground
+                hidden={props.hidden}
+                hide={props.changeHidden}
+            />
             {!props.hidden && (
                 <motion.div
+                    key={"settingsMain"}
                     className={"absolute z-30 w-fit h-fit"}
                     exit={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}

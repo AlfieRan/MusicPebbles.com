@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
-import { Settings } from "./settings";
+import { Settings } from "../overlay/settings";
 import { useBubbles } from "../../utils/hooks/useBubbles";
 import { Bubble } from "../bubble";
 import { useScreen } from "../../utils/hooks/useScreen";
@@ -37,15 +37,26 @@ export function Main() {
         }
     }, [screen]);
 
-    function changeHidden() {
-        setShowingSettings(!showingSettings);
+    function changeHidden(value?: boolean) {
+        if (value === undefined) {
+            setShowingSettings(!showingSettings);
+        } else {
+            setShowingSettings(value);
+        }
     }
 
-    function changeArtistHidden(artistInfo: artistType) {
-        setShowingOverlay({
-            hidden: !showingOverlay.hidden,
-            info: { type: "artist", artist: artistInfo },
-        });
+    function changeArtistHidden(artistInfo: artistType, value?: boolean) {
+        if (value === undefined) {
+            setShowingOverlay({
+                hidden: !showingOverlay.hidden,
+                info: { type: "artist", artist: artistInfo },
+            });
+        } else {
+            setShowingOverlay({
+                hidden: value,
+                info: { type: "artist", artist: artistInfo },
+            });
+        }
     }
 
     function changeNicheHidden() {
