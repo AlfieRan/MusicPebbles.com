@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Center, Flex, Text } from "@chakra-ui/react";
+import {
+    Center,
+    Flex,
+    Grid,
+    GridItem,
+    Table,
+    TableCaption,
+    TableContainer,
+    Text,
+} from "@chakra-ui/react";
 import { ApiError } from "../../utils/types/errors";
 
 const Page = () => {
@@ -41,45 +50,59 @@ const Page = () => {
                     <Text fontSize={"2xl"} textAlign={"center"}>
                         Api Errors
                     </Text>
-                    <Flex mx={"xl"} maxW={"80vw"}>
-                        {errors.map((error) => (
+                    <Flex
+                        mx={"xl"}
+                        maxW={"80vw"}
+                        maxH={"70vh"}
+                        flexDir={"column"}
+                        overflowY={"scroll"}
+                        borderWidth={1}
+                        borderRadius={"lg"}
+                    >
+                        {errors.map((error, index) => (
                             <Flex
                                 key={JSON.stringify(error.error) + error.api}
                                 flexDir={"column"}
-                                mx={"lg"}
-                                my={"md"}
-                                borderWidth={1}
-                                borderRadius={"lg"}
-                                px={"lg"}
-                                py={"md"}
+                                px={3}
+                                py={2}
+                                bg={index % 2 === 0 ? "DarkGrey" : "MidGrey"}
+                                maxW={"inherit"}
+                                overflow={"visible"}
                             >
-                                <Text fontSize={"sm"}>Api: {error.api}</Text>
-                                <Text
-                                    fontSize={"sm"}
-                                    hidden={
-                                        !(
-                                            error.api === "internal" ||
-                                            error.api === "spotify"
-                                        )
-                                    }
-                                >
-                                    {error.api === "internal" ||
-                                    error.api === "spotify"
-                                        ? "Status:" + error.statusCode
-                                        : 500}
-                                </Text>
-                                <Text mx={"sm"} fontSize={"sm"}>
-                                    Error: {JSON.stringify(error.error)}
-                                </Text>
-                                <Text hidden={error.api !== "spotify"}>
-                                    {error.api === "spotify"
-                                        ? "Raw response: " + error.apiResponse
-                                        : ""}
-                                </Text>
+                                <Table>
+                                    <tr>
+                                        <td className={"pr-5 py-1"}>
+                                            Timestamp:
+                                        </td>
+                                        <td className={"py-1"}>
+                                            {new Date(error.time).getTime()}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={"pr-5 py-1"}>Api:</td>
+                                        <td className={"py-1"}>{error.api}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className={"pr-5 py-1"}>Status:</td>
+                                        <td className={"py-1"}>
+                                            {error.statusCode}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className={"pr-5 py-1 align-top"}>
+                                            Error:
+                                        </td>
+                                        <td className={"break-words py-1"}>
+                                            <Text maxW={"60vw"}>
+                                                {error.error}
+                                            </Text>
+                                        </td>
+                                    </tr>
+                                </Table>
                             </Flex>
                         ))}
                     </Flex>
-                    <Text fontSize={"md"}>
+                    <Text fontSize={"md"} hidden={errors.length > 0}>
                         There are currently no error reports!
                     </Text>
                 </Flex>

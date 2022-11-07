@@ -15,7 +15,7 @@ import {
 } from "../../../server/constants";
 import { ApiError } from "../../../utils/types/errors";
 
-const intenseLogging = true;
+const intenseLogging = false;
 
 export default async function callback(
     req: NextApiRequest,
@@ -84,6 +84,7 @@ export default async function callback(
                 api: "spotify",
                 statusCode: error.response.statusCode,
                 apiResponse: error.response.data,
+                time: Date.now(),
             };
             await redisClient.lpush("errors", JSON.stringify(errorData));
 
@@ -110,6 +111,7 @@ export default async function callback(
             api: "spotify",
             statusCode: accessTokenResponse.statusCode,
             apiResponse: accessTokenResponse.statusText,
+            time: Date.now(),
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
 
@@ -153,6 +155,7 @@ export default async function callback(
                 api: "spotify",
                 statusCode: error.response.statusCode,
                 apiResponse: error.response.data,
+                time: Date.now(),
             };
             await redisClient.lpush("errors", JSON.stringify(errorData));
             res.redirect(`/error?error=${JSON.stringify(error)}`);
@@ -175,6 +178,7 @@ export default async function callback(
             api: "spotify",
             statusCode: profileResponseRequest.status,
             apiResponse: JSON.stringify(profileResponseRequest.body),
+            time: Date.now(),
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
         res.redirect(`/error?error=${JSON.stringify(profileResponseRequest)}`);
@@ -204,6 +208,7 @@ export default async function callback(
             api: "spotify",
             statusCode: profileResponseRequest.status,
             apiResponse: JSON.stringify(profileResponseRequest.body),
+            time: Date.now(),
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
         if (intenseLogging)
@@ -237,6 +242,7 @@ export default async function callback(
             api: "spotify",
             statusCode: profileResponse.statusCode,
             apiResponse: profileResponse,
+            time: Date.now(),
         };
         await redisClient.lpush("errors", JSON.stringify(errorData));
 

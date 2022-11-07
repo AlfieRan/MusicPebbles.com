@@ -46,7 +46,22 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
                 <Text>{uniqueness.details}</Text>
             </Flex>
             {/*TODO: change this to show top 5 artists */}
-            <Flex mt={3}>Balls</Flex>
+            <Flex mt={3} mb={1} flexDir={"column"}>
+                {uniqueness.artists.slice(0, 5).map((artist, index) => (
+                    <Flex
+                        key={artist.artist.id}
+                        borderWidth={1}
+                        px={2}
+                        py={1}
+                        borderTopRadius={index === 0 ? "md" : ""}
+                        borderBottomRadius={index === 4 ? "md" : ""}
+                        justifyContent={"space-between"}
+                    >
+                        <Text>{artist.artist.name}</Text>
+                        <Text>{Math.floor(artist.uniqueness)}/100</Text>
+                    </Flex>
+                ))}
+            </Flex>
         </Flex>
     );
 }
