@@ -4,28 +4,38 @@ import { useMouse } from "../utils/hooks/useMouse";
 import { useProfile } from "../utils/hooks/useProfile";
 import { Flex, Text } from "@chakra-ui/react";
 import { useUniqueness } from "../utils/hooks/useUniqueness";
+import { useScreen } from "../utils/hooks/useScreen";
 
 export default function Hovering(props: { hoveringState: hoveringType }) {
-    const mouse = useMouse();
+    const { mouse, sector } = useMouse();
     const profile = useProfile();
+    const screen = useScreen();
     const uniqueness = useUniqueness();
     const showRanking =
         props.hoveringState.hovering &&
         props.hoveringState.type === "artist" &&
         props.hoveringState.artist.ranking !== undefined;
 
+    if (screen.width < 500) {
+        // Don't show on mobile, can cause weird bugs
+        return <></>;
+    }
+
     return (
         <AnimatePresence>
             {props.hoveringState.hovering && (
                 <motion.div
                     className={
-                        "bg-MidGrey absolute w-fit h-fit pointer-events-none z-40 overflow-hidden"
+                        "bg-MidGrey absolute w-fit h-fit pointer-events-none z-40 m-2 overflow-hidden whitespace-nowrap"
                     }
                     style={{
                         x: mouse.x,
                         y: mouse.y,
-                        left: 0,
-                        top: 0,
+                        left: sector.x === "left" ? 0 : undefined,
+                        top: sector.y === "top" ? 0 : undefined,
+                        right: sector.x === "right" ? screen.width : undefined,
+                        bottom:
+                            sector.y === "bottom" ? screen.height : undefined,
                     }}
                     exit={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -57,7 +67,7 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                             py={1}
                             borderRadius={"xl"}
                             flexDir={"column"}
-                            maxW={"400px"}
+                            maxW={"450px"}
                         >
                             <Flex>
                                 <Text hidden={!showRanking} mr={2}>
@@ -98,7 +108,9 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                             borderRadius={"xl"}
                             flexDir={"column"}
                             maxW={"300px"}
+                            minW={"250px"}
                             fontSize={"md"}
+                            whiteSpace={"normal"}
                         >
                             <Text>{uniqueness.details}</Text>
                         </Flex>

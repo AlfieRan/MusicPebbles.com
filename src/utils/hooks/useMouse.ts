@@ -1,34 +1,37 @@
 import { useSpring } from "framer-motion";
-import { useEffect } from "react";
+import { MutableRefObject, Ref, useEffect, useState } from "react";
 
 export function useMouse() {
     const mouse = {
         x: useSpring(0, { stiffness: 75, damping: 15 }),
         y: useSpring(0, { stiffness: 100, damping: 15 }),
     };
-    const offset = {
-        x: useSpring(0, { stiffness: 75, damping: 15 }),
-        y: useSpring(0, { stiffness: 100, damping: 15 }),
-    };
+    const [sector, setSector] = useState<{
+        x: "left" | "right";
+        y: "top" | "bottom";
+    }>({ x: "left", y: "top" });
 
     const updateMouse = (e: MouseEvent) => {
         const { pageX, pageY } = e;
-        const Mult = getMultiplier();
 
-        if (pageX > window.innerWidth / 2 && offset.x.get() >= 0) {
-            offset.x.set(-225);
-        } else if (pageX < window.innerWidth / 2 && offset.x.get() < 0) {
-            offset.x.set(20);
+        if (pageX > window.innerWidth / 2 && sector.x !== "right") {
+            // mouse is on the right side of the screen
+            setSector((prev) => ({ ...prev, x: "right" }));
+        } else if (pageX < window.innerWidth / 2 && sector.x !== "left") {
+            // mouse is on the left side of the screen
+            setSector((prev) => ({ ...prev, x: "left" }));
         }
 
-        if (pageY > window.innerHeight / 2 && offset.y.get() >= 0) {
-            offset.y.set(-170 * Mult.height);
-        } else if (pageY < window.innerHeight / 2 && offset.y.get() < 0) {
-            offset.y.set(15 * Mult.height);
+        if (pageY > window.innerHeight / 2 && sector.y !== "bottom") {
+            // mouse is in the bottom half of the screen
+            setSector((prev) => ({ ...prev, y: "bottom" }));
+        } else if (pageY < window.innerHeight / 2 && sector.y !== "top") {
+            // mouse is in the top half of the screen
+            setSector((prev) => ({ ...prev, y: "top" }));
         }
 
-        mouse.x.set(pageX + offset.x.get());
-        mouse.y.set(pageY + offset.y.get());
+        mouse.x.set(pageX);
+        mouse.y.set(pageY);
     };
 
     useEffect(() => {
@@ -38,12 +41,5 @@ export function useMouse() {
         }
     }, [window, updateMouse]);
 
-    return mouse;
-}
-
-function getMultiplier(): { width: number; height: number } {
-    return {
-        width: screen.width / 5760 + 0.66, // 1920 * 3 = 5760
-        height: screen.height / 3240 + 0.66, // 1080 * 3 = 3240
-    };
+    return { mouse, sector };
 }

@@ -1,6 +1,7 @@
 import { artistType } from "../../utils/types/spotify";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
+import { parseRating } from "../../utils/basics";
 
 export function ArtistOverlay(props: {
     artistInfo: artistType;
@@ -123,19 +124,4 @@ export function ArtistOverlay(props: {
             </Flex>
         </Flex>
     );
-}
-
-function parseRating(num: number): string {
-    const lastDigit = num % 10;
-    let ending = "th";
-
-    if (lastDigit === 1) {
-        ending = "st";
-    } else if (lastDigit === 2) {
-        ending = "nd";
-    } else if (lastDigit === 3) {
-        ending = "rd";
-    }
-
-    return num + ending;
 }

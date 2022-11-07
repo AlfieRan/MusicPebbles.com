@@ -134,6 +134,7 @@ export function Bubble(props: {
             minH={0}
             overflow={"hidden"}
             bg={"MidBlue"}
+            cursor={"pointer"}
         >
             {middle}
         </Center>

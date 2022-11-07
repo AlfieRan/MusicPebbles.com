@@ -1,5 +1,7 @@
 import { useUniqueness } from "../../utils/hooks/useUniqueness";
 import { Button, Flex, Text } from "@chakra-ui/react";
+import Image from "next/image";
+import { parseRating } from "../../utils/basics";
 
 export function NicheOverlay(props: { changeHidden: () => void }) {
     const uniqueness = useUniqueness();
@@ -45,20 +47,56 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
             <Flex flexDir={"column"} fontSize={"md"}>
                 <Text>{uniqueness.details}</Text>
             </Flex>
-            {/*TODO: change this to show top 5 artists */}
-            <Flex mt={3} mb={1} flexDir={"column"}>
+            <Flex
+                mt={5}
+                mb={1}
+                flexDir={"column"}
+                fontSize={"xl"}
+                fontWeight={"semibold"}
+            >
+                <Flex justifyContent={"space-between"}>
+                    <Text>Most Niche Artists</Text>
+                    <Text>Niche Rating</Text>
+                </Flex>
                 {uniqueness.artists.slice(0, 5).map((artist, index) => (
                     <Flex
                         key={artist.artist.id}
                         borderWidth={1}
-                        px={2}
-                        py={1}
                         borderTopRadius={index === 0 ? "md" : ""}
                         borderBottomRadius={index === 4 ? "md" : ""}
                         justifyContent={"space-between"}
                     >
-                        <Text>{artist.artist.name}</Text>
-                        <Text>{Math.floor(artist.uniqueness)}/100</Text>
+                        <Flex h={"full"}>
+                            <Flex
+                                width={"75px"}
+                                height={"75px"}
+                                borderTopLeftRadius={index === 0 ? "md" : ""}
+                                borderBottomLeftRadius={index === 4 ? "md" : ""}
+                                overflow={"hidden"}
+                            >
+                                <Image
+                                    src={artist.artist.images[0].url}
+                                    alt={"image of" + artist.artist.name}
+                                    width={75}
+                                    height={75}
+                                />
+                            </Flex>
+                            <Flex flexDir={"column"} alignSelf={"center"}>
+                                <Text
+                                    mx={2}
+                                    fontWeight={"semibold"}
+                                    fontSize={"lg"}
+                                >
+                                    {artist.artist.name}
+                                </Text>
+                                <Text mx={2} fontSize={"sm"}>
+                                    Your {parseRating(artist.userRating)} Artist
+                                </Text>
+                            </Flex>
+                        </Flex>
+                        <Text mx={2} alignSelf={"center"}>
+                            {Math.floor(artist.uniqueness)}/100
+                        </Text>
                     </Flex>
                 ))}
             </Flex>
