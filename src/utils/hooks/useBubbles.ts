@@ -32,7 +32,7 @@ export function useBubbles() {
         const artistContexts: artistBubbleContextType[] = artists.map(
             (artist) => ({
                 type: "artist",
-                artist: artist,
+                artist,
             })
         );
         setBubbleContext([...otherContexts, ...artistContexts]);

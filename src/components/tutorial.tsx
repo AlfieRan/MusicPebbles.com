@@ -23,6 +23,8 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
         console.log("slideIndex: " + slideIndex);
     }, [slideIndex]);
 
+    // TODO: add a slide about the bubbles scaling with popularity
+
     return (
         <AnimatePresence>
             {!props.hidden && (

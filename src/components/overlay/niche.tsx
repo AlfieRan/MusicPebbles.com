@@ -2,9 +2,11 @@ import { useUniqueness } from "../../utils/hooks/useUniqueness";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { parseRating } from "../../utils/basics";
+import { useCustomSummary } from "../../utils/hooks/useCustomSummary";
 
 export function NicheOverlay(props: { changeHidden: () => void }) {
     const uniqueness = useUniqueness();
+    const customSummary = useCustomSummary();
     return (
         <Flex
             overflow={"hidden"}
@@ -45,8 +47,19 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
                     X
                 </Button>
             </Flex>
-            <Flex flexDir={"column"} fontSize={"md"}>
+            <Flex
+                flexDir={"column"}
+                fontSize={"md"}
+                hidden={customSummary !== undefined}
+            >
                 <Text>{uniqueness.details}</Text>
+            </Flex>
+            <Flex
+                flexDir={"column"}
+                fontSize={"md"}
+                hidden={customSummary === undefined}
+            >
+                <Text>{customSummary}</Text>
             </Flex>
             <Flex
                 mt={5}
@@ -61,7 +74,11 @@ export function NicheOverlay(props: { changeHidden: () => void }) {
                 </Flex>
                 {uniqueness.artists.slice(0, 5).map((artist, index) => (
                     <Flex
-                        key={artist.artist.id}
+                        key={
+                            artist.artist.id === ""
+                                ? Math.random()
+                                : artist.artist.id
+                        }
                         bg={
                             index % 2 === 0
                                 ? "blackAlpha.400"

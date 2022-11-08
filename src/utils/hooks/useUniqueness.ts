@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { uniqueArtistWrapperType, Uniqueness } from "../types/uniqueness";
 import { useArtists } from "./useArtists";
-import { artistType } from "../types/spotify";
+import { artistEmptyObject, artistsType, artistType } from "../types/spotify";
 import { uniqueSigmoid } from "../basics";
+import { profileType } from "../types/oauth";
+import { useProfile } from "./useProfile";
 
 const frequencyDependency = 0.35;
 // controls how much the uniqueness rating is affected by how much the user has listened to an artist
@@ -10,11 +12,23 @@ const frequencyDependency = 0.35;
 // decays exponentially, so at 0.5, the user's 50th artist has 7.7% of the effect of their 1st artist
 // at 0.25, the user's 50th artist has 1.5% of the effect of their 1st artist, etc.
 
+const emptyArtistUniqueObject = {
+    artist: artistEmptyObject,
+    uniqueness: 0,
+    userRating: 0,
+};
+
 export function useUniqueness() {
     const [uniqueness, setUniqueness] = useState<Uniqueness>({
-        rating: 0,
-        details: "",
-        artists: [],
+        rating: 50,
+        details: getUniquenessDetails(50),
+        artists: [
+            emptyArtistUniqueObject,
+            emptyArtistUniqueObject,
+            emptyArtistUniqueObject,
+            emptyArtistUniqueObject,
+            emptyArtistUniqueObject,
+        ],
     });
     const artists = useArtists();
 
@@ -33,7 +47,7 @@ export function useUniqueness() {
         const rating = Math.ceil(sum / portionOfArtists);
         setUniqueness({
             rating,
-            details: getUniquenessDetails(rating),
+            details: getUniquenessDetails(rating, artists),
             artists: sortedArtists,
         });
     }, [artists]);
@@ -87,7 +101,7 @@ function adjustPopularity(popularity: number) {
     return 0.005 * popularity ** 2 + 0.5 * popularity;
 }
 
-function getUniquenessDetails(rating: number) {
+function getUniquenessDetails(rating: number, artists?: artistsType): string {
     return rating >= 90
         ? "Okay you definitely only listen to your own music, have fun with that. Weirdo."
         : rating >= 80
@@ -100,11 +114,13 @@ function getUniquenessDetails(rating: number) {
         ? "100% a soundcloud user. You're not too bad, but you're not great either. You're just kinda there."
         : rating >= 45
         ? "Your taste is pretty mainstream, but you also appreciate some smaller artists. You may not be normal in many ways but at least your music taste is."
-        : rating >= 30
-        ? `"My favourite artist is this really underground group called The Beatles, you should check them out." You're pretty normal, but you're also pretty boring.`
-        : rating >= 20
+        : rating >= 35
+        ? `"My favourite artist is this really underground group called ${
+              artists !== undefined ? artists[0].name : "The Beatles"
+          }, you should check them out." You're pretty normal, but you're also pretty boring.`
+        : rating >= 25
         ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
-        : rating >= 10
+        : rating >= 15
         ? "Your taste is so mainstream that it's almost offensive. Please listen to something new right now."
         : "How did you even get a score this low, I genuinely didn't know that was possible. You're definitely a lizard pretending to be a person. (Hi Zuckberg!)";
 }

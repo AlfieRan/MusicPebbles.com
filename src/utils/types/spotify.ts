@@ -28,7 +28,13 @@ export type artistsType = artistType[];
 export const artistEmptyObject: artistType = {
     name: "",
     id: "",
-    images: [],
+    images: [
+        {
+            url: "/unknown.png",
+            width: 400,
+            height: 400,
+        },
+    ],
     genres: [],
     popularity: 0,
     followers: {

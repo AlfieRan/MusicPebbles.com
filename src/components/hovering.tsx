@@ -5,12 +5,14 @@ import { useProfile } from "../utils/hooks/useProfile";
 import { Flex, Text } from "@chakra-ui/react";
 import { useUniqueness } from "../utils/hooks/useUniqueness";
 import { useScreen } from "../utils/hooks/useScreen";
+import { useCustomSummary } from "../utils/hooks/useCustomSummary";
 
 export default function Hovering(props: { hoveringState: hoveringType }) {
     const { mouse, sector } = useMouse();
     const profile = useProfile();
     const screen = useScreen();
     const uniqueness = useUniqueness();
+    const customHover = useCustomSummary();
     const showRanking =
         props.hoveringState.hovering &&
         props.hoveringState.type === "artist" &&
@@ -112,7 +114,12 @@ export default function Hovering(props: { hoveringState: hoveringType }) {
                             fontSize={"md"}
                             whiteSpace={"normal"}
                         >
-                            <Text>{uniqueness.details}</Text>
+                            <Text hidden={customHover === undefined}>
+                                {customHover}
+                            </Text>
+                            <Text hidden={customHover !== undefined}>
+                                {uniqueness.details}
+                            </Text>
                         </Flex>
                     )}
                 </motion.div>
