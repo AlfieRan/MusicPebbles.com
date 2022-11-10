@@ -16,7 +16,7 @@ const Page = () => {
     return (
         <Box h={"100%"} w={"100%"}>
             <Center h={"full"} w={"full"} flexDir={"column"}>
-                <Text my={5}>Bubbles :)</Text>
+                <Text my={5}>Pebbles :)</Text>
                 <Link
                     href={"/api/oauth/login"}
                     borderWidth={2}

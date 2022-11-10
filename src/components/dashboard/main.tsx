@@ -4,14 +4,19 @@ import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { Settings } from "../overlay/settings";
-import { useBubbles } from "../../utils/hooks/useBubbles";
-import { Bubble } from "../bubble";
 import { useScreen } from "../../utils/hooks/useScreen";
 import { artistEmptyObject, artistType } from "../../utils/types/spotify";
 import { Overlay } from "../overlay/overlay";
 import { infoOverlayType } from "../../utils/types/overlay";
 import Tutorial from "../tutorial";
 import { useTutorial } from "../../utils/hooks/useTutorial";
+import ProfilePebble from "../pebbles/profilePebble";
+import ArtistPebble from "../pebbles/artistPebble";
+import SongPebble from "../pebbles/songPebble";
+import UniquePebble from "../pebbles/uniquePebble";
+import GenrePebble from "../pebbles/genrePebble";
+import TimePebble from "../pebbles/timePebble";
+import Pebbles from "../pebbles/Pebbles";
 
 export function Main() {
     // state hooks
@@ -24,7 +29,6 @@ export function Main() {
     const [showNum, setShowNum] = useState<number>(50);
 
     // custom hooks
-    const bubbles = useBubbles();
     const screen = useScreen();
     const tutorial = useTutorial();
 
@@ -33,7 +37,7 @@ export function Main() {
             setShowNum(
                 Math.min(Math.floor((screen.width * screen.height) / 10000), 47)
             );
-            console.log("Showing " + showNum + " bubbles");
+            console.log("Showing " + showNum + " pebbles");
         }
     }, [screen]);
 
@@ -103,7 +107,7 @@ export function Main() {
                 }}
                 initial={{ borderRadius: "0%" }}
             >
-                <Text>Bubbles</Text>
+                <Text>Pebbles</Text>
             </motion.div>
             <motion.div
                 className={
@@ -120,24 +124,7 @@ export function Main() {
                     delay: 3,
                 }}
             >
-                {bubbles.bubbles.slice(0, showNum).map((bubble) => (
-                    <Bubble
-                        setHovering={setHovering}
-                        context={bubble}
-                        key={
-                            bubble.details.type === "artist"
-                                ? bubble.details.artist.id + "bubble"
-                                : bubble.details.type === "profile"
-                                ? "profile"
-                                : bubble.details.type === "niche"
-                                ? "niche"
-                                : "unknown" + Math.random()
-                        }
-                        changeSettings={changeHidden}
-                        changeArtist={changeArtistHidden}
-                        changeNiche={changeNicheHidden}
-                    />
-                ))}
+                <Pebbles />
             </motion.div>
         </Center>
     );

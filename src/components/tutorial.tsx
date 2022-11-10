@@ -23,7 +23,7 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
         console.log("slideIndex: " + slideIndex);
     }, [slideIndex]);
 
-    // TODO: add a slide about the bubbles scaling with popularity
+    // TODO: add a slide about the pebbles scaling with popularity
 
     return (
         <AnimatePresence>
@@ -75,7 +75,7 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
                         overflow={"hidden"}
                     >
                         <Text mb={2} fontSize={"2xl"} textAlign={"center"}>
-                            Welcome to Bubbles {profile.profile?.display_name}!
+                            Welcome to Pebbles {profile.profile?.display_name}!
                         </Text>
                         <Flex
                             flexDir={"row"}
@@ -194,7 +194,7 @@ export default function Tutorial(props: { hidden: boolean; skip: () => void }) {
                                 _active={{ transform: "scale(0.97)" }}
                                 onClick={props.skip}
                             >
-                                Start using Bubbles
+                                Start using Pebbles
                             </Button>
                         </Flex>
                     </Center>

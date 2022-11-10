@@ -1,8 +1,8 @@
-# Bubbles
+# Pebbles
 
-Bubbles is a simple, lightweight and fast dashboard for spotify.
+Pebbles is a simple, lightweight and fast dashboard for spotify.
 
-If you couldn't have guessed, it's styled with bubbles.
+If you couldn't have guessed, it's styled with pebbles.
 
 ## Requirements
 - Spotify Api Account
