@@ -3,8 +3,12 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import { useArtists } from "../../utils/hooks/useArtists";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { setHoveringType } from "../../utils/types/state";
 
-export default function ArtistPebble(props: pebblePhysics) {
+export default function ArtistPebble(props: {
+    info: pebblePhysics;
+    setHovering: setHoveringType;
+}) {
     const artists = useArtists();
     const [loaded, setLoaded] = useState(false);
 
@@ -14,20 +18,33 @@ export default function ArtistPebble(props: pebblePhysics) {
         }
     }, [artists]);
 
-    const HU = props.dims.height / 6 - 20; // Height Unit
-    const WU = props.dims.width / 6 - 20; // Width Unit
+    const HU = props.info.dims.height / 6 - 20; // Height Unit
+    const WU = props.info.dims.width / 6 - 20; // Width Unit
 
     return (
         <Center
-            w={`${props.dims.width}px`}
-            h={`${props.dims.height}px`}
-            bottom={`${props.pos.y}px`}
-            left={`${props.pos.x}px`}
+            zIndex={5}
+            w={`${props.info.dims.width}px`}
+            h={`${props.info.dims.height}px`}
+            bottom={`${props.info.pos.y}px`}
+            left={`${props.info.pos.x}px`}
             borderRadius={"15px"}
             boxShadow={"#333 2px 4px 8px"}
             overflow={"hidden"}
-            bg={"MidGrey"}
+            bg={"blackAlpha.600"}
             pos={"absolute"}
+            _hover={{ bg: "blackAlpha.700", transform: "scale(1.01)" }}
+            transition={"0.1s ease-in-out"}
+            onMouseOver={() => {
+                props.setHovering({
+                    hovering: true,
+                    type: "text",
+                    text: "Artists",
+                });
+            }}
+            onMouseOut={() => {
+                props.setHovering({ hovering: false });
+            }}
         >
             {loaded ? (
                 <Flex flexDir={"column"}>
@@ -91,15 +108,6 @@ export default function ArtistPebble(props: pebblePhysics) {
                             </Flex>
                         </Flex>
                     ))}
-                    <Center
-                        pos={"absolute"}
-                        bottom={0}
-                        right={2}
-                        fontSize={"3xl"}
-                        cursor={"pointer"}
-                    >
-                        <Text>ⓘ</Text>
-                    </Center>
                 </Flex>
             ) : (
                 <Center w={"100%"} h={"100%"}>

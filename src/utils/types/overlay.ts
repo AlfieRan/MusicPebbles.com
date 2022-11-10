@@ -1,15 +1,12 @@
-import { artistType } from "./spotify";
+import { Component } from "react";
 
-export interface artistOverlay {
-    type: "artist";
-    artist: artistType;
+export interface componentOverlay {
+    hidden: false;
+    component: Component;
 }
 
-export interface nicheOverlay {
-    type: "niche";
+export interface hiddenOverlay {
+    hidden: true;
 }
 
-export type infoOverlayType = {
-    hidden: boolean;
-    info: artistOverlay | nicheOverlay;
-};
+export type overlayStateType = componentOverlay | hiddenOverlay;

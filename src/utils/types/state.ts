@@ -1,31 +1,26 @@
-import { artistType } from "./spotify";
-import { Dispatch, SetStateAction } from "react";
+import { Component, Dispatch, SetStateAction } from "react";
 
-export interface hoveringProfile {
+interface hoveringComponentState {
     hovering: true;
-    type: "profile";
+    type: "component";
+    component: Component;
 }
 
-export interface hoveringNiche {
+interface hoveringTextState {
     hovering: true;
-    type: "niche";
+    type: "text";
+    text: string;
 }
 
-export interface hoveringArtist {
-    hovering: true;
-    type: "artist";
-    artist: artistType;
-}
-
-export interface notHovering {
+interface notHoveringState {
     hovering: false;
 }
 
 export type hoveringType =
-    | hoveringProfile
-    | hoveringArtist
-    | hoveringNiche
-    | notHovering;
+    | hoveringComponentState
+    | hoveringTextState
+    | notHoveringState;
+
 export type setHoveringType = Dispatch<SetStateAction<hoveringType>>;
 
 interface dashboardMainState {

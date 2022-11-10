@@ -1,18 +1,34 @@
 import { Center, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
+import { setHoveringType } from "../../utils/types/state";
 
-export default function UniquePebble(props: pebblePhysics) {
+export default function UniquePebble(props: {
+    info: pebblePhysics;
+    setHovering: setHoveringType;
+}) {
     return (
         <Center
-            w={`${props.dims.width}px`}
-            h={`${props.dims.height}px`}
-            bottom={`${props.pos.y}px`}
-            left={`${props.pos.x}px`}
+            w={`${props.info.dims.width}px`}
+            h={`${props.info.dims.height}px`}
+            bottom={`${props.info.pos.y}px`}
+            left={`${props.info.pos.x}px`}
             borderRadius={"15px"}
             boxShadow={"#333 2px 4px 8px"}
             overflow={"hidden"}
-            bg={"MidGrey"}
+            bg={"blackAlpha.600"}
             pos={"absolute"}
+            _hover={{ bg: "blackAlpha.700", transform: "scale(1.01)" }}
+            transition={"0.1s ease-in-out"}
+            onMouseOver={() => {
+                props.setHovering({
+                    hovering: true,
+                    type: "text",
+                    text: "Uniqueness",
+                });
+            }}
+            onMouseOut={() => {
+                props.setHovering({ hovering: false });
+            }}
         >
             <Text>Uniqueness</Text>
         </Center>
