@@ -1,7 +1,7 @@
 import { artistType } from "../../utils/types/spotify";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
-import { parseRating } from "../../utils/basics";
+import { parseRating } from "../../utils/other/basics";
 
 export function ArtistOverlay(props: {
     artistInfo: artistType;
@@ -16,12 +16,19 @@ export function ArtistOverlay(props: {
             overflow={"hidden"}
             key={props.artistInfo.id + "overlay"}
         >
-            <Flex overflow={"hidden"} zIndex={10} maxW={"400px"} maxH={"400px"}>
+            <Flex
+                overflow={"hidden"}
+                zIndex={10}
+                maxW={"400px"}
+                maxH={"400px"}
+                p={3}
+            >
                 <Image
                     src={props.artistInfo.images[0].url}
                     alt={props.artistInfo.name}
-                    width={"400"}
-                    height={"400"}
+                    width={props.artistInfo.images[0].width * 400}
+                    height={props.artistInfo.images[0].height * 400}
+                    className={"shadow-outline"}
                 />
             </Flex>
             <Flex flexDir={"column"} maxW={"400px"} maxH={"400px"}>

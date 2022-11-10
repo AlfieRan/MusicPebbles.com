@@ -1,7 +1,7 @@
 import { useUniqueness } from "../../utils/hooks/useUniqueness";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
-import { parseRating } from "../../utils/basics";
+import { parseRating } from "../../utils/other/basics";
 import { useCustomSummary } from "../../utils/hooks/useCustomSummary";
 
 export function NicheOverlay(props: { changeHidden: () => void }) {

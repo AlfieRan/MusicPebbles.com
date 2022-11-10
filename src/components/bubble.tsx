@@ -5,6 +5,7 @@ import { useProfile } from "../utils/hooks/useProfile";
 import Image from "next/image";
 import { artistType } from "../utils/types/spotify";
 import { useUniqueness } from "../utils/hooks/useUniqueness";
+import { pebblePadding } from "../utils/hooks/useBubbles";
 
 export function Bubble(props: {
     setHovering: setHoveringType;
@@ -15,16 +16,14 @@ export function Bubble(props: {
 }) {
     const profile = useProfile();
     const uniqueness = useUniqueness();
-    const diameter = props.context.physics.radius * 2;
     let middle = <></>;
 
     if (props.context.details.type === "artist") {
         middle = (
-            <Image
-                src={props.context.details.artist.images[0].url}
-                width={props.context.details.artist.images[0].width}
-                height={props.context.details.artist.images[0].height}
-                alt={"Profile Picture of " + props.context.details.artist.name}
+            <Center
+                w={props.context.physics.dimensions.width}
+                h={props.context.physics.dimensions.height}
+                p={`${pebblePadding}px`}
                 onMouseOver={() => {
                     // have to do this cause weird typescript edge case
                     if ("artist" in props.context.details) {
@@ -44,14 +43,29 @@ export function Bubble(props: {
                         props.changeArtist(props.context.details.artist);
                     }
                 }}
-            />
+                key={props.context.details.artist.id + "pebbleImage"}
+            >
+                <Image
+                    src={props.context.details.artist.images[0].url}
+                    alt={
+                        "Profile Picture of " +
+                        props.context.details.artist.name
+                    }
+                    width={
+                        props.context.physics.dimensions.width - pebblePadding
+                    }
+                    height={
+                        props.context.physics.dimensions.height - pebblePadding
+                    }
+                />
+            </Center>
         );
     } else if (props.context.details.type === "profile") {
         if (profile.profile?.image_url === undefined) {
             middle = (
                 <Center
-                    w={diameter}
-                    h={diameter}
+                    w={props.context.physics.dimensions.width}
+                    h={props.context.physics.dimensions.height}
                     onMouseOver={() =>
                         props.setHovering({
                             hovering: true,
@@ -75,8 +89,8 @@ export function Bubble(props: {
             middle = (
                 <Image
                     src={profile.profile?.image_url ?? ""}
-                    width={diameter}
-                    height={diameter}
+                    width={props.context.physics.dimensions.width}
+                    height={props.context.physics.dimensions.height}
                     alt={profile.profile?.display_name}
                     onMouseOver={() =>
                         props.setHovering({
@@ -123,16 +137,20 @@ export function Bubble(props: {
     return (
         <Center
             flexDir={"column"}
-            borderRadius={"full"}
             position={"absolute"}
-            top={props.context.physics.pos.y - props.context.physics.radius}
-            left={props.context.physics.pos.x - props.context.physics.radius}
+            top={
+                props.context.physics.pos.y -
+                props.context.physics.dimensions.width / 2
+            }
+            left={
+                props.context.physics.pos.x -
+                props.context.physics.dimensions.height / 2
+            }
             zIndex={20}
             m={`${Margin}px`}
-            w={`${diameter - Margin}px`}
-            h={`${diameter - Margin}px`}
-            minH={0}
-            overflow={"hidden"}
+            w={`${props.context.physics.dimensions.width}px`}
+            h={`${props.context.physics.dimensions.height}px`}
+            borderRadius={`${pebblePadding / 1.5}px`}
             bg={"MidBlue"}
             cursor={"pointer"}
         >

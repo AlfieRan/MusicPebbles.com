@@ -5,7 +5,7 @@ import { ArtistOverlay } from "./artist";
 import { NicheOverlay } from "./niche";
 import BlurredBackground from "./blurredBackground";
 import { useEffect } from "react";
-import { setupKeyPresses } from "../../utils/usability";
+import { setupKeyPresses } from "../../utils/other/usability";
 
 export function Overlay(props: {
     changeHidden: (artistInfo: artistType, value?: boolean) => void;

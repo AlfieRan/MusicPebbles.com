@@ -5,6 +5,11 @@ export interface bubblePosType {
     y: number;
 }
 
+export interface dimensionType {
+    width: number;
+    height: number;
+}
+
 export interface artistBubbleContextType {
     type: "artist";
     artist: artistType;
@@ -20,8 +25,14 @@ export interface nicheBubbleContextType {
 
 export type bubblePhysicsType = {
     pos: bubblePosType;
-    velocity: bubblePosType;
-    radius: number;
+    dimensions: dimensionType;
+    points: {
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+    };
+    area: number;
 };
 
 export type bubbleType = {

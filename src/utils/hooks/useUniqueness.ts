@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { uniqueArtistWrapperType, Uniqueness } from "../types/uniqueness";
 import { useArtists } from "./useArtists";
 import { artistEmptyObject, artistsType, artistType } from "../types/spotify";
-import { uniqueSigmoid } from "../basics";
+import { uniqueSigmoid } from "../other/basics";
 import { profileType } from "../types/oauth";
 import { useProfile } from "./useProfile";
 

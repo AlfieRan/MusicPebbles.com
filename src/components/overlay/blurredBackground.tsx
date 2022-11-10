@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Flex } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { setupKeyPresses } from "../../utils/usability";
+import { setupKeyPresses } from "../../utils/other/usability";
 
 export default function BlurredBackground(props: {
     hidden: boolean;
