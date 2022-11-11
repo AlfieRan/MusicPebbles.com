@@ -1,31 +1,22 @@
 import { useEffect, useState } from "react";
-import { artistType } from "../types/spotify";
-import { wrapImages } from "../spotify/other";
+import { artistApiResponseType } from "../types/spotify";
+import { wrapArtists } from "../spotify/wrappers";
 
-export function useArtists(): [artistType[], () => void] {
-    const [artists, setArtists] = useState<artistType[]>([]);
+export function useArtists(): [artistApiResponseType, () => void] {
+    const [artists, setArtists] = useState<artistApiResponseType>({
+        short_term: false,
+        medium_term: false,
+        long_term: false,
+    });
 
     async function getArtists() {
         const response = await fetch("/api/user/artists");
-        const data = await response.json();
-        let newArtists: artistType[] = [];
-
-        for (let artist of data) {
-            newArtists.push({
-                id: artist.id,
-                name: artist.name,
-                popularity: artist.popularity,
-                genres: artist.genres,
-                images: await wrapImages(artist.images),
-                followers: artist.followers,
-                external_urls: artist.external_urls,
-                href: artist.href,
-                uri: artist.uri,
-                type: artist.type,
-            });
-        }
-
-        setArtists(newArtists);
+        const data = (await response.json()) as artistApiResponseType;
+        setArtists({
+            short_term: await wrapArtists(data.short_term),
+            medium_term: await wrapArtists(data.medium_term),
+            long_term: await wrapArtists(data.long_term),
+        });
     }
 
     function forceUpdate() {
@@ -40,7 +31,7 @@ export function useArtists(): [artistType[], () => void] {
 
     setInterval(() => {
         getArtists().catch((err) => console.error(err));
-    }, 1000 * 60 * 15);
+    }, 1000 * 60 * 60);
 
     return [artists, forceUpdate];
 }

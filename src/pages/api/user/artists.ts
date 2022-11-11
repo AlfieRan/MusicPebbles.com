@@ -3,10 +3,13 @@ import { getSession } from "../../../server/sessions/session";
 import { profileFull } from "../../../utils/types/oauth";
 import { getAccessCode } from "../../../server/sessions/access";
 import { wrapRedis } from "../../../server/utils/redis";
-import { artistsType } from "../../../utils/types/spotify";
+import {
+    artistApiResponseType,
+    artistsType,
+    timeFrameType,
+} from "../../../utils/types/spotify";
 import { ApiError } from "../../../utils/types/errors";
 import { redisClient } from "../../../server/constants";
-import { getTimeFrame } from "../../../server/utils/timeFrame";
 
 export default async function artists(
     req: NextApiRequest,
@@ -19,19 +22,7 @@ export default async function artists(
     }
 
     try {
-        const timeFrame = await getTimeFrame(userProfile.id);
-
-        const data = await wrapRedis<any[]>(
-            `${userProfile.id}_artists_${timeFrame}`,
-            async () => {
-                const artists = await getArtistApiCall(userProfile);
-                if (artists === false) {
-                    throw new Error("Unauthorized");
-                }
-                return artists;
-            },
-            86400
-        );
+        const data = await wrapArtistsAllTimeFrames(userProfile);
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
@@ -49,16 +40,47 @@ export default async function artists(
     }
 }
 
-async function getArtistApiCall(
+async function wrapArtistsAllTimeFrames(
     user: profileFull
+): Promise<artistApiResponseType> {
+    return {
+        long_term: await wrapArtists(user, "long_term"),
+        medium_term: await wrapArtists(user, "medium_term"),
+        short_term: await wrapArtists(user, "short_term"),
+    };
+}
+
+async function wrapArtists(
+    user: profileFull,
+    timeFrame: timeFrameType
+): Promise<false | artistsType> {
+    try {
+        return await wrapRedis<false | artistsType>(
+            `${user.id}_artists_${timeFrame}`,
+            async () => {
+                const artists = await getArtistApiCall(user, timeFrame);
+                if (artists === false) {
+                    throw Error("Unauthorized");
+                }
+                return artists;
+            },
+            86400
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+async function getArtistApiCall(
+    user: profileFull,
+    timeFrame: timeFrameType
 ): Promise<false | artistsType> {
     const accessToken = await getAccessCode(user);
 
     if (accessToken === false) {
         return false;
     }
-
-    const timeFrame = await getTimeFrame(user.id);
 
     const response = await fetch(
         `https://api.spotify.com/v1/me/top/artists?limit=50&time_range=${timeFrame}`,

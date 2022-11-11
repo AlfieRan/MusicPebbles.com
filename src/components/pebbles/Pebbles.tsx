@@ -10,8 +10,7 @@ import { useScreen } from "../../utils/hooks/useScreen";
 import { useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
-import { useSongs } from "../../utils/hooks/useSongs";
-import { useArtists } from "../../utils/hooks/useArtists";
+import { timeFrameType } from "../../utils/types/spotify";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -19,8 +18,7 @@ export default function Pebbles() {
     const [hoveringState, setHoveringState] = useState<hoveringType>({
         hovering: false,
     });
-    const [songs, updateSongs] = useSongs();
-    const [artists, updateArtists] = useArtists();
+    const [time, setTime] = useState<timeFrameType>("medium_term");
 
     // TODO: add a loading system between time changes
 
@@ -40,12 +38,12 @@ export default function Pebbles() {
             <SongPebble
                 info={pebbleState.song}
                 setHovering={setHoveringState}
-                songs={songs}
+                time={time}
             />
             <ArtistPebble
                 info={pebbleState.artist}
                 setHovering={setHoveringState}
-                artists={artists}
+                time={time}
             />
             <UniquePebble
                 info={pebbleState.unique}
@@ -58,8 +56,8 @@ export default function Pebbles() {
             <TimePebble
                 info={pebbleState.time}
                 setHovering={setHoveringState}
-                updateArtists={updateArtists}
-                updateSongs={updateSongs}
+                setTime={setTime}
+                time={time}
             />
         </Flex>
     );

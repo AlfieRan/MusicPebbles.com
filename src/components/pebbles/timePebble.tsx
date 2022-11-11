@@ -1,40 +1,20 @@
 import { Button, Center, Text, Flex } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
-import { useEffect, useState } from "react";
+import { timeFrameType } from "../../utils/types/spotify";
+import { Dispatch, SetStateAction } from "react";
 
 export default function TimePebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
-    updateSongs: Function;
-    updateArtists: Function;
+    setTime: Dispatch<SetStateAction<timeFrameType>>;
+    time: timeFrameType;
 }) {
-    const timeOptions = [
-        { info: "1 Month", type: "short_term" },
-        { info: "6 Months", type: "medium_term" },
-        { info: "All Time", type: "long_term" },
+    const timeOptions: timeFrameType[] = [
+        "short_term",
+        "medium_term",
+        "long_term",
     ];
-    const [timeSelected, setTimeSelected] = useState(timeOptions[1]);
-
-    useEffect(() => {
-        (async () => {
-            const response = await fetch("/api/user/setTime", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ time: timeSelected.type }),
-            });
-
-            if (response.status === 200) {
-                props.updateSongs();
-                props.updateArtists();
-            } else {
-                console.log("Error setting time");
-                // TODO: Handle error with a toast
-            }
-        })();
-    }, [timeSelected]);
 
     return (
         <Center
@@ -58,20 +38,16 @@ export default function TimePebble(props: {
                 px={4}
                 justifyContent={"center"}
             >
-                {timeOptions.map((time) => (
+                {timeOptions.map((timeOption) => (
                     <Button
-                        key={time.type + " button"}
+                        key={timeOption + " button"}
                         my={1}
-                        bg={
-                            timeSelected.type === time.type
-                                ? "MidBlue"
-                                : "MidGrey"
-                        }
+                        bg={props.time === timeOption ? "MidBlue" : "MidGrey"}
                         _hover={{ bg: "MidDarkBlue" }}
                         _active={{ bg: "DarkBlue" }}
-                        onClick={() => setTimeSelected(time)}
+                        onClick={() => props.setTime(timeOption)}
                     >
-                        <Text>{time.info}</Text>
+                        <Text>{timeOption}</Text>
                     </Button>
                 ))}
             </Flex>

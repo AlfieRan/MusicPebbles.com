@@ -91,3 +91,17 @@ export const songEmptyObject: songType = {
     popularity: 0,
     preview_url: "",
 };
+
+export type timeFrameType = "short_term" | "medium_term" | "long_term";
+
+export type artistApiResponseType = {
+    short_term: artistsType | false;
+    medium_term: artistsType | false;
+    long_term: artistsType | false;
+};
+
+export type songApiResponseType = {
+    short_term: songType[] | false;
+    medium_term: songType[] | false;
+    long_term: songType[] | false;
+};

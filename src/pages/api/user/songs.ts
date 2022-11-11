@@ -3,10 +3,15 @@ import { getSession } from "../../../server/sessions/session";
 import { profileFull } from "../../../utils/types/oauth";
 import { getAccessCode } from "../../../server/sessions/access";
 import { wrapRedis } from "../../../server/utils/redis";
-import { artistsType } from "../../../utils/types/spotify";
+import {
+    songApiResponseType,
+    songType,
+    timeFrameType,
+} from "../../../utils/types/spotify";
 import { ApiError } from "../../../utils/types/errors";
 import { redisClient } from "../../../server/constants";
-import { getTimeFrame } from "../../../server/utils/timeFrame";
+import { images } from "next/dist/build/webpack/config/blocks/images";
+import { wrapImages } from "../../../utils/spotify/other";
 
 export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     const userProfile = await getSession(req);
@@ -16,18 +21,7 @@ export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     }
 
     try {
-        const timeFrame = await getTimeFrame(userProfile.id);
-        const data = await wrapRedis<any[]>(
-            `${userProfile.id}_songs_${timeFrame}`,
-            async () => {
-                const artists = await getSongApiCall(userProfile);
-                if (artists === false) {
-                    throw new Error("Unauthorized");
-                }
-                return artists;
-            },
-            86400
-        );
+        const data = await wrapSongsAllTimeFrames(userProfile);
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
@@ -45,14 +39,47 @@ export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-async function getSongApiCall(user: profileFull): Promise<false | artistsType> {
+async function wrapSongsAllTimeFrames(
+    user: profileFull
+): Promise<songApiResponseType> {
+    return {
+        long_term: await wrapSongs(user, "long_term"),
+        medium_term: await wrapSongs(user, "medium_term"),
+        short_term: await wrapSongs(user, "short_term"),
+    };
+}
+
+async function wrapSongs(
+    user: profileFull,
+    timeFrame: timeFrameType
+): Promise<false | songType[]> {
+    try {
+        return await wrapRedis<false | songType[]>(
+            `${user.id}_artists_${timeFrame}`,
+            async () => {
+                const artists = await getSongApiCall(user, timeFrame);
+                if (artists === false) {
+                    throw Error("Unauthorized");
+                }
+                return artists;
+            },
+            86400
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+async function getSongApiCall(
+    user: profileFull,
+    timeFrame: timeFrameType
+): Promise<false | songType[]> {
     const accessToken = await getAccessCode(user);
 
     if (accessToken === false) {
         return false;
     }
-
-    const timeFrame = await getTimeFrame(user.id);
 
     const response = await fetch(
         `https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=${timeFrame}`,

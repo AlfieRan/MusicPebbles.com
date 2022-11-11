@@ -3,14 +3,36 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
 import { useScreen } from "../../utils/hooks/useScreen";
-import { songType } from "../../utils/types/spotify";
+import { songType, timeFrameType } from "../../utils/types/spotify";
+import { useEffect, useState } from "react";
+import { useSongs } from "../../utils/hooks/useSongs";
 
 export default function SongPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
-    songs: songType[];
+    time: timeFrameType;
 }) {
     const screenHook = useScreen();
+    const [loaded, setLoaded] = useState(true);
+    const [songs, setSongs] = useState<songType[]>([]);
+    const [allSongs] = useSongs();
+
+    useEffect(() => {
+        setLoaded(false);
+        const current = allSongs[props.time];
+        if (current) {
+            setSongs(current);
+        }
+    }, [allSongs, props.time]);
+
+    useEffect(() => {
+        console.log("Rendering song pebble");
+        if (songs.length > 4) {
+            setLoaded(true);
+        } else {
+            console.log("Not enough songs, songs: " + songs);
+        }
+    }, [songs]);
 
     function openSongOverlay() {
         console.log("open song overlay");
@@ -51,39 +73,50 @@ export default function SongPebble(props: {
             onMouseOver={openSongHovering}
             onMouseLeave={closeHovering}
         >
-            <Flex flexDir={"column"}>
-                {props.songs.slice(0, 5).map((song, i) => (
-                    <Flex flexDir={"row"} key={`${song.name}_preview`} my={1}>
-                        <Flex>
-                            <Image
-                                src={song.album.images[0].url ?? "/unknown.png"}
-                                alt={`${song.name} album art`}
-                                width={
-                                    Math.min(screenHook.height / 10, 75) *
-                                    (song.album.images[0].width ?? 1)
-                                }
-                                height={
-                                    Math.min(screenHook.height / 10, 75) *
-                                    (song.album.images[0].height ?? 1)
-                                }
-                            />
+            {loaded ? (
+                <Flex flexDir={"column"}>
+                    {songs.slice(0, 5).map((song, i) => (
+                        <Flex
+                            flexDir={"row"}
+                            key={`${song.name}_preview`}
+                            my={1}
+                        >
+                            <Flex>
+                                <Image
+                                    src={
+                                        song.album.images[0].url ??
+                                        "/unknown.png"
+                                    }
+                                    alt={`${song.name} album art`}
+                                    width={
+                                        Math.min(screenHook.height / 10, 75) *
+                                        (song.album.images[0].width ?? 1)
+                                    }
+                                    height={
+                                        Math.min(screenHook.height / 10, 75) *
+                                        (song.album.images[0].height ?? 1)
+                                    }
+                                />
+                            </Flex>
+                            <Flex flexDir={"column"} ml={2}>
+                                <Text fontSize={"sm"}>
+                                    {i + 1}. {song.name}
+                                </Text>
+                                <Text fontSize={"xs"}>
+                                    {song.artists
+                                        .map((artist) => artist.name)
+                                        .join(", ")}
+                                </Text>
+                                <Text fontSize={"xs"} color={"whiteAlpha.500"}>
+                                    {song.album.name}
+                                </Text>
+                            </Flex>
                         </Flex>
-                        <Flex flexDir={"column"} ml={2}>
-                            <Text fontSize={"sm"}>
-                                {i + 1}. {song.name}
-                            </Text>
-                            <Text fontSize={"xs"}>
-                                {song.artists
-                                    .map((artist) => artist.name)
-                                    .join(", ")}
-                            </Text>
-                            <Text fontSize={"xs"} color={"whiteAlpha.500"}>
-                                {song.album.name}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                ))}
-            </Flex>
+                    ))}
+                </Flex>
+            ) : (
+                <Text fontSize={"sm"}>Loading...</Text>
+            )}
         </Center>
     );
 }

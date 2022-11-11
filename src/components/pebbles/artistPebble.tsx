@@ -3,21 +3,32 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { setHoveringType } from "../../utils/types/state";
-import { artistType } from "../../utils/types/spotify";
+import { useArtists } from "../../utils/hooks/useArtists";
+import { artistsType, timeFrameType } from "../../utils/types/spotify";
 
 export default function ArtistPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
-    artists: artistType[];
+    time: timeFrameType;
 }) {
     const [loaded, setLoaded] = useState(false);
+    const [artists, setArtists] = useState<artistsType>([]);
+    const [allArtists] = useArtists();
+
+    useEffect(() => {
+        setLoaded(false);
+        const currentArtists = allArtists[props.time];
+        if (currentArtists) {
+            setArtists(currentArtists);
+        }
+    }, [allArtists, props.time]);
 
     useEffect(() => {
         console.log("Rendering song pebble");
-        if (props.artists.length > 4) {
+        if (artists.length > 4) {
             setLoaded(true);
         }
-    }, [props.artists]);
+    }, [artists]);
 
     const HU = props.info.dims.height / 6 - 20; // Height Unit
     const WU = props.info.dims.width / 6 - 20; // Width Unit
@@ -56,14 +67,10 @@ export default function ArtistPebble(props: {
                             overflow={"hidden"}
                         >
                             <Image
-                                src={props.artists[0].images[0].url}
+                                src={artists[0].images[0].url}
                                 alt={"Artist Image"}
-                                width={
-                                    props.artists[0].images[0].width * WU * 2
-                                }
-                                height={
-                                    props.artists[0].images[0].height * HU * 2
-                                }
+                                width={artists[0].images[0].width * WU * 2}
+                                height={artists[0].images[0].height * HU * 2}
                             />
                         </Flex>
                         <Flex
@@ -75,16 +82,14 @@ export default function ArtistPebble(props: {
                             justifyContent={"center"}
                             overflow={"hidden"}
                         >
-                            <Text fontSize={"md"}>
-                                1. {props.artists[0].name}
-                            </Text>
+                            <Text fontSize={"md"}>1. {artists[0].name}</Text>
                             <Text fontSize={"sm"} color={"whiteAlpha.500"}>
-                                {props.artists[0].genres.slice(0, 3).join(", ")}
+                                {artists[0].genres.slice(0, 3).join(", ")}
                                 ...
                             </Text>
                         </Flex>
                     </Flex>
-                    {props.artists.slice(1, 5).map((artist, index) => (
+                    {artists.slice(1, 5).map((artist, index) => (
                         <Flex key={index} flexDir={"row"} m={"10px"} h={HU}>
                             <Flex
                                 h={"fit-content"}
