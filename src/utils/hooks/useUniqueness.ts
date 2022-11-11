@@ -30,7 +30,7 @@ export function useUniqueness() {
             emptyArtistUniqueObject,
         ],
     });
-    const artists = useArtists();
+    const { artists } = useArtists();
 
     useEffect(() => {
         const sortedArtists = sortArtistsByUniqueness(artists);

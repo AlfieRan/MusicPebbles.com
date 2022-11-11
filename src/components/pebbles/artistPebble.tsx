@@ -1,22 +1,23 @@
 import { Center, Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import { useArtists } from "../../utils/hooks/useArtists";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { setHoveringType } from "../../utils/types/state";
+import { artistType } from "../../utils/types/spotify";
 
 export default function ArtistPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
+    artists: artistType[];
 }) {
-    const artists = useArtists();
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        if (artists.length > 4) {
+        console.log("Rendering song pebble");
+        if (props.artists.length > 4) {
             setLoaded(true);
         }
-    }, [artists]);
+    }, [props.artists]);
 
     const HU = props.info.dims.height / 6 - 20; // Height Unit
     const WU = props.info.dims.width / 6 - 20; // Width Unit
@@ -47,7 +48,7 @@ export default function ArtistPebble(props: {
             }}
         >
             {loaded ? (
-                <Flex flexDir={"column"}>
+                <Flex flexDir={"column"} minW={"80%"}>
                     <Flex flexDir={"row"} m={"10px"}>
                         <Flex
                             h={"fit-content"}
@@ -55,10 +56,14 @@ export default function ArtistPebble(props: {
                             overflow={"hidden"}
                         >
                             <Image
-                                src={artists[0].images[0].url}
+                                src={props.artists[0].images[0].url}
                                 alt={"Artist Image"}
-                                width={artists[0].images[0].width * WU * 2}
-                                height={artists[0].images[0].height * HU * 2}
+                                width={
+                                    props.artists[0].images[0].width * WU * 2
+                                }
+                                height={
+                                    props.artists[0].images[0].height * HU * 2
+                                }
                             />
                         </Flex>
                         <Flex
@@ -70,13 +75,16 @@ export default function ArtistPebble(props: {
                             justifyContent={"center"}
                             overflow={"hidden"}
                         >
-                            <Text fontSize={"md"}>1. {artists[0].name}</Text>
+                            <Text fontSize={"md"}>
+                                1. {props.artists[0].name}
+                            </Text>
                             <Text fontSize={"sm"} color={"whiteAlpha.500"}>
-                                {artists[0].genres.slice(0, 4).join(", ")}...
+                                {props.artists[0].genres.slice(0, 3).join(", ")}
+                                ...
                             </Text>
                         </Flex>
                     </Flex>
-                    {artists.slice(1, 5).map((artist, index) => (
+                    {props.artists.slice(1, 5).map((artist, index) => (
                         <Flex key={index} flexDir={"row"} m={"10px"} h={HU}>
                             <Flex
                                 h={"fit-content"}
@@ -93,7 +101,7 @@ export default function ArtistPebble(props: {
                             <Flex
                                 ml={3}
                                 flexDir={"column"}
-                                maxW={"60%"}
+                                maxW={"70%"}
                                 h={HU}
                                 justifyContent={"center"}
                                 overflow={"hidden"}
@@ -103,7 +111,7 @@ export default function ArtistPebble(props: {
                                 </Text>
 
                                 <Text fontSize={"xs"} color={"whiteAlpha.500"}>
-                                    {artist.genres.slice(0, 4).join(", ")}...
+                                    {artist.genres.slice(0, 2).join(", ")}...
                                 </Text>
                             </Flex>
                         </Flex>

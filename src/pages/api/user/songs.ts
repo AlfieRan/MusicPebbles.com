@@ -8,10 +8,7 @@ import { ApiError } from "../../../utils/types/errors";
 import { redisClient } from "../../../server/constants";
 import { getTimeFrame } from "../../../server/utils/timeFrame";
 
-export default async function artists(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
+export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     const userProfile = await getSession(req);
     if (!userProfile) {
         res.status(401).json({ error: "Unauthorized" });
@@ -20,11 +17,10 @@ export default async function artists(
 
     try {
         const timeFrame = await getTimeFrame(userProfile.id);
-
         const data = await wrapRedis<any[]>(
-            `${userProfile.id}_artists_${timeFrame}`,
+            `${userProfile.id}_songs_${timeFrame}`,
             async () => {
-                const artists = await getArtistApiCall(userProfile);
+                const artists = await getSongApiCall(userProfile);
                 if (artists === false) {
                     throw new Error("Unauthorized");
                 }
@@ -49,9 +45,7 @@ export default async function artists(
     }
 }
 
-async function getArtistApiCall(
-    user: profileFull
-): Promise<false | artistsType> {
+async function getSongApiCall(user: profileFull): Promise<false | artistsType> {
     const accessToken = await getAccessCode(user);
 
     if (accessToken === false) {
@@ -61,7 +55,7 @@ async function getArtistApiCall(
     const timeFrame = await getTimeFrame(user.id);
 
     const response = await fetch(
-        `https://api.spotify.com/v1/me/top/artists?limit=50&time_range=${timeFrame}`,
+        `https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=${timeFrame}`,
         {
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -72,7 +66,7 @@ async function getArtistApiCall(
     const data = await response.json();
 
     if (response.status !== 200) {
-        console.log("API ERROR - GET TOP ARTISTS - ", data);
+        console.log("API ERROR - GET TOP SONGS - ", data);
         return false;
     }
 
