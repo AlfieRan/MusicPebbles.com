@@ -66,6 +66,7 @@ export type songType = {
     name: string;
     popularity: number;
     preview_url: string;
+    id: string;
 };
 
 export const songEmptyObject: songType = {
@@ -90,6 +91,7 @@ export const songEmptyObject: songType = {
     name: "",
     popularity: 0,
     preview_url: "",
+    id: "",
 };
 
 export type timeFrameType = "short_term" | "medium_term" | "long_term";

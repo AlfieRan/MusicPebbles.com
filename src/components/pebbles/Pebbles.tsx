@@ -11,6 +11,8 @@ import { useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { timeFrameType } from "../../utils/types/spotify";
+import { overlayStateType } from "../../utils/types/overlay";
+import { Overlay } from "../overlay/overlay";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -18,9 +20,14 @@ export default function Pebbles() {
     const [hoveringState, setHoveringState] = useState<hoveringType>({
         hovering: false,
     });
+    const [overlayState, setOverlayState] = useState<overlayStateType>({
+        hidden: true,
+    });
     const [time, setTime] = useState<timeFrameType>("medium_term");
 
-    // TODO: add a loading system between time changes
+    function hideOverlay() {
+        setOverlayState({ hidden: true });
+    }
 
     return (
         <Flex
@@ -31,6 +38,7 @@ export default function Pebbles() {
             zIndex={1}
         >
             <Hovering {...hoveringState} />
+            <Overlay info={overlayState} hide={hideOverlay} />
             <ProfilePebble
                 info={pebbleState.profile}
                 setHovering={setHoveringState}
@@ -39,6 +47,7 @@ export default function Pebbles() {
                 info={pebbleState.song}
                 setHovering={setHoveringState}
                 time={time}
+                setOverlay={setOverlayState}
             />
             <ArtistPebble
                 info={pebbleState.artist}

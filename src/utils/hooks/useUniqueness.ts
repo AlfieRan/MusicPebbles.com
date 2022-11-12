@@ -12,8 +12,14 @@ import {
     timeFrameType,
 } from "../types/spotify";
 import { uniqueSigmoid } from "../other/basics";
+import { fadeBetween } from "../other/Colours";
 
 const frequencyDependency = 0.35;
+const artistPopularityVariation = 0.25;
+const maxPopularity = 80;
+const artistPopularityVariationSquare =
+    (maxPopularity - artistPopularityVariation * 100) / 10000;
+
 // controls how much the uniqueness rating is affected by how much the user has listened to an artist
 // must be between 0 and 1
 // decays exponentially, so at 0.5, the user's 50th artist has 7.7% of the effect of their 1st artist
@@ -38,7 +44,10 @@ const emptyUnqiueObject = {
     ],
 };
 
-export function useUniqueness(): Uniqueness {
+export function useUniqueness(): [
+    Uniqueness,
+    { short_term: boolean; medium_term: boolean; long_term: boolean }
+] {
     const [uniqueness, setUniqueness] = useState<Uniqueness>({
         short_term: emptyUnqiueObject,
         medium_term: emptyUnqiueObject,
@@ -52,6 +61,11 @@ export function useUniqueness(): Uniqueness {
     const [allArtists, _] = useArtists();
 
     useEffect(() => {
+        setLoading({
+            short_term: true,
+            medium_term: true,
+            long_term: true,
+        });
         // Medium length is the default and the first loaded, so do the calculations for that first
         setUniqueness((prevState) => ({
             ...prevState,
@@ -59,6 +73,11 @@ export function useUniqueness(): Uniqueness {
                 allArtists.medium_term !== false ? allArtists.medium_term : []
             ),
         }));
+        setLoading({
+            short_term: true,
+            medium_term: false,
+            long_term: true,
+        });
         // then move onto the other time periods
         setUniqueness((prevState) => ({
             ...prevState,
@@ -69,9 +88,14 @@ export function useUniqueness(): Uniqueness {
                 allArtists.long_term !== false ? allArtists.long_term : []
             ),
         }));
+        setLoading({
+            short_term: false,
+            medium_term: false,
+            long_term: false,
+        });
     }, [allArtists]);
 
-    return uniqueness;
+    return [uniqueness, loading];
 }
 
 function getUniquenessForTime(artists: artistsType): SingleUniqueness {
@@ -137,7 +161,10 @@ function getArtistUniqueness(artist: artistType): number {
 }
 
 function adjustPopularity(popularity: number) {
-    return 0.005 * popularity ** 2 + 0.5 * popularity;
+    return (
+        artistPopularityVariationSquare * popularity ** 2 +
+        artistPopularityVariation * popularity
+    );
 }
 
 function getUniquenessDetails(rating: number, artists?: artistsType): string {
@@ -165,19 +192,5 @@ function getUniquenessDetails(rating: number, artists?: artistsType): string {
 }
 
 function getUniquenessColour(rating: number): string {
-    const max = "#00ffdf";
-    const min = "#9f1d1d";
-
-    const r = blendBetweenHex(min.substring(1, 3), max.substring(1, 3), rating);
-    const g = blendBetweenHex(min.substring(3, 5), max.substring(3, 5), rating);
-    const b = blendBetweenHex(min.substring(5, 7), max.substring(5, 7), rating);
-
-    return `#${r}${g}${b}`;
-}
-
-function blendBetweenHex(a: string, b: string, percent: number) {
-    return Math.floor(
-        parseInt(a, 16) * (percent / 100) +
-            parseInt(b, 16) * (1 - percent / 100)
-    ).toString(16);
+    return fadeBetween("#ff0000", "#11ff00", 100, rating);
 }

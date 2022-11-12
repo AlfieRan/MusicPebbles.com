@@ -4,13 +4,15 @@ import { setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
 import { useScreen } from "../../utils/hooks/useScreen";
 import { songType, timeFrameType } from "../../utils/types/spotify";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSongs } from "../../utils/hooks/useSongs";
+import { overlayStateType } from "../../utils/types/overlay";
 
 export default function SongPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     time: timeFrameType;
+    setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
     const screenHook = useScreen();
     const [loaded, setLoaded] = useState(true);
@@ -35,6 +37,14 @@ export default function SongPebble(props: {
     }, [songs]);
 
     function openSongOverlay() {
+        props.setOverlay({
+            hidden: false,
+            component: (
+                <Flex>
+                    <Text>Hi</Text>
+                </Flex>
+            ),
+        });
         console.log("open song overlay");
     }
 
@@ -76,14 +86,14 @@ export default function SongPebble(props: {
             onMouseLeave={closeHovering}
         >
             {loaded ? (
-                <Flex flexDir={"column"}>
-                    {songs.slice(0, 5).map((song, i) => (
-                        <Flex
-                            flexDir={"row"}
-                            key={`${song.name}_preview`}
-                            my={1}
-                        >
-                            <Flex>
+                <Flex flexDir={"column"} justifyContent={"center"}>
+                    <Flex flexDir={"column"}>
+                        {songs.slice(0, 5).map((song, i) => (
+                            <Flex
+                                flexDir={"row"}
+                                key={`${song.name}_preview`}
+                                my={1}
+                            >
                                 <Image
                                     src={
                                         song.album.images[0].url ??
@@ -99,22 +109,30 @@ export default function SongPebble(props: {
                                         (song.album.images[0].height ?? 1)
                                     }
                                 />
+
+                                <Flex flexDir={"column"} ml={2}>
+                                    <Text
+                                        fontSize={
+                                            song.name.length < 35 ? "sm" : "xs"
+                                        }
+                                    >
+                                        {i + 1}. {song.name}
+                                    </Text>
+                                    <Text fontSize={"xs"}>
+                                        {song.artists
+                                            .map((artist) => artist.name)
+                                            .join(", ")}
+                                    </Text>
+                                    <Text
+                                        fontSize={"xs"}
+                                        color={"whiteAlpha.500"}
+                                    >
+                                        {song.album.name}
+                                    </Text>
+                                </Flex>
                             </Flex>
-                            <Flex flexDir={"column"} ml={2}>
-                                <Text fontSize={"sm"}>
-                                    {i + 1}. {song.name}
-                                </Text>
-                                <Text fontSize={"xs"}>
-                                    {song.artists
-                                        .map((artist) => artist.name)
-                                        .join(", ")}
-                                </Text>
-                                <Text fontSize={"xs"} color={"whiteAlpha.500"}>
-                                    {song.album.name}
-                                </Text>
-                            </Flex>
-                        </Flex>
-                    ))}
+                        ))}
+                    </Flex>
                 </Flex>
             ) : (
                 <Text fontSize={"sm"}>Loading...</Text>

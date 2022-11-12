@@ -63,68 +63,90 @@ export default function ArtistPebble(props: {
             }}
         >
             {loaded ? (
-                <Flex flexDir={"column"} minW={"80%"}>
-                    <Flex flexDir={"row"} m={"10px"}>
-                        <Flex
-                            h={"fit-content"}
-                            borderRadius={"10px"}
-                            overflow={"hidden"}
-                        >
-                            <Image
-                                src={artists[0].images[0].url}
-                                alt={"Artist Image"}
-                                width={artists[0].images[0].width * WU * 2}
-                                height={artists[0].images[0].height * HU * 2}
-                            />
-                        </Flex>
-                        <Flex
-                            ml={3}
-                            flexDir={"column"}
-                            h={2 * HU}
-                            maxW={4 * WU}
-                            pb={2}
-                            justifyContent={"center"}
-                            overflow={"hidden"}
-                        >
-                            <Text fontSize={"md"}>1. {artists[0].name}</Text>
-                            <Text fontSize={"sm"} color={"whiteAlpha.500"}>
-                                {artists[0].genres.slice(0, 3).join(", ")}
-                                ...
-                            </Text>
-                        </Flex>
-                    </Flex>
-                    {artists.slice(1, 5).map((artist, index) => (
-                        <Flex key={index} flexDir={"row"} m={"10px"} h={HU}>
+                <Flex flexDir={"column"} justifyContent={"center"}>
+                    <Flex flexDir={"column"} minW={"80%"}>
+                        <Flex flexDir={"row"} mx={"10px"} my={"5px"}>
                             <Flex
                                 h={"fit-content"}
                                 borderRadius={"10px"}
                                 overflow={"hidden"}
                             >
                                 <Image
-                                    src={artist.images[0].url}
+                                    src={artists[0].images[0].url}
                                     alt={"Artist Image"}
-                                    width={artist.images[0].width * WU}
-                                    height={artist.images[0].height * HU}
+                                    width={artists[0].images[0].width * WU * 2}
+                                    height={
+                                        artists[0].images[0].height * HU * 2
+                                    }
                                 />
                             </Flex>
                             <Flex
                                 ml={3}
                                 flexDir={"column"}
-                                maxW={"70%"}
-                                h={HU}
+                                h={2 * HU}
+                                maxW={4 * WU}
+                                pb={2}
                                 justifyContent={"center"}
                                 overflow={"hidden"}
                             >
-                                <Text fontSize={"sm"}>
-                                    {index + 2}. {artist.name}
+                                <Text fontSize={"md"}>
+                                    1. {artists[0].name}
                                 </Text>
-
-                                <Text fontSize={"xs"} color={"whiteAlpha.500"}>
-                                    {artist.genres.slice(0, 2).join(", ")}...
+                                <Text fontSize={"sm"} color={"whiteAlpha.500"}>
+                                    {artists[0].genres.slice(0, 3).join(", ")}
+                                    ...
                                 </Text>
                             </Flex>
                         </Flex>
-                    ))}
+                        <Flex flexDir={"column"}>
+                            {artists.slice(1, 5).map((artist, index) => (
+                                <Flex
+                                    key={index}
+                                    flexDir={"row"}
+                                    mx={"10px"}
+                                    my={"5px"}
+                                    h={HU}
+                                >
+                                    <Flex
+                                        h={"fit-content"}
+                                        borderRadius={"10px"}
+                                        overflow={"hidden"}
+                                    >
+                                        <Image
+                                            src={artist.images[0].url}
+                                            alt={"Artist Image"}
+                                            width={artist.images[0].width * WU}
+                                            height={
+                                                artist.images[0].height * HU
+                                            }
+                                        />
+                                    </Flex>
+                                    <Flex
+                                        ml={3}
+                                        flexDir={"column"}
+                                        maxW={"70%"}
+                                        h={HU}
+                                        justifyContent={"center"}
+                                        overflow={"hidden"}
+                                    >
+                                        <Text fontSize={"sm"}>
+                                            {index + 2}. {artist.name}
+                                        </Text>
+
+                                        <Text
+                                            fontSize={"xs"}
+                                            color={"whiteAlpha.500"}
+                                        >
+                                            {artist.genres
+                                                .slice(0, 2)
+                                                .join(", ")}
+                                            ...
+                                        </Text>
+                                    </Flex>
+                                </Flex>
+                            ))}
+                        </Flex>
+                    </Flex>
                 </Flex>
             ) : (
                 <Center w={"100%"} h={"100%"}>

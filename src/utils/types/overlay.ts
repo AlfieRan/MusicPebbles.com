@@ -1,8 +1,6 @@
-import { Component } from "react";
-
 export interface componentOverlay {
     hidden: false;
-    component: Component;
+    component: JSX.Element;
 }
 
 export interface hiddenOverlay {

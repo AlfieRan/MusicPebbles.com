@@ -37,7 +37,7 @@ export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-async function wrapSongsAllTimeFrames(
+export async function wrapSongsAllTimeFrames(
     user: profileFull
 ): Promise<songApiResponseType> {
     return {
