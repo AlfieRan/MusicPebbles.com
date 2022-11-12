@@ -15,6 +15,7 @@ export type pebbleObjType = {
     genre: pebblePhysics;
     unique: pebblePhysics;
     time: pebblePhysics;
+    playing: pebblePhysics;
 };
 
 export type screenType = "small" | "large";

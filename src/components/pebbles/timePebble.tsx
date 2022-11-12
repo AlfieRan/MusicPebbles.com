@@ -27,7 +27,6 @@ export default function TimePebble(props: {
             overflow={"hidden"}
             bg={"blackAlpha.600"}
             pos={"absolute"}
-            _hover={{ bg: "blackAlpha.700" }}
             transition={"0.1s ease-in-out"}
         >
             <Flex

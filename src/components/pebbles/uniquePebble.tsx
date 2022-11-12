@@ -57,7 +57,7 @@ export default function UniquePebble(props: {
                                 fontSize={"5xl"}
                                 mb={1}
                             >
-                                {uniqueness[props.time].rating}
+                                {uniqueness[props.time].rating.toString()}
                             </Text>
                         </Flex>
                     </Flex>

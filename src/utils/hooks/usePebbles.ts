@@ -29,18 +29,17 @@ const pebbleSizesLarge = {
         height: 1,
     },
     genre: {
-        width: 3,
+        width: 2,
+        height: 1,
+    },
+    playing: {
+        width: 1,
         height: 1,
     },
     time: {
         width: 1,
         height: 1,
     },
-};
-
-const pebbleSizesSmall = {
-    ...pebbleSizesLarge,
-    genre: { width: 2, height: 2 },
 };
 
 const maxHeight = 5;
@@ -54,6 +53,7 @@ export function usePebbles() {
         unique: emptyPebblePhysics,
         genre: emptyPebblePhysics,
         time: emptyPebblePhysics,
+        playing: emptyPebblePhysics,
     });
     const screenHook = useScreen();
     const [componentHeight, setComponentHeight] = useState<number | undefined>(
@@ -68,7 +68,6 @@ export function usePebbles() {
 
         if (screenHook.width < 600) {
             gridSize = { w: 2, h: 8 };
-            pebbleSizes = pebbleSizesSmall;
         }
         const gridItemSize = (() => {
             if (
@@ -128,6 +127,10 @@ export function usePebbles() {
                 song: getGridItemPosition(pebbleSizes.song, { x: 3, y: 0 }),
                 unique: getGridItemPosition(pebbleSizes.unique, { x: 2, y: 2 }),
                 genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
+                playing: getGridItemPosition(pebbleSizes.playing, {
+                    x: 2,
+                    y: 0,
+                }),
                 time: getGridItemPosition(pebbleSizes.time, { x: 4, y: 2 }),
             };
             setPebbleState(pebbleState);
@@ -142,6 +145,10 @@ export function usePebbles() {
                 song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 3 }),
                 unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 2 }),
                 genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
+                playing: getGridItemPosition(pebbleSizes.playing, {
+                    x: 1,
+                    y: 5,
+                }),
                 time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 5 }),
             };
             setPebbleState(pebbleState);

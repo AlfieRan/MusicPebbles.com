@@ -1,6 +1,6 @@
 import { Button, Center, Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import { setHoveringType } from "../../utils/types/state";
+import { audioPlayerType, setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
 import { useScreen } from "../../utils/hooks/useScreen";
 import { songType, timeFrameType } from "../../utils/types/spotify";
@@ -14,12 +14,13 @@ export default function SongPebble(props: {
     setHovering: setHoveringType;
     time: timeFrameType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
+    audioPlayer: audioPlayerType;
 }) {
+    // TODO: Add links to spotify everywhere lol
     const screenHook = useScreen();
     const [loaded, setLoaded] = useState(true);
     const [songs, setSongs] = useState<songType[]>([]);
     const [allSongs] = useSongs();
-    const audioPlayer = useAudio();
 
     useEffect(() => {
         setLoaded(false);
@@ -46,12 +47,71 @@ export default function SongPebble(props: {
                     flexDir={"column"}
                     bg={"MidGrey"}
                     px={4}
-                    py={4}
+                    py={2}
                     borderRadius={"10px"}
-                    maxW={"80%"}
+                    maxW={"100%"}
+                    key={"SongOverlay"}
                 >
-                    <Text mb={"10px"}>This is an audio preview demo</Text>
-                    <Flex flexDir={"row"} wrap={"wrap"} maxW={"95%"}>
+                    <Flex mb={5}>
+                        <Text mb={"10px"}>Audio preview demo</Text>
+                        <Button
+                            bg={"blackAlpha.400"}
+                            _hover={{
+                                bg: "blackAlpha.500",
+                                transform: "scale(1.02)",
+                            }}
+                            _active={{
+                                bg: "blackAlpha.600",
+                                transform: "scale(0.98)",
+                            }}
+                            ml={2}
+                            onClick={() => {
+                                props.audioPlayer.prevSong();
+                            }}
+                        >
+                            Previous Song
+                        </Button>
+                        <Button
+                            bg={"blackAlpha.400"}
+                            _hover={{
+                                bg: "blackAlpha.500",
+                                transform: "scale(1.02)",
+                            }}
+                            _active={{
+                                bg: "blackAlpha.600",
+                                transform: "scale(0.98)",
+                            }}
+                            ml={2}
+                            onClick={() => {
+                                props.audioPlayer.playPause();
+                            }}
+                        >
+                            {props.audioPlayer.paused ? "Play" : "Pause"}
+                        </Button>
+                        <Button
+                            bg={"blackAlpha.400"}
+                            _hover={{
+                                bg: "blackAlpha.500",
+                                transform: "scale(1.02)",
+                            }}
+                            _active={{
+                                bg: "blackAlpha.600",
+                                transform: "scale(0.98)",
+                            }}
+                            ml={2}
+                            onClick={() => {
+                                props.audioPlayer.nextSong();
+                            }}
+                        >
+                            Next Song
+                        </Button>
+                    </Flex>
+                    <Flex
+                        flexDir={"row"}
+                        justifyContent={"center"}
+                        wrap={"wrap"}
+                        maxW={"95%"}
+                    >
                         {songs.slice(0, 20).map((song, index) => (
                             <Button
                                 bg={"blackAlpha.400"}
@@ -65,13 +125,14 @@ export default function SongPebble(props: {
                                 }}
                                 m={1}
                                 onClick={() => {
-                                    audioPlayer.setSrc(song.preview_url);
-                                    audioPlayer.play();
+                                    props.audioPlayer.setSong(song);
                                 }}
                                 key={song.name + "Preview Button" + index}
                             >
                                 <Flex wrap={"wrap"} flexDir={"column"}>
-                                    <Text>{song.name}</Text>
+                                    <Text>
+                                        {index + 1}. {song.name}
+                                    </Text>
                                     <Text
                                         fontSize={"xs"}
                                         color={"whiteAlpha.400"}
@@ -134,21 +195,29 @@ export default function SongPebble(props: {
                                 key={`${song.name}_preview`}
                                 my={1}
                             >
-                                <Image
-                                    src={
-                                        song.album.images[0].url ??
-                                        "/unknown.png"
-                                    }
-                                    alt={`${song.name} album art`}
-                                    width={
-                                        Math.min(screenHook.height / 10, 75) *
-                                        (song.album.images[0].width ?? 1)
-                                    }
-                                    height={
-                                        Math.min(screenHook.height / 10, 75) *
-                                        (song.album.images[0].height ?? 1)
-                                    }
-                                />
+                                <Flex alignItems={"center"}>
+                                    <Image
+                                        src={
+                                            song.album.images[0].url ??
+                                            "/unknown.png"
+                                        }
+                                        alt={`${song.name} album art`}
+                                        width={
+                                            Math.min(
+                                                screenHook.height / 10,
+                                                75
+                                            ) *
+                                            (song.album.images[0].width ?? 1)
+                                        }
+                                        height={
+                                            Math.min(
+                                                screenHook.height / 10,
+                                                75
+                                            ) *
+                                            (song.album.images[0].height ?? 1)
+                                        }
+                                    />
+                                </Flex>
 
                                 <Flex flexDir={"column"} ml={2}>
                                     <Text

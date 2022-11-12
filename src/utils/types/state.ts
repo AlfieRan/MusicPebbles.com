@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { songType } from "./spotify";
 
 interface hoveringComponentState {
     hovering: true;
@@ -34,3 +35,13 @@ interface dashboardLoadingState {
 }
 
 export type dashboardStateType = dashboardMainState | dashboardLoadingState;
+
+export type audioPlayerType = {
+    playPause: () => void;
+    paused: boolean;
+    setSong: (song: songType) => void;
+    addSongs: (songs: songType[]) => void;
+    nextSong: () => void;
+    prevSong: () => void;
+    playing: songType | undefined;
+};

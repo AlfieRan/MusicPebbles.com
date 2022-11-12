@@ -5,14 +5,17 @@ import UniquePebble from "./uniquePebble";
 import GenrePebble from "./genrePebble";
 import TimePebble from "./timePebble";
 import { usePebbles } from "../../utils/hooks/usePebbles";
-import { Flex } from "@chakra-ui/react";
+import { Center, Flex } from "@chakra-ui/react";
 import { useScreen } from "../../utils/hooks/useScreen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
 import Hovering from "../hovering";
 import { timeFrameType } from "../../utils/types/spotify";
 import { overlayStateType } from "../../utils/types/overlay";
 import { Overlay } from "../overlay/overlay";
+import { useAudio } from "../../utils/hooks/useAudio";
+import { useSongs } from "../../utils/hooks/useSongs";
+import AudioPebble from "./audioPebble";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -24,13 +27,23 @@ export default function Pebbles() {
         hidden: true,
     });
     const [time, setTime] = useState<timeFrameType>("medium_term");
+    const [songs] = useSongs();
+    const audioPlayer = useAudio();
+
+    useEffect(() => {
+        const currentSongs = songs[time];
+        if (currentSongs !== false && currentSongs.length > 0) {
+            console.log(`Adding ${currentSongs.length} songs to audio player`);
+            audioPlayer.addSongs(currentSongs);
+        }
+    }, [time, songs]);
 
     function hideOverlay() {
         setOverlayState({ hidden: true });
     }
 
     return (
-        <Flex
+        <Center
             w={screen.width}
             h={componentHeight || screen.height}
             overflowX={"hidden"}
@@ -48,6 +61,7 @@ export default function Pebbles() {
                 setHovering={setHoveringState}
                 time={time}
                 setOverlay={setOverlayState}
+                audioPlayer={audioPlayer}
             />
             <ArtistPebble
                 info={pebbleState.artist}
@@ -69,6 +83,11 @@ export default function Pebbles() {
                 setTime={setTime}
                 time={time}
             />
-        </Flex>
+            <AudioPebble
+                info={pebbleState.playing}
+                setHovering={setHoveringState}
+                audioPlayer={audioPlayer}
+            />
+        </Center>
     );
 }
