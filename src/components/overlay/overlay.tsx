@@ -23,7 +23,7 @@ export function Overlay(props: { info: overlayStateType; hide: () => void }) {
                             initial={{ scale: 0.5, opacity: 0 }}
                             transition={{ duration: 0.15 }}
                         >
-                            {props.info.component}
+                            <Center>{props.info.component}</Center>
                         </motion.div>
                     </Center>
                 )}

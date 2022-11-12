@@ -1,9 +1,9 @@
-import { Component, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface hoveringComponentState {
     hovering: true;
     type: "component";
-    component: Component;
+    component: JSX.Element;
 }
 
 interface hoveringTextState {

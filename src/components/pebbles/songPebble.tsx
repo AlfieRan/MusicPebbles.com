@@ -1,4 +1,4 @@
-import { Center, Flex, Text } from "@chakra-ui/react";
+import { Button, Center, Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import { songType, timeFrameType } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSongs } from "../../utils/hooks/useSongs";
 import { overlayStateType } from "../../utils/types/overlay";
+import { useAudio } from "../../utils/hooks/useAudio";
 
 export default function SongPebble(props: {
     info: pebblePhysics;
@@ -18,6 +19,7 @@ export default function SongPebble(props: {
     const [loaded, setLoaded] = useState(true);
     const [songs, setSongs] = useState<songType[]>([]);
     const [allSongs] = useSongs();
+    const audioPlayer = useAudio();
 
     useEffect(() => {
         setLoaded(false);
@@ -40,8 +42,46 @@ export default function SongPebble(props: {
         props.setOverlay({
             hidden: false,
             component: (
-                <Flex>
-                    <Text>Hi</Text>
+                <Flex
+                    flexDir={"column"}
+                    bg={"MidGrey"}
+                    px={4}
+                    py={4}
+                    borderRadius={"10px"}
+                    maxW={"80%"}
+                >
+                    <Text mb={"10px"}>This is an audio preview demo</Text>
+                    <Flex flexDir={"row"} wrap={"wrap"} maxW={"95%"}>
+                        {songs.slice(0, 20).map((song, index) => (
+                            <Button
+                                bg={"blackAlpha.400"}
+                                _hover={{
+                                    bg: "blackAlpha.600",
+                                    transform: "scale(1.02)",
+                                }}
+                                _active={{
+                                    bg: "blackAlpha.800",
+                                    transform: "scale(0.98)",
+                                }}
+                                m={1}
+                                onClick={() => {
+                                    audioPlayer.setSrc(song.preview_url);
+                                    audioPlayer.play();
+                                }}
+                                key={song.name + "Preview Button" + index}
+                            >
+                                <Flex wrap={"wrap"} flexDir={"column"}>
+                                    <Text>{song.name}</Text>
+                                    <Text
+                                        fontSize={"xs"}
+                                        color={"whiteAlpha.400"}
+                                    >
+                                        By {song.artists[0].name ?? "unknown"}
+                                    </Text>
+                                </Flex>
+                            </Button>
+                        ))}
+                    </Flex>
                 </Flex>
             ),
         });
