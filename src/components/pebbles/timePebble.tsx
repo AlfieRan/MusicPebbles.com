@@ -47,10 +47,18 @@ export default function TimePebble(props: {
                         _active={{ bg: "DarkBlue" }}
                         onClick={() => props.setTime(timeOption)}
                     >
-                        <Text>{timeOption}</Text>
+                        <Text>{wrapTimeString(timeOption)}</Text>
                     </Button>
                 ))}
             </Flex>
         </Center>
     );
+}
+
+function wrapTimeString(time: timeFrameType) {
+    return time === "short_term"
+        ? "Last 4 Weeks"
+        : time === "medium_term"
+        ? "Last 6 Months"
+        : "All Time";
 }

@@ -34,7 +34,7 @@ export default function ArtistPebble(props: {
     const WU = props.info.dims.width / 6 - 20; // Width Unit
 
     return (
-        <Center
+        <Flex
             zIndex={5}
             w={`${props.info.dims.width}px`}
             h={`${props.info.dims.height}px`}
@@ -42,6 +42,10 @@ export default function ArtistPebble(props: {
             left={`${props.info.pos.x}px`}
             borderRadius={"15px"}
             boxShadow={"#333 2px 4px 8px"}
+            py={2}
+            px={10}
+            flexDir={"column"}
+            justifyContent={"center"}
             overflow={"hidden"}
             bg={"blackAlpha.600"}
             pos={"absolute"}
@@ -127,6 +131,6 @@ export default function ArtistPebble(props: {
                     Loading your artists...
                 </Center>
             )}
-        </Center>
+        </Flex>
     );
 }

@@ -48,6 +48,7 @@ export default function Pebbles() {
             <UniquePebble
                 info={pebbleState.unique}
                 setHovering={setHoveringState}
+                time={time}
             />
             <GenrePebble
                 info={pebbleState.genre}

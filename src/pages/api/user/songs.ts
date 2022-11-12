@@ -10,8 +10,6 @@ import {
 } from "../../../utils/types/spotify";
 import { ApiError } from "../../../utils/types/errors";
 import { redisClient } from "../../../server/constants";
-import { images } from "next/dist/build/webpack/config/blocks/images";
-import { wrapImages } from "../../../utils/spotify/other";
 
 export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     const userProfile = await getSession(req);
@@ -55,13 +53,13 @@ async function wrapSongs(
 ): Promise<false | songType[]> {
     try {
         return await wrapRedis<false | songType[]>(
-            `${user.id}_artists_${timeFrame}`,
+            `${user.id}_songs_${timeFrame}`,
             async () => {
-                const artists = await getSongApiCall(user, timeFrame);
-                if (artists === false) {
+                const songs = await getSongApiCall(user, timeFrame);
+                if (songs === false) {
                     throw Error("Unauthorized");
                 }
-                return artists;
+                return songs;
             },
             86400
         );

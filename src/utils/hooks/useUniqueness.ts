@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
-import { uniqueArtistWrapperType, Uniqueness } from "../types/uniqueness";
+import {
+    SingleUniqueness,
+    uniqueArtistWrapperType,
+    Uniqueness,
+} from "../types/uniqueness";
 import { useArtists } from "./useArtists";
-import { artistEmptyObject, artistsType, artistType } from "../types/spotify";
+import {
+    artistEmptyObject,
+    artistsType,
+    artistType,
+    timeFrameType,
+} from "../types/spotify";
 import { uniqueSigmoid } from "../other/basics";
-import { profileType } from "../types/oauth";
-import { useProfile } from "./useProfile";
 
 const frequencyDependency = 0.35;
 // controls how much the uniqueness rating is affected by how much the user has listened to an artist
@@ -18,41 +25,73 @@ const emptyArtistUniqueObject = {
     userRating: 0,
 };
 
-export function useUniqueness() {
+const emptyUnqiueObject = {
+    rating: 50,
+    colour: "#FFD700",
+    details: getUniquenessDetails(50),
+    artists: [
+        emptyArtistUniqueObject,
+        emptyArtistUniqueObject,
+        emptyArtistUniqueObject,
+        emptyArtistUniqueObject,
+        emptyArtistUniqueObject,
+    ],
+};
+
+export function useUniqueness(): Uniqueness {
     const [uniqueness, setUniqueness] = useState<Uniqueness>({
-        rating: 50,
-        details: getUniquenessDetails(50),
-        artists: [
-            emptyArtistUniqueObject,
-            emptyArtistUniqueObject,
-            emptyArtistUniqueObject,
-            emptyArtistUniqueObject,
-            emptyArtistUniqueObject,
-        ],
+        short_term: emptyUnqiueObject,
+        medium_term: emptyUnqiueObject,
+        long_term: emptyUnqiueObject,
     });
-    const { artists } = useArtists();
+    const [loading, setLoading] = useState({
+        short_term: true,
+        medium_term: true,
+        long_term: true,
+    });
+    const [allArtists, _] = useArtists();
 
     useEffect(() => {
-        const sortedArtists = sortArtistsByUniqueness(artists);
-
-        const portionOfArtists = sortedArtists.length * frequencyDependency;
-        const exponentialFactor = (portionOfArtists - 1) / portionOfArtists;
-
-        const sum = sortedArtists.reduce(
-            (acc, artist) =>
-                acc +
-                artist.uniqueness * exponentialFactor ** artist.userRating,
-            0
-        );
-        const rating = Math.ceil(sum / portionOfArtists);
-        setUniqueness({
-            rating,
-            details: getUniquenessDetails(rating, artists),
-            artists: sortedArtists,
-        });
-    }, [artists]);
+        // Medium length is the default and the first loaded, so do the calculations for that first
+        setUniqueness((prevState) => ({
+            ...prevState,
+            medium_term: getUniquenessForTime(
+                allArtists.medium_term !== false ? allArtists.medium_term : []
+            ),
+        }));
+        // then move onto the other time periods
+        setUniqueness((prevState) => ({
+            ...prevState,
+            short_term: getUniquenessForTime(
+                allArtists.short_term !== false ? allArtists.short_term : []
+            ),
+            long_term: getUniquenessForTime(
+                allArtists.long_term !== false ? allArtists.long_term : []
+            ),
+        }));
+    }, [allArtists]);
 
     return uniqueness;
+}
+
+function getUniquenessForTime(artists: artistsType): SingleUniqueness {
+    const sortedArtists = sortArtistsByUniqueness(artists);
+
+    const portionOfArtists = sortedArtists.length * frequencyDependency;
+    const exponentialFactor = (portionOfArtists - 1) / portionOfArtists;
+
+    const sum = sortedArtists.reduce(
+        (acc, artist) =>
+            acc + artist.uniqueness * exponentialFactor ** artist.userRating,
+        0
+    );
+    const rating = Math.ceil(sum / portionOfArtists);
+    return {
+        rating,
+        colour: getUniquenessColour(rating),
+        details: getUniquenessDetails(rating, artists),
+        artists: sortedArtists,
+    };
 }
 
 function sortArtistsByUniqueness(
@@ -123,4 +162,22 @@ function getUniquenessDetails(rating: number, artists?: artistsType): string {
         : rating >= 15
         ? "Your taste is so mainstream that it's almost offensive. Please listen to something new right now."
         : "How did you even get a score this low, I genuinely didn't know that was possible. You're definitely a lizard pretending to be a person. (Hi Zuckberg!)";
+}
+
+function getUniquenessColour(rating: number): string {
+    const max = "#00ffdf";
+    const min = "#9f1d1d";
+
+    const r = blendBetweenHex(min.substring(1, 3), max.substring(1, 3), rating);
+    const g = blendBetweenHex(min.substring(3, 5), max.substring(3, 5), rating);
+    const b = blendBetweenHex(min.substring(5, 7), max.substring(5, 7), rating);
+
+    return `#${r}${g}${b}`;
+}
+
+function blendBetweenHex(a: string, b: string, percent: number) {
+    return Math.floor(
+        parseInt(a, 16) * (percent / 100) +
+            parseInt(b, 16) * (1 - percent / 100)
+    ).toString(16);
 }

@@ -42,7 +42,7 @@ export default function SongPebble(props: {
         props.setHovering({
             hovering: true,
             type: "text",
-            text: "Open song",
+            text: "Songs",
         });
     }
 
@@ -53,7 +53,7 @@ export default function SongPebble(props: {
     }
 
     return (
-        <Center
+        <Flex
             w={`${props.info.dims.width}px`}
             h={`${props.info.dims.height}px`}
             bottom={`${props.info.pos.y}px`}
@@ -64,7 +64,9 @@ export default function SongPebble(props: {
             bg={"blackAlpha.600"}
             pos={"absolute"}
             flexDir={"column"}
-            p={2}
+            py={2}
+            px={10}
+            justifyContent={"center"}
             zIndex={5}
             _hover={{ bg: "blackAlpha.700", transform: "scale(1.01)" }}
             transition={"0.1s ease-in-out"}
@@ -117,6 +119,6 @@ export default function SongPebble(props: {
             ) : (
                 <Text fontSize={"sm"}>Loading...</Text>
             )}
-        </Center>
+        </Flex>
     );
 }
