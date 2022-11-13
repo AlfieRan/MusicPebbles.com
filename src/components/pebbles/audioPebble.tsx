@@ -1,4 +1,4 @@
-import { Button, Center, Flex, Text } from "@chakra-ui/react";
+import { Button, Center, Flex, Link, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { audioPlayerType, setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
@@ -25,6 +25,15 @@ export default function AudioPebble(props: {
         props.setHovering({ hovering: false });
     }
 
+    function redirectToSpotify() {
+        window.open(
+            props.audioPlayer.playing !== undefined
+                ? props.audioPlayer.playing.external_urls.spotify
+                : "https://open.spotify.com/",
+            "_blank"
+        );
+    }
+
     return (
         <Center
             w={`${props.info.dims.width}px`}
@@ -40,6 +49,23 @@ export default function AudioPebble(props: {
             flexDir={"column"}
         >
             <Center
+                pos={"absolute"}
+                right={`${WU * 0.4}px`}
+                top={`${WU * 0.4}px`}
+                cursor={"pointer"}
+                _hover={{ transform: "scale(1.1)" }}
+                _active={{ transform: "scale(0.9)" }}
+                transition={"0.1s ease-in-out"}
+                onClick={redirectToSpotify}
+            >
+                <Image
+                    src={"/spotifyBranding/icons/white.png"}
+                    width={WU * 0.8}
+                    height={WU * 0.8}
+                    alt={"Spotify Icon, click to go to Spotify"}
+                />
+            </Center>
+            <Center
                 width={`${WU * 5}px`}
                 height={`${HU * 5}px`}
                 fontSize={"xs"}
@@ -53,15 +79,7 @@ export default function AudioPebble(props: {
                             bg={"MidGrey"}
                             onMouseOver={openHover}
                             onMouseLeave={closeHover}
-                            onClick={() => {
-                                window.open(
-                                    props.audioPlayer.playing !== undefined
-                                        ? props.audioPlayer.playing
-                                              .external_urls.spotify
-                                        : "https://open.spotify.com/",
-                                    "_blank"
-                                );
-                            }}
+                            onClick={redirectToSpotify}
                         >
                             <Image
                                 src={
@@ -105,6 +123,7 @@ export default function AudioPebble(props: {
                                         w={"fit-content"}
                                         whiteSpace={"nowrap"}
                                         textAlign={"left"}
+                                        fontSize={`${HU * 0.5}px`}
                                     >
                                         {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.artists[0].name}`}
                                     </Text>
@@ -130,6 +149,8 @@ export default function AudioPebble(props: {
                     _hover={{ bg: "blackAlpha.500", transform: "scale(1.05)" }}
                     _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
                     onClick={props.audioPlayer.prevSong}
+                    px={`${WU * 0.5}px`}
+                    py={0}
                 >
                     {"⏮︎"}
                 </Button>
@@ -139,6 +160,8 @@ export default function AudioPebble(props: {
                     _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
                     mx={1}
                     onClick={props.audioPlayer.playPause}
+                    px={`${WU * 0.5}px`}
+                    py={0}
                 >
                     {props.audioPlayer.paused ? "▶︎" : "⏸︎"}
                 </Button>
@@ -147,6 +170,8 @@ export default function AudioPebble(props: {
                     _hover={{ bg: "blackAlpha.500", transform: "scale(1.05)" }}
                     _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
                     onClick={props.audioPlayer.nextSong}
+                    px={`${WU * 0.5}px`}
+                    py={0}
                 >
                     {"⏭︎"}
                 </Button>
