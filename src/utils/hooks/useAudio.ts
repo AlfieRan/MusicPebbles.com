@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { songType } from "../types/spotify";
 import { audioPlayerType } from "../types/state";
+import { sleep } from "../other/time";
 
 export function useAudio(): audioPlayerType {
     const [audio, setAudio] = useState<HTMLAudioElement | undefined>(undefined);
@@ -35,6 +36,12 @@ export function useAudio(): audioPlayerType {
         }
     }, [audio]);
 
+    useEffect(() => {
+        if (curSong === undefined && availableSongs.length > 0) {
+            setSong(availableSongs[0], false).catch(console.error);
+        }
+    }, [availableSongs]);
+
     async function play() {
         if (audio) {
             if (audio.src === "") {
@@ -64,15 +71,21 @@ export function useAudio(): audioPlayerType {
     }
 
     async function setSong(song: songType, playSong: boolean = true) {
-        if (audio) {
-            audio.src = song.preview_url;
-            audio.load();
-            setCurSong(song);
-            if (playSong) {
-                await play();
+        try {
+            if (audio) {
+                audio.volume = 0;
+                audio.src = song.preview_url;
+                audio.load();
+                setCurSong(song);
+                if (playSong) {
+                    await sleep(50);
+                    await play();
+                }
+            } else {
+                console.error("Audio is undefined");
             }
-        } else {
-            console.error("Audio is undefined");
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -118,10 +131,10 @@ export function useAudio(): audioPlayerType {
                             ...prevState,
                             current: percent,
                         }));
-                        if (percent < 0.1 || percent > 0.9) {
-                            fadeInOut();
-                        } else {
+                        if (percent > 0.1 && percent < 0.9) {
                             audio.volume = 1;
+                        } else {
+                            fadeInOut();
                         }
                     }
                 }, 500),
