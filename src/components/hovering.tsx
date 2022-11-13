@@ -34,7 +34,7 @@ export default function Hovering(props: hoveringType) {
                     initial={{ scale: 0.5, opacity: 0 }}
                     transition={{ duration: 0.15 }}
                 >
-                    <Flex bg={"MidGrey"} px={3} py={2} borderRadius={"lg"}>
+                    <Flex bg={"MidGrey"} px={5} py={3} borderRadius={"lg"}>
                         {props.type === "text" && <Text>{props.text}</Text>}
                         {props.type === "component" && <>{props.component}</>}
                     </Flex>

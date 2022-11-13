@@ -16,6 +16,7 @@ export function useAudio(): audioPlayerType {
 
     useEffect(() => {
         const audio = new Audio();
+        audio.volume = 0;
         setAudio(audio);
         return () => {
             audio.pause();
@@ -112,13 +113,32 @@ export function useAudio(): audioPlayerType {
                     if (audio.ended) {
                         await nextSong();
                     } else {
+                        const percent = audio.currentTime / audio.duration;
                         setPlayBackProgress((prevState) => ({
                             ...prevState,
-                            current: audio.currentTime / 30,
+                            current: percent,
                         }));
+                        if (percent < 0.1 || percent > 0.9) {
+                            fadeInOut();
+                        } else {
+                            audio.volume = 1;
+                        }
                     }
-                }, 1000),
+                }, 500),
             }));
+        }
+    }
+
+    function fadeInOut() {
+        if (audio) {
+            const interval = setInterval(() => {
+                const percent = audio.currentTime / audio.duration;
+                if (percent < 0.1 || percent > 0.9) {
+                    audio.volume = getSoundLevel(percent);
+                } else {
+                    clearInterval(interval);
+                }
+            }, 10);
         }
     }
 
@@ -131,4 +151,14 @@ export function useAudio(): audioPlayerType {
         prevSong,
         playing: curSong,
     };
+}
+
+function getSoundLevel(percent: number) {
+    // takes a number between 0-1 and returns a number between 0-1
+    if (percent < 0.1) {
+        return percent * 10;
+    } else if (percent > 0.9) {
+        return (1 - percent) * 10;
+    }
+    return 1;
 }

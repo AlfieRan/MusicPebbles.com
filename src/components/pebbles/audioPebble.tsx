@@ -2,17 +2,28 @@ import { Button, Center, Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { audioPlayerType, setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
-import { useScreen } from "../../utils/hooks/useScreen";
+import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 export default function AudioPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     audioPlayer: audioPlayerType;
 }) {
-    const screenHook = useScreen();
-
     const HU = props.info.dims.height / 8; // Height Unit
     const WU = props.info.dims.width / 8; // Width Unit
+
+    function openHover() {
+        props.setHovering({
+            hovering: true,
+            type: "text",
+            text: "Click to go to Spotify",
+        });
+    }
+
+    function closeHover() {
+        props.setHovering({ hovering: false });
+    }
 
     return (
         <Center
@@ -29,42 +40,89 @@ export default function AudioPebble(props: {
             flexDir={"column"}
         >
             <Center
-                width={`${WU * 4}px`}
-                height={`${HU * 4}px`}
+                width={`${WU * 5}px`}
+                height={`${HU * 5}px`}
                 fontSize={"xs"}
-                bg={"MidGrey"}
                 borderRadius={"10px"}
             >
                 {props.audioPlayer.playing !== undefined ? (
-                    <Flex>
-                        <Image
-                            src={props.audioPlayer.playing.album.images[0].url}
-                            alt={"Currently playing song"}
-                            width={
-                                props.audioPlayer.playing.album.images[0]
-                                    .width *
-                                WU *
-                                4
-                            }
-                            height={
-                                props.audioPlayer.playing.album.images[0]
-                                    .height *
-                                HU *
-                                4
-                            }
-                        />
-                    </Flex>
+                    <Center flexDir={"column"}>
+                        <Flex
+                            width={`${WU * 4}px`}
+                            height={`${HU * 4}px`}
+                            bg={"MidGrey"}
+                            onMouseOver={openHover}
+                            onMouseLeave={closeHover}
+                            onClick={() => {
+                                window.open(
+                                    props.audioPlayer.playing !== undefined
+                                        ? props.audioPlayer.playing
+                                              .external_urls.spotify
+                                        : "https://open.spotify.com/",
+                                    "_blank"
+                                );
+                            }}
+                        >
+                            <Image
+                                src={
+                                    props.audioPlayer.playing.album.images[0]
+                                        .url
+                                }
+                                alt={"Currently playing song"}
+                                width={
+                                    props.audioPlayer.playing.album.images[0]
+                                        .width *
+                                    WU *
+                                    4
+                                }
+                                height={
+                                    props.audioPlayer.playing.album.images[0]
+                                        .height *
+                                    HU *
+                                    4
+                                }
+                            />
+                        </Flex>
+                        <Flex
+                            w={`${WU * 5}px`}
+                            h={HU + "px"}
+                            overflow={"hidden"}
+                            mt={1}
+                            justifyContent={"center"}
+                        >
+                            <Flex w={"fit-content"}>
+                                <motion.div
+                                    className={"flex w-fit"}
+                                    initial={{ x: "100%" }}
+                                    animate={{ x: ["100%", "-100%"] }}
+                                    transition={{
+                                        duration: 7.5,
+                                        ease: "linear",
+                                        repeat: Infinity,
+                                    }}
+                                >
+                                    <Text
+                                        w={"fit-content"}
+                                        whiteSpace={"nowrap"}
+                                        textAlign={"left"}
+                                    >
+                                        {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.artists[0].name}`}
+                                    </Text>
+                                </motion.div>
+                            </Flex>
+                        </Flex>
+                    </Center>
                 ) : (
                     <Center textAlign={"center"}>No Song Playing</Center>
                 )}
             </Center>
             <Flex
                 flexDir={"row"}
-                mt={2}
                 mx={`${WU}px`}
-                h={`${HU * 2}px`}
-                w={`${WU * 7}px`}
+                maxH={`${HU * 2}px`}
+                maxW={`${WU * 7}px`}
                 justifyContent={"center"}
+                alignItems={"center"}
                 fontSize={`${HU * 0.75}px`}
             >
                 <Button
