@@ -32,7 +32,7 @@ export default function AudioPebble(props: {
     });
 
     useEffect(() => {
-        if (WU > HU) {
+        if (WU > 1.1 * HU) {
             setMode("wide");
         } else {
             setMode("normal");
@@ -82,9 +82,9 @@ export default function AudioPebble(props: {
                 pos={"absolute"}
                 right={0}
                 top={0}
-                p={`${WU * 0.35}px`}
+                p={`${HU * 0.4}px`}
                 bg={"black"}
-                borderBottomLeftRadius={`${WU * 0.6}px`}
+                borderBottomLeftRadius={`${HU * 0.7}px`}
                 cursor={"pointer"}
                 _hover={{ transform: "scale(1.1)" }}
                 _active={{ transform: "scale(0.9)" }}
@@ -93,14 +93,14 @@ export default function AudioPebble(props: {
             >
                 <Image
                     src={"/spotifyBranding/icons/white.png"}
-                    width={WU * 0.7}
-                    height={WU * 0.7}
+                    width={Math.max(HU * 0.8, 21)}
+                    height={Math.max(HU * 0.8, 21)}
                     alt={"Spotify Icon, click to go to Spotify"}
                 />
             </Center>
             <Center
                 width={`${WU * 7}px`}
-                height={mode === "normal" ? `${HU * 5}px` : `${HU * 6.5}px`}
+                height={`${HU * 6.5}px`}
                 fontSize={"xs"}
                 borderRadius={"10px"}
             >
@@ -144,9 +144,14 @@ export default function AudioPebble(props: {
                                     ? `${WU * 7}px`
                                     : `${WU * 5}px`
                             }
-                            h={mode === "normal" ? `${HU}px` : `${HU * 7}px`}
+                            h={
+                                mode === "normal"
+                                    ? `${HU * 2.5}px`
+                                    : `${HU * 6.5}px`
+                            }
                             px={mode === "wide" ? `${WU * 0.25}px` : ""}
                             justifyContent={"center"}
+                            alignItems={mode === "normal" ? "center" : ""}
                         >
                             <Flex
                                 w={
@@ -156,19 +161,16 @@ export default function AudioPebble(props: {
                                 }
                                 h={
                                     mode === "normal"
-                                        ? `${HU}px`
+                                        ? `${HU * 3}px`
                                         : `${HU * 3.5}px`
                                 }
                                 overflow={"hidden"}
                                 my={1}
                                 justifyContent={"center"}
                             >
-                                <Flex
-                                    w={"fit-content"}
-                                    hidden={mode === "wide"}
-                                >
+                                <Flex h={`${HU}px`} hidden={mode === "wide"}>
                                     <motion.div
-                                        className={"flex w-fit-content"}
+                                        className={"flex w-fit-content h-full"}
                                         initial={{ x: "90%" }}
                                         animate={{ x: ["90%", "-90%"] }}
                                         transition={{
@@ -180,6 +182,7 @@ export default function AudioPebble(props: {
                                     >
                                         <Text
                                             w={"fit-content"}
+                                            h={"fit-content"}
                                             whiteSpace={"nowrap"}
                                             textAlign={"center"}
                                             fontSize={`${HU * 0.5}px`}
@@ -206,11 +209,10 @@ export default function AudioPebble(props: {
                                     </Text>
                                 </Flex>
                             </Flex>
-
                             <AudioControls
                                 audioPlayer={props.audioPlayer}
-                                HU={HU}
-                                WU={WU}
+                                HU={HU * 0.7}
+                                WU={WU * 0.7}
                             />
                         </Flex>
                     </Center>
