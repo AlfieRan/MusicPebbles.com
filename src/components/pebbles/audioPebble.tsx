@@ -3,7 +3,7 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import { audioPlayerType, setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
+import AudioControls from "../other/audioControls";
 
 export default function AudioPebble(props: {
     info: pebblePhysics;
@@ -66,7 +66,7 @@ export default function AudioPebble(props: {
                 />
             </Center>
             <Center
-                width={`${WU * 5}px`}
+                width={`${WU * 6.5}px`}
                 height={`${HU * 5}px`}
                 fontSize={"xs"}
                 borderRadius={"10px"}
@@ -102,7 +102,7 @@ export default function AudioPebble(props: {
                             />
                         </Flex>
                         <Flex
-                            w={`${WU * 5}px`}
+                            w={`${WU * 6}px`}
                             h={HU + "px"}
                             overflow={"hidden"}
                             mt={1}
@@ -110,11 +110,12 @@ export default function AudioPebble(props: {
                         >
                             <Flex w={"fit-content"}>
                                 <motion.div
-                                    className={"flex w-fit"}
-                                    initial={{ x: "100%" }}
-                                    animate={{ x: ["100%", "-100%"] }}
+                                    className={"flex w-fit-content"}
+                                    initial={{ x: "90%" }}
+                                    animate={{ x: ["90%", "-90%"] }}
                                     transition={{
-                                        duration: 7.5,
+                                        duration: 15,
+                                        repeatDelay: 0,
                                         ease: "linear",
                                         repeat: Infinity,
                                     }}
@@ -122,60 +123,24 @@ export default function AudioPebble(props: {
                                     <Text
                                         w={"fit-content"}
                                         whiteSpace={"nowrap"}
-                                        textAlign={"left"}
+                                        textAlign={"center"}
                                         fontSize={`${HU * 0.5}px`}
                                     >
-                                        {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.artists[0].name}`}
+                                        {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.album.name} - ${props.audioPlayer.playing.artists[0].name}`}
                                     </Text>
                                 </motion.div>
                             </Flex>
                         </Flex>
+                        <AudioControls
+                            audioPlayer={props.audioPlayer}
+                            HU={HU}
+                            WU={WU}
+                        />
                     </Center>
                 ) : (
                     <Center textAlign={"center"}>No Song Playing</Center>
                 )}
             </Center>
-            <Flex
-                flexDir={"row"}
-                mx={`${WU}px`}
-                maxH={`${HU * 2}px`}
-                maxW={`${WU * 7}px`}
-                justifyContent={"center"}
-                alignItems={"center"}
-                fontSize={`${HU * 0.75}px`}
-            >
-                <Button
-                    bg={"blackAlpha.600"}
-                    _hover={{ bg: "blackAlpha.500", transform: "scale(1.05)" }}
-                    _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
-                    onClick={props.audioPlayer.prevSong}
-                    px={`${WU * 0.5}px`}
-                    py={0}
-                >
-                    {"⏮︎"}
-                </Button>
-                <Button
-                    bg={"blackAlpha.600"}
-                    _hover={{ bg: "blackAlpha.500", transform: "scale(1.05)" }}
-                    _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
-                    mx={1}
-                    onClick={props.audioPlayer.playPause}
-                    px={`${WU * 0.5}px`}
-                    py={0}
-                >
-                    {props.audioPlayer.paused ? "▶︎" : "⏸︎"}
-                </Button>
-                <Button
-                    bg={"blackAlpha.600"}
-                    _hover={{ bg: "blackAlpha.500", transform: "scale(1.05)" }}
-                    _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
-                    onClick={props.audioPlayer.nextSong}
-                    px={`${WU * 0.5}px`}
-                    py={0}
-                >
-                    {"⏭︎"}
-                </Button>
-            </Flex>
         </Center>
     );
 }

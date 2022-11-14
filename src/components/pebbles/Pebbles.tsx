@@ -51,7 +51,12 @@ export default function Pebbles() {
             zIndex={1}
         >
             <Hovering {...hoveringState} />
-            <Overlay info={overlayState} hide={hideOverlay} />
+            <Overlay
+                info={overlayState}
+                hide={hideOverlay}
+                audioPlayer={audioPlayer}
+                time={time}
+            />
             <ProfilePebble
                 info={pebbleState.profile}
                 setHovering={setHoveringState}

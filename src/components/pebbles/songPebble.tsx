@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSongs } from "../../utils/hooks/useSongs";
 import { overlayStateType } from "../../utils/types/overlay";
 import { useAudio } from "../../utils/hooks/useAudio";
+import SongOverlay from "../overlay/songOverlay";
 
 export default function SongPebble(props: {
     info: pebblePhysics;
@@ -42,109 +43,7 @@ export default function SongPebble(props: {
     function openSongOverlay() {
         props.setOverlay({
             hidden: false,
-            component: (
-                <Flex
-                    flexDir={"column"}
-                    bg={"MidGrey"}
-                    px={4}
-                    py={2}
-                    borderRadius={"10px"}
-                    maxW={"100%"}
-                    key={"SongOverlay"}
-                >
-                    <Flex mb={5}>
-                        <Text mb={"10px"}>Audio preview demo</Text>
-                        <Button
-                            bg={"blackAlpha.400"}
-                            _hover={{
-                                bg: "blackAlpha.500",
-                                transform: "scale(1.02)",
-                            }}
-                            _active={{
-                                bg: "blackAlpha.600",
-                                transform: "scale(0.98)",
-                            }}
-                            ml={2}
-                            onClick={() => {
-                                props.audioPlayer.prevSong();
-                            }}
-                        >
-                            Previous Song
-                        </Button>
-                        <Button
-                            bg={"blackAlpha.400"}
-                            _hover={{
-                                bg: "blackAlpha.500",
-                                transform: "scale(1.02)",
-                            }}
-                            _active={{
-                                bg: "blackAlpha.600",
-                                transform: "scale(0.98)",
-                            }}
-                            ml={2}
-                            onClick={() => {
-                                props.audioPlayer.playPause();
-                            }}
-                        >
-                            {props.audioPlayer.paused ? "Play" : "Pause"}
-                        </Button>
-                        <Button
-                            bg={"blackAlpha.400"}
-                            _hover={{
-                                bg: "blackAlpha.500",
-                                transform: "scale(1.02)",
-                            }}
-                            _active={{
-                                bg: "blackAlpha.600",
-                                transform: "scale(0.98)",
-                            }}
-                            ml={2}
-                            onClick={() => {
-                                props.audioPlayer.nextSong();
-                            }}
-                        >
-                            Next Song
-                        </Button>
-                    </Flex>
-                    <Flex
-                        flexDir={"row"}
-                        justifyContent={"center"}
-                        wrap={"wrap"}
-                        maxW={"95%"}
-                    >
-                        {songs.slice(0, 20).map((song, index) => (
-                            <Button
-                                bg={"blackAlpha.400"}
-                                _hover={{
-                                    bg: "blackAlpha.600",
-                                    transform: "scale(1.02)",
-                                }}
-                                _active={{
-                                    bg: "blackAlpha.800",
-                                    transform: "scale(0.98)",
-                                }}
-                                m={1}
-                                onClick={() => {
-                                    props.audioPlayer.setSong(song);
-                                }}
-                                key={song.name + "Preview Button" + index}
-                            >
-                                <Flex wrap={"wrap"} flexDir={"column"}>
-                                    <Text>
-                                        {index + 1}. {song.name}
-                                    </Text>
-                                    <Text
-                                        fontSize={"xs"}
-                                        color={"whiteAlpha.400"}
-                                    >
-                                        By {song.artists[0].name ?? "unknown"}
-                                    </Text>
-                                </Flex>
-                            </Button>
-                        ))}
-                    </Flex>
-                </Flex>
-            ),
+            type: "songs",
         });
         console.log("open song overlay");
     }

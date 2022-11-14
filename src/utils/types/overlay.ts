@@ -1,6 +1,8 @@
+export type OverlayTypes = "songs";
+
 export interface componentOverlay {
     hidden: false;
-    component: JSX.Element;
+    type: OverlayTypes;
 }
 
 export interface hiddenOverlay {
