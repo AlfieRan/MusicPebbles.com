@@ -45,3 +45,9 @@ export type audioPlayerType = {
     prevSong: () => void;
     playing: songType | undefined;
 };
+
+export type songOverlayInfo = {
+    song: string;
+    artist: string;
+    album: string;
+};

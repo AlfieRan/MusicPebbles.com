@@ -42,6 +42,13 @@ const pebbleSizesLarge = {
     },
 };
 
+const pebbleOverridesSmall = {
+    playing: {
+        width: 2,
+        height: 1,
+    },
+};
+
 const maxHeight = 5;
 
 // TODO: make this work for any screen size, currently only works well on desktop
@@ -56,8 +63,8 @@ export function usePebbles() {
         playing: emptyPebblePhysics,
     });
     const screenHook = useScreen();
-    const [componentHeight, setComponentHeight] = useState<number | undefined>(
-        undefined
+    const [componentHeight, setComponentHeight] = useState<number>(
+        screenHook.height
     );
 
     useEffect(() => {
@@ -68,6 +75,7 @@ export function usePebbles() {
 
         if (screenHook.width < 600) {
             gridSize = { w: 2, h: 8 };
+            pebbleSizes = { ...pebbleSizesLarge, ...pebbleOverridesSmall };
         }
         const gridItemSize = (() => {
             if (
@@ -118,7 +126,7 @@ export function usePebbles() {
         }
 
         if (gridSize.w === 5) {
-            const pebbleState: pebbleObjType = {
+            const newPebbleState: pebbleObjType = {
                 profile: getGridItemPosition(pebbleSizes.profile, {
                     x: 2,
                     y: 1,
@@ -133,27 +141,27 @@ export function usePebbles() {
                 }),
                 time: getGridItemPosition(pebbleSizes.time, { x: 4, y: 2 }),
             };
-            setPebbleState(pebbleState);
+            setPebbleState(newPebbleState);
             setComponentHeight(screenHook.height);
         } else {
-            const pebbleState: pebbleObjType = {
+            const newPebbleState: pebbleObjType = {
                 profile: getGridItemPosition(pebbleSizes.profile, {
                     x: 0,
                     y: 5,
                 }),
                 artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 6 }),
-                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 3 }),
-                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 2 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 2 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 1 }),
                 genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
-                    x: 1,
-                    y: 5,
+                    x: 0,
+                    y: 4,
                 }),
                 time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 5 }),
             };
-            setPebbleState(pebbleState);
+            setPebbleState(newPebbleState);
             setComponentHeight(
-                gridItemSize * gridSize.h + padding * (gridSize.h + 1)
+                (gridSize.h + 3) * (padding + gridItemSize) + padding
             );
         }
     }, [screenHook]);

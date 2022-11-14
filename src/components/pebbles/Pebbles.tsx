@@ -45,54 +45,61 @@ export default function Pebbles() {
     return (
         <Center
             w={screen.width}
-            h={componentHeight || screen.height}
+            h={Math.min(componentHeight, screen.height)}
             overflowX={"hidden"}
+            pos={"relative"}
             overflowY={"scroll"}
             zIndex={1}
         >
-            <Hovering {...hoveringState} />
-            <Overlay
-                info={overlayState}
-                hide={hideOverlay}
-                audioPlayer={audioPlayer}
-                time={time}
-            />
-            <ProfilePebble
-                info={pebbleState.profile}
-                setHovering={setHoveringState}
-            />
-            <SongPebble
-                info={pebbleState.song}
-                setHovering={setHoveringState}
-                time={time}
-                setOverlay={setOverlayState}
-                audioPlayer={audioPlayer}
-            />
-            <ArtistPebble
-                info={pebbleState.artist}
-                setHovering={setHoveringState}
-                time={time}
-            />
-            <UniquePebble
-                info={pebbleState.unique}
-                setHovering={setHoveringState}
-                time={time}
-            />
-            <GenrePebble
-                info={pebbleState.genre}
-                setHovering={setHoveringState}
-            />
-            <TimePebble
-                info={pebbleState.time}
-                setHovering={setHoveringState}
-                setTime={setTime}
-                time={time}
-            />
-            <AudioPebble
-                info={pebbleState.playing}
-                setHovering={setHoveringState}
-                audioPlayer={audioPlayer}
-            />
+            <Center
+                minH={Math.max(componentHeight, screen.height)}
+                w={screen.width}
+                pos={"absolute"}
+            >
+                <Hovering {...hoveringState} />
+                <Overlay
+                    info={overlayState}
+                    hide={hideOverlay}
+                    audioPlayer={audioPlayer}
+                    time={time}
+                />
+                <ProfilePebble
+                    info={pebbleState.profile}
+                    setHovering={setHoveringState}
+                />
+                <SongPebble
+                    info={pebbleState.song}
+                    setHovering={setHoveringState}
+                    time={time}
+                    setOverlay={setOverlayState}
+                    audioPlayer={audioPlayer}
+                />
+                <ArtistPebble
+                    info={pebbleState.artist}
+                    setHovering={setHoveringState}
+                    time={time}
+                />
+                <UniquePebble
+                    info={pebbleState.unique}
+                    setHovering={setHoveringState}
+                    time={time}
+                />
+                <GenrePebble
+                    info={pebbleState.genre}
+                    setHovering={setHoveringState}
+                />
+                <TimePebble
+                    info={pebbleState.time}
+                    setHovering={setHoveringState}
+                    setTime={setTime}
+                    time={time}
+                />
+                <AudioPebble
+                    info={pebbleState.playing}
+                    setHovering={setHoveringState}
+                    audioPlayer={audioPlayer}
+                />
+            </Center>
         </Center>
     );
 }

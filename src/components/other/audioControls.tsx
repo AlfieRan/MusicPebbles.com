@@ -1,5 +1,5 @@
 import { audioPlayerType } from "../../utils/types/state";
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Text } from "@chakra-ui/react";
 
 export default function AudioControls(props: {
     audioPlayer: audioPlayerType;
@@ -14,7 +14,7 @@ export default function AudioControls(props: {
             maxW={`${props.WU * 3}px`}
             justifyContent={"center"}
             alignItems={"center"}
-            fontSize={`${props.HU * 0.75}px`}
+            fontSize={`${props.WU * 0.75}px`}
         >
             <Button
                 bg={"blackAlpha.600"}
@@ -24,7 +24,7 @@ export default function AudioControls(props: {
                 px={`${props.WU * 0.5}px`}
                 py={0}
             >
-                {"⏮︎"}
+                <Text>{"⏮︎"}</Text>
             </Button>
             <Button
                 bg={"blackAlpha.600"}
@@ -35,7 +35,7 @@ export default function AudioControls(props: {
                 px={`${props.WU * 0.5}px`}
                 py={0}
             >
-                {props.audioPlayer.paused ? "▶︎" : "⏸︎"}
+                <Text>{props.audioPlayer.paused ? "▶︎" : "⏸︎"}</Text>
             </Button>
             <Button
                 bg={"blackAlpha.600"}
@@ -45,7 +45,7 @@ export default function AudioControls(props: {
                 px={`${props.WU * 0.5}px`}
                 py={0}
             >
-                {"⏭︎"}
+                <Text>{"⏭︎"}</Text>
             </Button>
         </Flex>
     );

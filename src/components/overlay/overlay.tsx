@@ -26,7 +26,7 @@ export function Overlay(props: {
                 {!props.info.hidden && (
                     <motion.div
                         key={"overlayMain"}
-                        className={"absolute z-50 w-fit h-fit max-w-[80%]"}
+                        className={"fixed z-50 w-fit h-fit max-w-[80%]"}
                         exit={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         initial={{ scale: 0.5, opacity: 0 }}

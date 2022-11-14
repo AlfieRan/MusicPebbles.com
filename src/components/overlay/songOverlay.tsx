@@ -1,10 +1,11 @@
 import { Button, Center, Flex, Link, Text } from "@chakra-ui/react";
-import { audioPlayerType } from "../../utils/types/state";
+import { audioPlayerType, songOverlayInfo } from "../../utils/types/state";
 import { songType, timeFrameType } from "../../utils/types/spotify";
 import { useSongs } from "../../utils/hooks/useSongs";
 import { useEffect, useState } from "react";
 import AudioControls from "../other/audioControls";
 import Image from "next/image";
+import { wrapNames } from "../../utils/other/wrapNames";
 
 export default function SongOverlay(props: {
     audioPlayer: audioPlayerType;
@@ -14,8 +15,11 @@ export default function SongOverlay(props: {
 }) {
     const [allSongs] = useSongs();
     const [songs, setSongs] = useState<songType[]>([]);
-    const [currentSong, setCurrentSong] = useState<string>("No Song Playing");
-    const [currentArtist, setCurrentArtist] = useState<string>("");
+    const [currentSong, setCurrentSong] = useState<songOverlayInfo>({
+        song: "No Song Playing",
+        artist: "",
+        album: "",
+    });
 
     useEffect(() => {
         const CurrentSongs = allSongs[props.time];
@@ -25,32 +29,19 @@ export default function SongOverlay(props: {
     }, [allSongs, props.time]);
 
     useEffect(() => {
-        if (props.audioPlayer.playing !== undefined) {
-            let newString = `${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.album.name}`;
-            if (newString.length > 70) {
-                newString = newString.substring(0, 70) + "...";
-            }
-            setCurrentSong(newString);
-
-            let newArtist = props.audioPlayer.playing.artists
-                .map((artist) => artist.name)
-                .join(", ");
-            if (newArtist.length > 50) {
-                newArtist = newArtist.substring(0, 50) + "...";
-            }
-            setCurrentArtist(newArtist);
-        }
+        setCurrentSong(wrapNames(props.audioPlayer));
     }, [props.audioPlayer.playing]);
 
     return (
         <Flex
             flexDir={"column"}
+            alignItems={"center"}
             bg={"MidGrey"}
-            px={5}
+            px={`${props.WU * 0.25}px`}
             py={4}
             borderRadius={"10px"}
-            maxW={props.WU * 8}
-            maxH={props.HU * 8}
+            maxW={`${props.WU * 8}px`}
+            maxH={`${props.HU * 8}px`}
             key={"SongOverlay"}
         >
             <Flex w={"100%"} justifyContent={"center"}>
@@ -61,36 +52,56 @@ export default function SongOverlay(props: {
                     borderRadius={"10px"}
                     justifyContent={"space-between"}
                     w={`${props.WU * 7.5}px`}
+                    px={`${props.WU * 0.25}px`}
                     maxH={`${props.HU * 2}px`}
                 >
-                    <Flex w={`${props.WU * 6.5}px`} alignItems={"center"}>
-                        <AudioControls
-                            audioPlayer={props.audioPlayer}
-                            WU={props.WU / 4}
-                            HU={props.HU / 4}
-                        />
+                    <Flex
+                        w={`${props.WU * 5}px`}
+                        alignItems={{ base: "flex-start", md: "center" }}
+                        flexDir={{ base: "column", md: "row" }}
+                    >
+                        <Flex
+                            w={{
+                                base: `${props.WU * 3}px`,
+                                md: `${(props.WU / 2) * 3}px`,
+                            }}
+                            maxH={{
+                                base: `${props.HU * 2}px`,
+                                md: `${props.HU}px`,
+                            }}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                        >
+                            <AudioControls
+                                audioPlayer={props.audioPlayer}
+                                WU={props.WU / 4}
+                                HU={props.HU / 4}
+                            />
+                        </Flex>
                         <Flex
                             maxH={`${props.HU}px`}
-                            w={`${props.WU * 5}px`}
+                            w={`${props.WU * 4}px`}
                             justifyContent={"center"}
                             flexDir={"column"}
                         >
                             <Text fontSize={`${props.WU / 8}px`}>
-                                {currentSong}
+                                {currentSong.song}
                             </Text>
                             <Text
                                 fontSize={`${props.WU / 10}px`}
-                                hidden={currentArtist === ""}
+                                hidden={currentSong.artist === ""}
                             >
-                                {currentArtist}
+                                {currentSong.artist}
                             </Text>
                         </Flex>
                     </Flex>
                     <Link
                         _hover={{ transform: "scale(1.05)" }}
                         _active={{ transform: "scale(0.95)" }}
-                        mr={2}
-                        maxW={`${props.WU}px`}
+                        maxW={{
+                            base: `${props.WU * 2}px`,
+                            md: `${props.WU}px`,
+                        }}
                         href={
                             props.audioPlayer.playing !== undefined
                                 ? props.audioPlayer.playing.external_urls
@@ -100,25 +111,31 @@ export default function SongOverlay(props: {
                         isExternal
                     >
                         <Flex
-                            maxW={`${props.WU}px`}
+                            w={{
+                                base: `${props.WU * 2}px`,
+                                md: `${props.WU}px`,
+                            }}
                             h={"100%"}
+                            justifyContent={"flex-start"}
                             alignItems={"center"}
+                            pos={"relative"}
                         >
                             <Image
                                 src={"/spotifyBranding/logos/white.png"}
                                 alt={"Spotify Icon"}
-                                width={props.WU * 0.8}
-                                height={props.WU * 0.8}
+                                className={"object-contain"}
+                                fill
                             />
                         </Flex>
                     </Link>
                 </Flex>
             </Flex>
             <Flex
-                flexDir={"row"}
-                justifyContent={"space-around"}
+                flexDir={{ base: "column", md: "row" }}
+                justifyContent={{ base: "flex-start", md: "space-around" }}
+                alignItems={{ base: "center", md: "flex-start" }}
                 w={`${props.WU * 7.5}px`}
-                maxH={`${props.HU * 6}px`}
+                maxH={`${props.HU * 7.5}px`}
                 mt={2}
                 bg={"whiteAlpha.300"}
                 borderRadius={"10px"}
@@ -128,10 +145,13 @@ export default function SongOverlay(props: {
                     (songPacket, packetIndex) => (
                         <Flex
                             key={packetIndex + "SongOverlayPacket"}
-                            w={`${props.WU * 3.5}px`}
+                            w={{
+                                base: `${props.WU * 7}px`,
+                                md: `${props.WU * 3.5}px`,
+                            }}
                             h={"fit-content"}
                             py={"5px"}
-                            mb={"10px"}
+                            mb={{ base: "0px", md: "10px" }}
                             flexDir={"column"}
                         >
                             {songPacket.map((song, songIndex) => (
@@ -155,16 +175,8 @@ export default function SongOverlay(props: {
                                         <Flex
                                             overflow={"hidden"}
                                             borderRadius={"5px"}
-                                            width={
-                                                props.WU *
-                                                0.5 *
-                                                song.album.images[0].width
-                                            }
-                                            height={
-                                                props.WU *
-                                                0.5 *
-                                                song.album.images[0].height
-                                            }
+                                            width={"auto"}
+                                            height={"auto"}
                                         >
                                             <Image
                                                 src={song.album.images[0].url}

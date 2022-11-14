@@ -1,17 +1,47 @@
 import { Button, Center, Flex, Link, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import { audioPlayerType, setHoveringType } from "../../utils/types/state";
+import {
+    audioPlayerType,
+    setHoveringType,
+    songOverlayInfo,
+} from "../../utils/types/state";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import AudioControls from "../other/audioControls";
+import { useEffect, useState } from "react";
+import { wrapNames } from "../../utils/other/wrapNames";
 
 export default function AudioPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     audioPlayer: audioPlayerType;
 }) {
-    const HU = props.info.dims.height / 8; // Height Unit
-    const WU = props.info.dims.width / 8; // Width Unit
+    const [HU, setHU] = useState(props.info.dims.height / 8);
+    const [WU, setWU] = useState(props.info.dims.width / 8);
+
+    useEffect(() => {
+        setHU(props.info.dims.height / 8);
+        setWU(props.info.dims.width / 8);
+    }, [props.info.dims.height, props.info.dims.width]);
+
+    const [mode, setMode] = useState<"wide" | "normal">("normal");
+    const [currentSong, setCurrentSong] = useState<songOverlayInfo>({
+        song: "No Song Playing",
+        artist: "",
+        album: "",
+    });
+
+    useEffect(() => {
+        if (WU > HU) {
+            setMode("wide");
+        } else {
+            setMode("normal");
+        }
+    }, [HU, WU]);
+
+    useEffect(() => {
+        setCurrentSong(wrapNames(props.audioPlayer, 25));
+    }, [props.audioPlayer.playing]);
 
     function openHover() {
         props.setHovering({
@@ -50,8 +80,11 @@ export default function AudioPebble(props: {
         >
             <Center
                 pos={"absolute"}
-                right={`${WU * 0.4}px`}
-                top={`${WU * 0.4}px`}
+                right={0}
+                top={0}
+                p={`${WU * 0.35}px`}
+                bg={"black"}
+                borderBottomLeftRadius={`${WU * 0.6}px`}
                 cursor={"pointer"}
                 _hover={{ transform: "scale(1.1)" }}
                 _active={{ transform: "scale(0.9)" }}
@@ -60,23 +93,36 @@ export default function AudioPebble(props: {
             >
                 <Image
                     src={"/spotifyBranding/icons/white.png"}
-                    width={WU * 0.8}
-                    height={WU * 0.8}
+                    width={WU * 0.7}
+                    height={WU * 0.7}
                     alt={"Spotify Icon, click to go to Spotify"}
                 />
             </Center>
             <Center
-                width={`${WU * 6.5}px`}
-                height={`${HU * 5}px`}
+                width={`${WU * 7}px`}
+                height={mode === "normal" ? `${HU * 5}px` : `${HU * 6.5}px`}
                 fontSize={"xs"}
                 borderRadius={"10px"}
             >
                 {props.audioPlayer.playing !== undefined ? (
-                    <Center flexDir={"column"}>
+                    <Center
+                        flexDir={mode === "normal" ? "column" : "row"}
+                        w={"100%"}
+                        h={"100%"}
+                    >
                         <Flex
-                            width={`${WU * 4}px`}
-                            height={`${HU * 4}px`}
-                            bg={"MidGrey"}
+                            w={
+                                mode === "normal"
+                                    ? `${HU * 4}px`
+                                    : `${WU * 2}px`
+                            }
+                            h={
+                                mode === "normal"
+                                    ? `${HU * 4}px`
+                                    : `${WU * 3}px`
+                            }
+                            pos={"relative"}
+                            flexDir={"column"}
                             onMouseOver={openHover}
                             onMouseLeave={closeHover}
                             onClick={redirectToSpotify}
@@ -86,56 +132,87 @@ export default function AudioPebble(props: {
                                     props.audioPlayer.playing.album.images[0]
                                         .url
                                 }
+                                className={"object-contain"}
                                 alt={"Currently playing song"}
-                                width={
-                                    props.audioPlayer.playing.album.images[0]
-                                        .width *
-                                    WU *
-                                    4
-                                }
-                                height={
-                                    props.audioPlayer.playing.album.images[0]
-                                        .height *
-                                    HU *
-                                    4
-                                }
+                                fill
                             />
                         </Flex>
                         <Flex
-                            w={`${WU * 6}px`}
-                            h={HU + "px"}
-                            overflow={"hidden"}
-                            mt={1}
+                            flexDir={"column"}
+                            w={
+                                mode === "normal"
+                                    ? `${WU * 7}px`
+                                    : `${WU * 5}px`
+                            }
+                            h={mode === "normal" ? `${HU}px` : `${HU * 7}px`}
+                            px={mode === "wide" ? `${WU * 0.25}px` : ""}
                             justifyContent={"center"}
                         >
-                            <Flex w={"fit-content"}>
-                                <motion.div
-                                    className={"flex w-fit-content"}
-                                    initial={{ x: "90%" }}
-                                    animate={{ x: ["90%", "-90%"] }}
-                                    transition={{
-                                        duration: 15,
-                                        repeatDelay: 0,
-                                        ease: "linear",
-                                        repeat: Infinity,
-                                    }}
+                            <Flex
+                                w={
+                                    mode === "normal"
+                                        ? `${WU * 7}px`
+                                        : `${WU * 5}px`
+                                }
+                                h={
+                                    mode === "normal"
+                                        ? `${HU}px`
+                                        : `${HU * 3.5}px`
+                                }
+                                overflow={"hidden"}
+                                my={1}
+                                justifyContent={"center"}
+                            >
+                                <Flex
+                                    w={"fit-content"}
+                                    hidden={mode === "wide"}
                                 >
-                                    <Text
-                                        w={"fit-content"}
-                                        whiteSpace={"nowrap"}
-                                        textAlign={"center"}
-                                        fontSize={`${HU * 0.5}px`}
+                                    <motion.div
+                                        className={"flex w-fit-content"}
+                                        initial={{ x: "90%" }}
+                                        animate={{ x: ["90%", "-90%"] }}
+                                        transition={{
+                                            duration: 15,
+                                            repeatDelay: 0,
+                                            ease: "linear",
+                                            repeat: Infinity,
+                                        }}
                                     >
-                                        {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.album.name} - ${props.audioPlayer.playing.artists[0].name}`}
+                                        <Text
+                                            w={"fit-content"}
+                                            whiteSpace={"nowrap"}
+                                            textAlign={"center"}
+                                            fontSize={`${HU * 0.5}px`}
+                                        >
+                                            {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.album.name} - ${props.audioPlayer.playing.artists[0].name}`}
+                                        </Text>
+                                    </motion.div>
+                                </Flex>
+                                <Flex
+                                    w={"100%"}
+                                    h={"100%"}
+                                    hidden={mode === "normal"}
+                                    flexDir={"column"}
+                                    pb={`${HU * 0.5}px`}
+                                >
+                                    <Text fontSize={`${HU * 0.7}px`}>
+                                        {currentSong.song}
                                     </Text>
-                                </motion.div>
+                                    <Text fontSize={`${HU * 0.7}px`}>
+                                        {currentSong.album}
+                                    </Text>
+                                    <Text fontSize={`${HU * 0.7}px`}>
+                                        {currentSong.artist}
+                                    </Text>
+                                </Flex>
                             </Flex>
+
+                            <AudioControls
+                                audioPlayer={props.audioPlayer}
+                                HU={HU}
+                                WU={WU}
+                            />
                         </Flex>
-                        <AudioControls
-                            audioPlayer={props.audioPlayer}
-                            HU={HU}
-                            WU={WU}
-                        />
                     </Center>
                 ) : (
                     <Center textAlign={"center"}>No Song Playing</Center>
