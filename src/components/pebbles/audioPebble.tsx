@@ -48,6 +48,8 @@ export default function AudioPebble(props: {
             hovering: true,
             type: "text",
             text: "Click to go to Spotify",
+            x: "right",
+            y: "top",
         });
     }
 

@@ -53,6 +53,8 @@ export default function SongPebble(props: {
             hovering: true,
             type: "text",
             text: "Songs",
+            x: "left",
+            y: "top",
         });
     }
 

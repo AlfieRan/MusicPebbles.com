@@ -1,4 +1,4 @@
-const escapeKeys = ["Escape", "Esc", "Space", " ", ""];
+const escapeKeys = ["Escape", "Esc", "Space", "Enter", " ", ""];
 
 export function setupKeyPresses(hideComponent: (value?: boolean) => void) {
     function handleKeyPress(e: KeyboardEvent) {

@@ -66,6 +66,7 @@ export default function Pebbles() {
                 <ProfilePebble
                     info={pebbleState.profile}
                     setHovering={setHoveringState}
+                    setOverlay={setOverlayState}
                 />
                 <SongPebble
                     info={pebbleState.song}

@@ -3,12 +3,24 @@ import { Center } from "@chakra-ui/react";
 import Image from "next/image";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
+import { Dispatch, SetStateAction } from "react";
+import { overlayStateType } from "../../utils/types/overlay";
 
 export default function ProfilePebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
+    setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
     const profile = useProfile();
+
+    function openSongOverlay() {
+        props.setOverlay({
+            hidden: false,
+            type: "profile",
+        });
+        console.log("open song overlay");
+    }
+
     return (
         <Center
             w={`${props.info.dims.width}px`}
@@ -29,11 +41,14 @@ export default function ProfilePebble(props: {
                     text: profile.profile?.display_name
                         ? `Hi ${profile.profile?.display_name}!`
                         : "Loading...",
+                    x: "right",
+                    y: "top",
                 });
             }}
             onMouseOut={() => {
                 props.setHovering({ hovering: false });
             }}
+            onClick={openSongOverlay}
         >
             <Image
                 src={profile.profile?.image_url ?? "/unknown.png"}

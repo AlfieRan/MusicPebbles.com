@@ -24,6 +24,8 @@ export default function GenrePebble(props: {
                     hovering: true,
                     type: "text",
                     text: "Genres",
+                    x: "right",
+                    y: "top",
                 });
             }}
             onMouseOut={() => {

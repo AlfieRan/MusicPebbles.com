@@ -1,4 +1,4 @@
-export type OverlayTypes = "songs";
+export type OverlayTypes = "songs" | "profile";
 
 export interface componentOverlay {
     hidden: false;

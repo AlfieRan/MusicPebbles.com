@@ -5,7 +5,7 @@ import { useScreen } from "../utils/hooks/useScreen";
 import { Text, Flex } from "@chakra-ui/react";
 
 export default function Hovering(props: hoveringType) {
-    const { mouse, sector } = useMouse();
+    const { mouse } = useMouse();
     const screen = useScreen();
 
     if (screen.width < 500) {
@@ -23,11 +23,10 @@ export default function Hovering(props: hoveringType) {
                     style={{
                         x: mouse.x,
                         y: mouse.y,
-                        left: sector.x === "left" ? 0 : undefined,
-                        top: sector.y === "top" ? 0 : undefined,
-                        right: sector.x === "right" ? screen.width : undefined,
-                        bottom:
-                            sector.y === "bottom" ? screen.height : undefined,
+                        left: props.x === "right" ? 0 : undefined,
+                        top: props.y === "bottom" ? 0 : undefined,
+                        right: props.x === "left" ? screen.width : undefined,
+                        bottom: props.y === "top" ? screen.height : undefined,
                     }}
                     exit={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}

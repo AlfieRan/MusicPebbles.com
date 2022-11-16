@@ -4,12 +4,16 @@ import { songType } from "./spotify";
 interface hoveringComponentState {
     hovering: true;
     type: "component";
+    y: "top" | "bottom";
+    x: "left" | "right";
     component: JSX.Element;
 }
 
 interface hoveringTextState {
     hovering: true;
     type: "text";
+    y: "top" | "bottom";
+    x: "left" | "right";
     text: string;
 }
 

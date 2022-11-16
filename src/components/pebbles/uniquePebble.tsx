@@ -32,6 +32,8 @@ export default function UniquePebble(props: {
                     hovering: true,
                     type: "text",
                     text: "Uniqueness",
+                    x: "left",
+                    y: "bottom",
                 });
             }}
             onMouseOut={() => {

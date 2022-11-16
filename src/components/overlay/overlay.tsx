@@ -5,6 +5,7 @@ import SongOverlay from "./songOverlay";
 import { audioPlayerType } from "../../utils/types/state";
 import { timeFrameType } from "../../utils/types/spotify";
 import { useScreen } from "../../utils/hooks/useScreen";
+import ProfileOverlay from "./profileOverlay";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -32,12 +33,17 @@ export function Overlay(props: {
                         initial={{ scale: 0.5, opacity: 0 }}
                         transition={{ duration: 0.15 }}
                     >
-                        <SongOverlay
-                            audioPlayer={props.audioPlayer}
-                            time={props.time}
-                            HU={HU}
-                            WU={WU}
-                        />
+                        {props.info.type === "songs" && (
+                            <SongOverlay
+                                audioPlayer={props.audioPlayer}
+                                time={props.time}
+                                HU={HU}
+                                WU={WU}
+                            />
+                        )}
+                        {props.info.type === "profile" && (
+                            <ProfileOverlay WU={WU} HU={HU} />
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>

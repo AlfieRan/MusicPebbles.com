@@ -56,6 +56,8 @@ export default function ArtistPebble(props: {
                     hovering: true,
                     type: "text",
                     text: "Artists",
+                    x: "right",
+                    y: "bottom",
                 });
             }}
             onMouseOut={() => {
