@@ -1,14 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    Center,
-    Flex,
-    Grid,
-    GridItem,
-    Table,
-    TableCaption,
-    TableContainer,
-    Text,
-} from "@chakra-ui/react";
+import { Center, Flex, Table, Text } from "@chakra-ui/react";
 import { ApiError } from "../../utils/types/errors";
 
 const Page = () => {
@@ -98,6 +89,26 @@ const Page = () => {
                                             </Text>
                                         </td>
                                     </tr>
+                                    {error.api === "spotify" && (
+                                        <tr>
+                                            <td
+                                                className={
+                                                    "pr-5 py-1 align-top"
+                                                }
+                                            >
+                                                Raw:
+                                            </td>
+                                            <td
+                                                className={
+                                                    "break-words py-1 text-xs"
+                                                }
+                                            >
+                                                <Text maxW={"60vw"}>
+                                                    {error.apiResponse}
+                                                </Text>
+                                            </td>
+                                        </tr>
+                                    )}
                                 </Table>
                             </Flex>
                         ))}

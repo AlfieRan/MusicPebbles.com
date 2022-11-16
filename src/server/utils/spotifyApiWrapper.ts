@@ -17,7 +17,7 @@ export async function spotifyWrapRequestDirect<T>(
         const params = {
             method: options.method,
             headers: {
-                "Content-Type": options.contentType,
+                "content-type": options.contentType,
                 Authorization: options.Authorization,
             },
             body:

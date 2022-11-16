@@ -7,6 +7,7 @@ import {
 import { getQueriesType } from "../../../server/types/callback";
 import {
     ClientIDSecretPair,
+    LOGGING,
     RedirectUri,
     redisClient,
     StateKey,
@@ -60,99 +61,153 @@ export default async function callback(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    console.log("[Callback] Callback Request Received.");
-    // Step 1 & 2.
-    const code = getQueryData(req.query);
+    try {
+        let LoggingId;
+        if (LOGGING) LoggingId = Math.random().toString(36).substring(2, 15);
+        console.log("[Callback] Callback Request Received.");
+        // Step 1 & 2.
+        const code = getQueryData(req.query);
+        if (LOGGING)
+            console.log(`[Callback] [${LoggingId}] Query Data Parsed.`);
 
-    // Step 3.
-    if (!code.success) {
-        res.redirect(`/error/?error=${code.error}`);
-        return;
-    }
-
-    // Step 4.
-    const accessToken = await spotifyWrapRequest<SpotifyTokenResponse>(
-        "https://accounts.spotify.com/api/token",
-        {
-            method: "POST",
-            contentType: "application/x-www-form-urlencoded",
-            Authorization: ClientIDSecretPair,
-            body: {
-                grant_type: "authorization_code",
-                code: code.code,
-                redirect_uri: RedirectUri,
-            },
+        // Step 3.
+        if (!code.success) {
+            if (LOGGING)
+                console.log(`[Callback] [${LoggingId}] Query Data Error.`);
+            res.redirect(encodeURIComponent(`/error?error=${code.error}`));
+            return;
         }
-    );
 
-    // Step 5.
-    if (!accessToken.success || accessToken.data.access_token === "") {
-        res.redirect(
-            `/error/?error=spotify_callback_error: ${
-                !accessToken.success
-                    ? accessToken.error
-                    : "Access token undefined"
-            }`
+        // Step 4.
+        if (LOGGING)
+            console.log(
+                `[Callback] [${LoggingId}] Requesting access token from spotify.`
+            );
+        const accessToken = await spotifyWrapRequest<SpotifyTokenResponse>(
+            "https://accounts.spotify.com/api/token",
+            {
+                method: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                Authorization: ClientIDSecretPair,
+                body: {
+                    grant_type: "authorization_code",
+                    code: encodeURIComponent(code.code),
+                    redirect_uri: RedirectUri,
+                },
+            }
         );
-        return;
-    }
 
-    // Step 6.
-    const userProfile = await spotifyWrapRequest<any>(
-        "https://api.spotify.com/v1/me",
-        {
-            method: "GET",
-            contentType: "application/json",
-            Authorization: `Bearer ${accessToken.data.access_token}`,
-            parameters: undefined,
-        }
-    );
-
-    // Step 7.
-    if (!userProfile.success) {
-        if (userProfile.code === 403) {
+        // Step 5.
+        if (LOGGING)
+            console.log(
+                `[Callback] [${LoggingId}] Received an access token response from spotify.`
+            );
+        if (!accessToken.success || accessToken.data.access_token === "") {
+            if (LOGGING)
+                console.log(`[Callback] [${LoggingId}] Access token invalid.`);
             res.redirect(
-                `/error?error=Spotify responded to our profile request with a 403 error which means you were not logged in properly,
+                encodeURIComponent(
+                    `/error?error=spotify_callback_error: ${
+                        !accessToken.success
+                            ? accessToken.error
+                            : "Access token undefined"
+                    }`
+                )
+            );
+            return;
+        }
+
+        // Step 6.
+        if (LOGGING)
+            console.log(
+                `[Callback] [${LoggingId}] Requesting profile using access token.`
+            );
+        const userProfile = await spotifyWrapRequest<any>(
+            "https://api.spotify.com/v1/me",
+            {
+                method: "GET",
+                contentType: "application/json",
+                Authorization: `Bearer ${accessToken.data.access_token}`,
+                parameters: undefined,
+            }
+        );
+
+        // Step 7.
+        if (LOGGING)
+            console.log(`[Callback] [${LoggingId}] Checking user profile.`);
+        if (!userProfile.success) {
+            if (LOGGING)
+                console.log(
+                    `[Callback] [${LoggingId}] User profile received is invalid.`
+                );
+            if (userProfile.code === 403) {
+                res.redirect(
+                    encodeURIComponent(`/error?error=Spotify responded to our profile request with a 403 error which means you were not logged in properly,
                  if you are using a developer version of this site that likely means you have not be whitelisted properly.
-                  If not please try logging in again and if it still fails please alert our head developer at hi@alfieranstead.com`
-            );
-        } else {
-            res.redirect(
-                `/error?error=spotify_profile_request_failure:${userProfile.error}`
-            );
+                  If not please try logging in again and if it still fails please alert our head developer at hi@alfieranstead.com`)
+                );
+            } else {
+                res.redirect(
+                    encodeURIComponent(
+                        `/error?error=spotify_profile_request_failure:${userProfile.error}`
+                    )
+                );
+            }
+            return;
         }
+        if (LOGGING)
+            console.log(`[Callback] [${LoggingId}] User profile is valid.`);
+
+        // Step 8.
+        const fullProfile: profileFull = {
+            display_name: userProfile.data.display_name,
+            id: userProfile.data.id,
+            image_url:
+                userProfile.data.images.length > 0
+                    ? userProfile.data.images[0].url
+                    : undefined,
+            refresh_token: accessToken.data.refresh_token,
+        };
+
+        if (LOGGING)
+            console.log(`[Callback] [${LoggingId}] Storing data in redis.`);
+
+        redisClient.setex(
+            fullProfile.id + "_access",
+            accessToken.data.expires_in,
+            accessToken.data.access_token
+        );
+        redisClient.setex(
+            fullProfile.id + "_profile",
+            3600 * 24 * 7,
+            JSON.stringify(fullProfile)
+        );
+
+        console.log(`[Callback] User: ${fullProfile.id} just logged in.`);
+
+        // Step 9.
+        if (LOGGING)
+            console.log(
+                `[Callback] [${LoggingId}] Setting cookies and redirecting.`
+            );
+        const cookie = await createLoginCookie(fullProfile.id);
+        res.setHeader("Set-Cookie", cookie);
+        res.redirect("/dashboard");
+        return;
+    } catch (e) {
+        res.redirect(
+            encodeURIComponent(`/error?error=unexpected_callback_error: ${e}`)
+        );
+
+        await storeError({
+            api: "spotify",
+            error: "Callback error",
+            apiResponse: JSON.stringify(e),
+            statusCode: 500,
+            time: Date.now(),
+        });
         return;
     }
-
-    // Step 8.
-    const fullProfile: profileFull = {
-        display_name: userProfile.data.display_name,
-        id: userProfile.data.id,
-        image_url:
-            userProfile.data.images.length > 0
-                ? userProfile.data.images[0].url
-                : undefined,
-        refresh_token: accessToken.data.refresh_token,
-    };
-
-    redisClient.setex(
-        fullProfile.id + "_access",
-        accessToken.data.expires_in,
-        accessToken.data.access_token
-    );
-    redisClient.setex(
-        fullProfile.id + "_profile",
-        3600 * 24 * 7,
-        JSON.stringify(fullProfile)
-    );
-
-    console.log(`[Callback V2] User: ${fullProfile.id} just logged in.`);
-
-    // Step 9.
-    const cookie = await createLoginCookie(fullProfile.id);
-    res.setHeader("Set-Cookie", cookie);
-    res.redirect("/dashboard");
-    return;
 }
 
 function getQueryData(
