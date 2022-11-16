@@ -19,6 +19,7 @@ export default function ProfileOverlay(props: { HU: number; WU: number }) {
             <Text fontSize={"md"}>What do you want to do?</Text>
             <Flex flexDir={"column"}>
                 <Button
+                    mt={2}
                     bg={"red.500"}
                     _hover={{ bg: "red.600", transform: "scale(1.02)" }}
                     _active={{ bg: "red.700", transform: "scale(0.98)" }}

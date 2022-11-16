@@ -74,7 +74,7 @@ export default async function callback(
         if (!code.success) {
             if (LOGGING)
                 console.log(`[Callback] [${LoggingId}] Query Data Error.`);
-            res.redirect(encodeURIComponent(`/error?error=${code.error}`));
+            res.redirect(`/error?error=${encodeURIComponent(code.error)}`);
             return;
         }
 
@@ -106,13 +106,11 @@ export default async function callback(
             if (LOGGING)
                 console.log(`[Callback] [${LoggingId}] Access token invalid.`);
             res.redirect(
-                encodeURIComponent(
-                    `/error?error=spotify_callback_error: ${
-                        !accessToken.success
-                            ? accessToken.error
-                            : "Access token undefined"
-                    }`
-                )
+                `/error?error=spotify_callback_error: ${encodeURIComponent(
+                    !accessToken.success
+                        ? accessToken.error
+                        : "Access token undefined"
+                )}`
             );
             return;
         }
@@ -142,15 +140,15 @@ export default async function callback(
                 );
             if (userProfile.code === 403) {
                 res.redirect(
-                    encodeURIComponent(`/error?error=Spotify responded to our profile request with a 403 error which means you were not logged in properly,
+                    `/error?error=spotify_callback_error: ${encodeURIComponent(`Spotify responded to your profile request with a 403 error which means you were not logged in properly,
                  if you are using a developer version of this site that likely means you have not be whitelisted properly.
-                  If not please try logging in again and if it still fails please alert our head developer at hi@alfieranstead.com`)
+                  If not please try logging in again and if it still fails please alert our head developer at hi@alfieranstead.com`)}`
                 );
             } else {
                 res.redirect(
-                    encodeURIComponent(
-                        `/error?error=spotify_profile_request_failure:${userProfile.error}`
-                    )
+                    `/error?error=spotify_profile_request_failure:${encodeURIComponent(
+                        userProfile.error
+                    )}`
                 );
             }
             return;
@@ -196,7 +194,9 @@ export default async function callback(
         return;
     } catch (e) {
         res.redirect(
-            encodeURIComponent(`/error?error=unexpected_callback_error: ${e}`)
+            `/error?error=unexpected_callback_error: ${encodeURIComponent(
+                JSON.stringify(e)
+            )}`
         );
 
         await storeError({
