@@ -1,8 +1,10 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useProfile } from "../../utils/hooks/useProfile";
+import { useRouter } from "next/router";
 
 export default function ProfileOverlay(props: { HU: number; WU: number }) {
     const profile = useProfile();
+    const router = useRouter();
     return (
         <Flex
             flexDir={"column"}
@@ -23,6 +25,13 @@ export default function ProfileOverlay(props: { HU: number; WU: number }) {
                     bg={"red.500"}
                     _hover={{ bg: "red.600", transform: "scale(1.02)" }}
                     _active={{ bg: "red.700", transform: "scale(0.98)" }}
+                    onClick={() => {
+                        fetch("/api/oauth/logout")
+                            .then(() => {
+                                router.push("/").catch(console.error);
+                            })
+                            .catch(console.error);
+                    }}
                 >
                     Log Out
                 </Button>

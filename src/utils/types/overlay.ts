@@ -1,12 +1,21 @@
-export type OverlayTypes = "songs" | "profile";
+import { songApiResponseType } from "./spotify";
 
-export interface componentOverlay {
+export interface songComponentOverlay {
     hidden: false;
-    type: OverlayTypes;
+    type: "songs";
+    songs: songApiResponseType;
+}
+
+export interface profileComponentOverlay {
+    hidden: false;
+    type: "profile";
 }
 
 export interface hiddenOverlay {
     hidden: true;
 }
 
-export type overlayStateType = componentOverlay | hiddenOverlay;
+export type overlayStateType =
+    | songComponentOverlay
+    | profileComponentOverlay
+    | hiddenOverlay;

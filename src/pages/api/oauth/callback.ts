@@ -9,12 +9,13 @@ import {
     ClientIDSecretPair,
     LOGGING,
     RedirectUri,
-    redisClient,
     StateKey,
 } from "../../../server/constants";
 import { storeError } from "../../../server/utils/errorWrapper";
 import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
 import { createLoginCookie } from "../../../server/utils/cookies";
+import { getRedisClient } from "../../../server/utils/redis";
+import Redis from "ioredis";
 
 // Stages of callback:
 // 1. [Main] get code, state and error from query
@@ -61,12 +62,13 @@ export default async function callback(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    const redisClient = getRedisClient();
     try {
         let LoggingId;
         if (LOGGING) LoggingId = Math.random().toString(36).substring(2, 15);
         console.log("[Callback] Callback Request Received.");
         // Step 1 & 2.
-        const code = getQueryData(req.query);
+        const code = getQueryData(req.query, redisClient);
         if (LOGGING)
             console.log(`[Callback] [${LoggingId}] Query Data Parsed.`);
 
@@ -75,6 +77,7 @@ export default async function callback(
             if (LOGGING)
                 console.log(`[Callback] [${LoggingId}] Query Data Error.`);
             res.redirect(`/error?error=${encodeURIComponent(code.error)}`);
+            redisClient.quit();
             return;
         }
 
@@ -94,7 +97,8 @@ export default async function callback(
                     code: encodeURIComponent(code.code),
                     redirect_uri: RedirectUri,
                 },
-            }
+            },
+            redisClient
         );
 
         // Step 5.
@@ -112,6 +116,7 @@ export default async function callback(
                         : "Access token undefined"
                 )}`
             );
+            redisClient.quit();
             return;
         }
 
@@ -127,7 +132,8 @@ export default async function callback(
                 contentType: "application/json",
                 Authorization: `Bearer ${accessToken.data.access_token}`,
                 parameters: undefined,
-            }
+            },
+            redisClient
         );
 
         // Step 7.
@@ -151,6 +157,7 @@ export default async function callback(
                     )}`
                 );
             }
+            redisClient.quit();
             return;
         }
         if (LOGGING)
@@ -171,12 +178,12 @@ export default async function callback(
             console.log(`[Callback] [${LoggingId}] Storing data in redis.`);
 
         redisClient.setex(
-            fullProfile.id + "_access",
+            `spotify:${fullProfile.id}:access`,
             accessToken.data.expires_in,
             accessToken.data.access_token
         );
         redisClient.setex(
-            fullProfile.id + "_profile",
+            `spotify:${fullProfile.id}:profile`,
             3600 * 24 * 7,
             JSON.stringify(fullProfile)
         );
@@ -188,10 +195,9 @@ export default async function callback(
             console.log(
                 `[Callback] [${LoggingId}] Setting cookies and redirecting.`
             );
-        const cookie = await createLoginCookie(fullProfile.id);
+        const cookie = await createLoginCookie(fullProfile.id, redisClient);
         res.setHeader("Set-Cookie", cookie);
         res.redirect("/dashboard");
-        return;
     } catch (e) {
         res.redirect(
             `/error?error=unexpected_callback_error: ${encodeURIComponent(
@@ -199,19 +205,24 @@ export default async function callback(
             )}`
         );
 
-        await storeError({
-            api: "spotify",
-            error: "Callback error",
-            apiResponse: JSON.stringify(e),
-            statusCode: 500,
-            time: Date.now(),
-        });
-        return;
+        await storeError(
+            {
+                api: "spotify",
+                error: "Callback error",
+                apiResponse: JSON.stringify(e),
+                statusCode: 500,
+                time: Date.now(),
+            },
+            redisClient
+        );
     }
+    if (redisClient.status !== "end") redisClient.quit();
+    return;
 }
 
 function getQueryData(
-    query: Partial<{ [p: string]: string | string[] }>
+    query: Partial<{ [p: string]: string | string[] }>,
+    redisClient: Redis
 ): getQueriesType {
     const raw: SpotifyCallbackResponse = {
         code: query.code,
@@ -220,13 +231,16 @@ function getQueryData(
     } as SpotifyCallbackResponse;
 
     if (raw.error) {
-        storeError({
-            api: "spotify",
-            error: "[Callback] Error: Queries in callback redirect contained an error.",
-            apiResponse: raw.error,
-            statusCode: 500,
-            time: Date.now(),
-        })
+        storeError(
+            {
+                api: "spotify",
+                error: "[Callback] Error: Queries in callback redirect contained an error.",
+                apiResponse: raw.error,
+                statusCode: 500,
+                time: Date.now(),
+            },
+            redisClient
+        )
             .then(() => {
                 console.log("[Callback] Query Error Stored Successfully.");
             })
@@ -234,13 +248,16 @@ function getQueryData(
 
         return { success: false, error: raw.error };
     } else if (raw.state !== StateKey) {
-        storeError({
-            api: "spotify",
-            error: "[Callback] Error: State did not match that assigned locally.",
-            apiResponse: `${raw.state} !== ${StateKey}`,
-            statusCode: 500,
-            time: Date.now(),
-        })
+        storeError(
+            {
+                api: "spotify",
+                error: "[Callback] Error: State did not match that assigned locally.",
+                apiResponse: `${raw.state} !== ${StateKey}`,
+                statusCode: 500,
+                time: Date.now(),
+            },
+            redisClient
+        )
             .then(() => {
                 console.log("[Callback] Query Error Stored Successfully.");
             })

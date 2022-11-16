@@ -1,11 +1,11 @@
 import { getAccessToken } from "./jwt";
-import { redisClient } from "../constants";
 import dayjs from "dayjs";
 import { serialize } from "cookie";
+import Redis from "ioredis";
 
-export async function createLoginCookie(id: string) {
+export async function createLoginCookie(id: string, redisClient: Redis) {
     const Auth = await getAccessToken(id);
-    await redisClient.set("jwt_" + Auth, id);
+    await redisClient.set(`jwt:${Auth}`, id);
     return generateCookie(Auth, dayjs().add(1, "week").toDate(), "auth");
 }
 

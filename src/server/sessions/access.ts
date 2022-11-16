@@ -1,9 +1,11 @@
-import { ClientIDSecretPair, RedirectUri, redisClient } from "../constants";
+import { ClientIDSecretPair } from "../constants";
 import { profileFull } from "../../utils/types/oauth";
 import formurlencoded from "form-urlencoded";
+import Redis from "ioredis";
 
 export async function getAccessCode(
-    userProfile: profileFull
+    userProfile: profileFull,
+    redisClient: Redis
 ): Promise<false | string> {
     const cached = await redisClient.get(userProfile.id + "_access");
     if (cached !== "" && cached !== null) return cached;

@@ -1,7 +1,10 @@
-import { Button, Center, Flex, Link, Text } from "@chakra-ui/react";
+import { Center, Flex, Link, Text } from "@chakra-ui/react";
 import { audioPlayerType, songOverlayInfo } from "../../utils/types/state";
-import { songType, timeFrameType } from "../../utils/types/spotify";
-import { useSongs } from "../../utils/hooks/useSongs";
+import {
+    songApiResponseType,
+    songType,
+    timeFrameType,
+} from "../../utils/types/spotify";
 import { useEffect, useState } from "react";
 import AudioControls from "../other/audioControls";
 import Image from "next/image";
@@ -12,8 +15,8 @@ export default function SongOverlay(props: {
     time: timeFrameType;
     HU: number;
     WU: number;
+    allSongs: songApiResponseType;
 }) {
-    const [allSongs] = useSongs();
     const [songs, setSongs] = useState<songType[]>([]);
     const [currentSong, setCurrentSong] = useState<songOverlayInfo>({
         song: "No Song Playing",
@@ -22,11 +25,11 @@ export default function SongOverlay(props: {
     });
 
     useEffect(() => {
-        const CurrentSongs = allSongs[props.time];
+        const CurrentSongs = props.allSongs[props.time];
         if (CurrentSongs !== false) {
             setSongs(CurrentSongs);
         }
-    }, [allSongs, props.time]);
+    }, [props.allSongs, props.time]);
 
     useEffect(() => {
         setCurrentSong(wrapNames(props.audioPlayer));

@@ -3,7 +3,11 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import { audioPlayerType, setHoveringType } from "../../utils/types/state";
 import Image from "next/image";
 import { useScreen } from "../../utils/hooks/useScreen";
-import { songType, timeFrameType } from "../../utils/types/spotify";
+import {
+    songApiResponseType,
+    songType,
+    timeFrameType,
+} from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSongs } from "../../utils/hooks/useSongs";
 import { overlayStateType } from "../../utils/types/overlay";
@@ -16,20 +20,20 @@ export default function SongPebble(props: {
     time: timeFrameType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
     audioPlayer: audioPlayerType;
+    allSongs: songApiResponseType;
 }) {
     // TODO: Add links to spotify everywhere lol
     const screenHook = useScreen();
     const [loaded, setLoaded] = useState(true);
     const [songs, setSongs] = useState<songType[]>([]);
-    const [allSongs] = useSongs();
 
     useEffect(() => {
         setLoaded(false);
-        const current = allSongs[props.time];
+        const current = props.allSongs[props.time];
         if (current) {
             setSongs(current);
         }
-    }, [allSongs, props.time]);
+    }, [props.allSongs, props.time]);
 
     useEffect(() => {
         console.log("Rendering song pebble");
@@ -44,6 +48,7 @@ export default function SongPebble(props: {
         props.setOverlay({
             hidden: false,
             type: "songs",
+            songs: props.allSongs,
         });
         console.log("open song overlay");
     }

@@ -5,6 +5,7 @@ import { sleep } from "../other/time";
 
 export function useAudio(): audioPlayerType {
     const [audio, setAudio] = useState<HTMLAudioElement | undefined>(undefined);
+    const MasterVolume = 0.5;
 
     const [curSong, setCurSong] = useState<songType | undefined>(undefined);
     const [paused, setPaused] = useState<boolean>(true);
@@ -132,7 +133,7 @@ export function useAudio(): audioPlayerType {
                             current: percent,
                         }));
                         if (percent > 0.1 && percent < 0.9) {
-                            audio.volume = 1;
+                            audio.volume = MasterVolume;
                         } else {
                             fadeInOut();
                         }
@@ -147,7 +148,7 @@ export function useAudio(): audioPlayerType {
             const interval = setInterval(() => {
                 const percent = audio.currentTime / audio.duration;
                 if (percent < 0.1 || percent > 0.9) {
-                    audio.volume = getSoundLevel(percent);
+                    audio.volume = getSoundLevel(percent, MasterVolume);
                 } else {
                     clearInterval(interval);
                 }
@@ -166,12 +167,12 @@ export function useAudio(): audioPlayerType {
     };
 }
 
-function getSoundLevel(percent: number) {
+function getSoundLevel(percent: number, MasterVolume: number) {
     // takes a number between 0-1 and returns a number between 0-1
     if (percent < 0.1) {
-        return percent * 10;
+        return percent * 10 * MasterVolume;
     } else if (percent > 0.9) {
-        return (1 - percent) * 10;
+        return (1 - percent) * 10 * MasterVolume;
     }
     return 1;
 }

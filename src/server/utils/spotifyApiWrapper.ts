@@ -5,13 +5,15 @@ import {
 import formurlencoded from "form-urlencoded";
 import { sleep } from "../../utils/other/time";
 import { storeError } from "./errorWrapper";
+import Redis from "ioredis";
 
 const stackOverflowLimit = 5;
 
 export async function spotifyWrapRequestDirect<T>(
     route: string,
     options: spotifyRequestOptions,
-    stackDepth: number = 0
+    stackDepth: number = 0,
+    redisClient: Redis
 ): Promise<SpotifyApiRequest<T>> {
     try {
         const params = {
@@ -59,7 +61,12 @@ export async function spotifyWrapRequestDirect<T>(
                 };
             } else {
                 await sleep(timeOut[1]);
-                return await spotifyWrapRequest(route, options, stackDepth + 1);
+                return await spotifyWrapRequest(
+                    route,
+                    options,
+                    redisClient,
+                    stackDepth + 1
+                );
             }
         }
 
@@ -92,26 +99,31 @@ export async function spotifyWrapRequestDirect<T>(
 export async function spotifyWrapRequest<T>(
     route: string,
     options: spotifyRequestOptions,
+    redisClient: Redis,
     stackDepth: number = 0,
     redisErrorHandling: boolean = true
 ): Promise<SpotifyApiRequest<T>> {
     const result = await spotifyWrapRequestDirect<T>(
         route,
         options,
-        stackDepth
+        stackDepth,
+        redisClient
     );
 
     if (!redisErrorHandling || result.success) {
         return result;
     }
 
-    await storeError({
-        api: "spotify",
-        error: result.error,
-        apiResponse: result.raw,
-        statusCode: result.code,
-        time: Date.now(),
-    });
+    await storeError(
+        {
+            api: "spotify",
+            error: result.error,
+            apiResponse: result.raw,
+            statusCode: result.code,
+            time: Date.now(),
+        },
+        redisClient
+    );
 
     return result;
 }

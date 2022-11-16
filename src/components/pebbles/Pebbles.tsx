@@ -5,7 +5,7 @@ import UniquePebble from "./uniquePebble";
 import GenrePebble from "./genrePebble";
 import TimePebble from "./timePebble";
 import { usePebbles } from "../../utils/hooks/usePebbles";
-import { Center, Flex } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 import { useScreen } from "../../utils/hooks/useScreen";
 import { useEffect, useState } from "react";
 import { hoveringType } from "../../utils/types/state";
@@ -16,6 +16,7 @@ import { Overlay } from "../overlay/overlay";
 import { useAudio } from "../../utils/hooks/useAudio";
 import { useSongs } from "../../utils/hooks/useSongs";
 import AudioPebble from "./audioPebble";
+import { useArtists } from "../../utils/hooks/useArtists";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -28,6 +29,7 @@ export default function Pebbles() {
     });
     const [time, setTime] = useState<timeFrameType>("medium_term");
     const [songs] = useSongs();
+    const [artists] = useArtists();
     const audioPlayer = useAudio();
 
     useEffect(() => {
@@ -74,11 +76,13 @@ export default function Pebbles() {
                     time={time}
                     setOverlay={setOverlayState}
                     audioPlayer={audioPlayer}
+                    allSongs={songs}
                 />
                 <ArtistPebble
                     info={pebbleState.artist}
                     setHovering={setHoveringState}
                     time={time}
+                    allArtists={artists}
                 />
                 <UniquePebble
                     info={pebbleState.unique}

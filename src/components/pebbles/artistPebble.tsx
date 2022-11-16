@@ -3,25 +3,28 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { setHoveringType } from "../../utils/types/state";
-import { useArtists } from "../../utils/hooks/useArtists";
-import { artistsType, timeFrameType } from "../../utils/types/spotify";
+import {
+    artistApiResponseType,
+    artistsType,
+    timeFrameType,
+} from "../../utils/types/spotify";
 
 export default function ArtistPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     time: timeFrameType;
+    allArtists: artistApiResponseType;
 }) {
     const [loaded, setLoaded] = useState(false);
     const [artists, setArtists] = useState<artistsType>([]);
-    const [allArtists] = useArtists();
 
     useEffect(() => {
         setLoaded(false);
-        const currentArtists = allArtists[props.time];
+        const currentArtists = props.allArtists[props.time];
         if (currentArtists) {
             setArtists(currentArtists);
         }
-    }, [allArtists, props.time]);
+    }, [props.allArtists, props.time]);
 
     useEffect(() => {
         console.log("Rendering song pebble");

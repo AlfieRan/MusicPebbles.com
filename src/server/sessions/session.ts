@@ -1,9 +1,10 @@
 import { profileFull } from "../../utils/types/oauth";
 import { NextApiRequest } from "next";
-import { redisClient } from "../constants";
+import Redis from "ioredis";
 
 export async function getSession(
-    req: NextApiRequest
+    req: NextApiRequest,
+    redisClient: Redis
 ): Promise<profileFull | false> {
     const key = sessionKeyFromRequest(req, "auth");
 
@@ -14,14 +15,14 @@ export async function getSession(
     }
 
     // get user id
-    const userId = await redisClient.get("jwt_" + key);
+    const userId = await redisClient.get(`jwt:${key}`);
 
     if (!userId) {
         return false;
     }
 
     // get user profile
-    const profile = await redisClient.get(userId + "_profile");
+    const profile = await redisClient.get(`spotify:${userId}:profile`);
 
     // make sure user's profile exists
     if (!profile) {

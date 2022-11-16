@@ -1,4 +1,3 @@
-import { redis } from "./utils/redis";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -10,7 +9,6 @@ function env(key: string): string {
     return value;
 }
 
-export const redisClient = redis;
 export const ClientID = env("SPOTIFY_CLIENT_ID");
 export const ClientSecret = env("SPOTIFY_CLIENT_SECRET");
 export const RedirectUri = env("SPOTIFY_REDIRECT_URI");

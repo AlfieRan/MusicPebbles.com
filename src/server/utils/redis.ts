@@ -9,22 +9,25 @@ if (RedisUrl === "") {
     throw new Error("Missing environment variables");
 }
 
-export const redis = new Redis(RedisUrl).on("error", (error) => {
-    console.log(
-        {
-            error: error,
-        },
-        "Redis error"
-    );
+export function getRedisClient() {
+    return new Redis(RedisUrl).on("error", (error) => {
+        console.log(
+            {
+                error: error,
+            },
+            "Redis error"
+        );
 
-    if (error.code === "ECONNREFUSED") {
-        console.log("Redis connection refused");
-    }
-});
+        if (error.code === "ECONNREFUSED") {
+            console.log("Redis connection refused");
+        }
+    });
+}
 
 export async function wrapRedis<T>(
     key: string,
     fn: () => Promise<T>,
+    redis: Redis,
     seconds: number = 3600
 ): Promise<T> {
     const cached = await redis.get(key);

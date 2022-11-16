@@ -37,6 +37,7 @@ export function Overlay(props: {
                             <SongOverlay
                                 audioPlayer={props.audioPlayer}
                                 time={props.time}
+                                allSongs={props.info.songs}
                                 HU={HU}
                                 WU={WU}
                             />
