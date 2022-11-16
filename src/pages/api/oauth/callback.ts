@@ -60,6 +60,7 @@ export default async function callback(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    console.log("[Callback] Callback Request Received.");
     // Step 1 & 2.
     const code = getQueryData(req.query);
 
