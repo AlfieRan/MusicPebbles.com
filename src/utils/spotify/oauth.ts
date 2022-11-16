@@ -15,5 +15,6 @@ export function OauthLoginUrl(
     url.searchParams.append("redirect_uri", RedirectUri);
     url.searchParams.append("state", State);
     url.searchParams.append("scope", scopes.join(" "));
+    url.searchParams.append("show_dialog", "true");
     return url.toString();
 }
