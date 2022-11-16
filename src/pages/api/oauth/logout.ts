@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { generateCookie } from "./callback";
+import { generateCookie } from "../../../server/utils/cookies";
 
 async function createLogoutCookie() {
     return generateCookie("", new Date(), "auth");
