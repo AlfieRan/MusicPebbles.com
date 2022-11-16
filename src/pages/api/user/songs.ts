@@ -10,6 +10,7 @@ import {
 } from "../../../utils/types/spotify";
 import { ApiError } from "../../../utils/types/errors";
 import { redisClient } from "../../../server/constants";
+import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
 
 export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     const userProfile = await getSession(req);
@@ -79,21 +80,20 @@ async function getSongApiCall(
         return false;
     }
 
-    const response = await fetch(
-        `https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=${timeFrame}`,
+    const raw = await spotifyWrapRequest<{ items: any[] }>(
+        "https://api.spotify.com/v1/me/top/tracks",
         {
-            headers: {
-                Authorization: "Bearer " + accessToken,
-            },
+            method: "GET",
+            contentType: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            parameters: `limit=50&time_range=${timeFrame}`,
         }
     );
 
-    const data = await response.json();
-
-    if (response.status !== 200) {
-        console.log("API ERROR - GET TOP SONGS - ", data);
+    if (!raw.success) {
+        console.log("[Song Api] Error: ", raw.error);
         return false;
     }
 
-    return data.items;
+    return raw.data.items;
 }

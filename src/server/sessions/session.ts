@@ -9,6 +9,7 @@ export async function getSession(
 
     // check is user is logged in
     if (key === false) {
+        // TODO: this should then use refresh token to get new auth key.
         return false;
     }
 

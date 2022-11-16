@@ -8,34 +8,32 @@ import {
     artistsType,
     timeFrameType,
 } from "../../../utils/types/spotify";
-import { ApiError } from "../../../utils/types/errors";
-import { redisClient } from "../../../server/constants";
+import { storeError } from "../../../server/utils/errorWrapper";
+import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
 
 export default async function artists(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const userProfile = await getSession(req);
-    if (!userProfile) {
-        res.status(401).json({ error: "Unauthorized" });
-        return;
-    }
-
     try {
+        const userProfile = await getSession(req);
+        if (!userProfile) {
+            res.status(403).json({ error: "Unauthorized" });
+            return;
+        }
+
         const data = await wrapArtistsAllTimeFrames(userProfile);
         res.status(200).json(data);
-    } catch (error) {
-        console.log(error);
-        const errorObj: ApiError = {
-            api: "internal",
-            error: JSON.stringify(error),
+        return;
+    } catch (e) {
+        await storeError({
+            api: "spotify",
+            apiResponse: JSON.stringify(e),
+            error: "Unknown Spotify Api Error",
             statusCode: 500,
             time: Date.now(),
-        };
-        await redisClient.lpush("errors", JSON.stringify(errorObj));
-
-        res.redirect("/api/error?error=" + JSON.stringify(errorObj));
-
+        });
+        await res.status(500).json(e);
         return;
     }
 }
@@ -82,21 +80,19 @@ async function getArtistApiCall(
         return false;
     }
 
-    const response = await fetch(
-        `https://api.spotify.com/v1/me/top/artists?limit=50&time_range=${timeFrame}`,
+    const response = await spotifyWrapRequest<{ items: any[] }>(
+        "https://api.spotify.com/v1/me/top/artists",
         {
-            headers: {
-                Authorization: "Bearer " + accessToken,
-            },
+            method: "GET",
+            contentType: "application/json",
+            parameters: `limit=50&time_range=${timeFrame}`,
+            Authorization: `Bearer ${accessToken}`,
         }
     );
 
-    const data = await response.json();
-
-    if (response.status !== 200) {
-        console.log("API ERROR - GET TOP ARTISTS - ", data);
+    if (!response.success) {
         return false;
     }
 
-    return data.items;
+    return response.data.items;
 }
