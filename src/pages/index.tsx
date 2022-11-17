@@ -2,6 +2,7 @@ import { Center, Flex, Link, Text } from "@chakra-ui/react";
 import { useProfile } from "../utils/hooks/useProfile";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const Page = () => {
     const profile = useProfile();
@@ -39,7 +40,7 @@ const Page = () => {
                     borderRadius={"20px"}
                 >
                     <Text fontSize={"3xl"} fontWeight={"semibold"}>
-                        Welcome to Pebbles
+                        Pebbles
                     </Text>
                     <Text fontSize={"md"}>
                         The Spotify dashboard that&apos;s actually useful.
@@ -61,21 +62,54 @@ const Page = () => {
                     </Text>
                     <Link
                         href={"/api/oauth/login"}
-                        borderRadius={"xl"}
+                        borderRadius={"10px"}
                         boxShadow={"#333 2px 4px 8px"}
-                        fontWeight={"semibold"}
-                        px={10}
-                        py={1}
-                        mt={2}
-                        mb={1}
-                        bg={"blue.600"}
-                        w={"fit-content"}
-                        _hover={{ bg: "blue.500", transform: "scale(1.03)" }}
-                        _active={{ bg: "blue.700", transform: "scale(0.97)" }}
+                        px={4}
+                        py={2}
+                        mt={4}
+                        mb={2}
+                        bg={"green.500"}
+                        color={"white"}
+                        w={"100%"}
+                        maxH={"60px"}
+                        minH={"40px"}
+                        _hover={{
+                            bg: "green.600",
+                            transform: "scale(1.01)",
+                        }}
+                        _active={{ bg: "green.700", transform: "scale(0.99)" }}
                     >
-                        Login with Spotify
+                        <Flex
+                            flexDir={"row"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            fontWeight={"semibold"}
+                        >
+                            <Text
+                                w={"60%"}
+                                mr={{ base: "5px", md: 0 }}
+                                fontSize={{ base: "xl", md: "lg" }}
+                            >
+                                Login with Spotify
+                            </Text>
+                            <Flex
+                                maxW={"20%"}
+                                minW={"10%"}
+                                h={"40px"}
+                                w={"40px"}
+                                justifyContent={"center"}
+                                pos={"relative"}
+                                objectFit={"contain"}
+                            >
+                                <Image
+                                    src={"/spotifyBranding/icons/white.png"}
+                                    alt={"Spotify Logo"}
+                                    fill
+                                />
+                            </Flex>
+                        </Flex>
                     </Link>
-                    <Text fontSize={"sm"} color={"whiteAlpha.600"}>
+                    <Text fontSize={"xs"} color={"whiteAlpha.600"}>
                         Pebbles is not affiliated with Spotify
                     </Text>
                 </Flex>

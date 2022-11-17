@@ -97,7 +97,11 @@ export function useAudio(): audioPlayerType {
     async function nextSong(playSong: boolean = true) {
         if (availableSongs.length > 0) {
             let randomSong = curSong;
-            while (randomSong === curSong) {
+            while (
+                randomSong === curSong ||
+                randomSong === undefined ||
+                randomSong.preview_url === ""
+            ) {
                 randomSong =
                     availableSongs[
                         Math.floor(Math.random() * availableSongs.length)
