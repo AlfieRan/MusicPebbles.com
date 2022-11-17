@@ -2,7 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "../../../server/sessions/session";
 import { profileFull } from "../../../utils/types/oauth";
 import { getAccessCode } from "../../../server/sessions/access";
-import { getRedisClient, wrapRedis } from "../../../server/utils/redis";
+import {
+    getRedisClient,
+    quitRedis,
+    wrapRedis,
+} from "../../../server/utils/redis";
 import {
     artistApiResponseType,
     artistsType,
@@ -21,13 +25,13 @@ export default async function artists(
         const userProfile = await getSession(req, redisClient);
         if (!userProfile) {
             res.status(403).json({ error: "Unauthorized" });
-            redisClient.quit();
+            quitRedis(redisClient);
             return;
         }
 
         const data = await wrapArtistsAllTimeFrames(userProfile, redisClient);
         res.status(200).json(data);
-        redisClient.quit();
+        quitRedis(redisClient);
     } catch (e) {
         await storeError(
             {
@@ -41,8 +45,7 @@ export default async function artists(
         );
         await res.status(500).json(e);
     }
-    redisClient.quit();
-    return;
+    quitRedis(redisClient);
 }
 
 async function wrapArtistsAllTimeFrames(

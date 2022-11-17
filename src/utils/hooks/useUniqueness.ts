@@ -4,12 +4,11 @@ import {
     uniqueArtistWrapperType,
     Uniqueness,
 } from "../types/uniqueness";
-import { useArtists } from "./useArtists";
 import {
+    artistApiResponseType,
     artistEmptyObject,
     artistsType,
     artistType,
-    timeFrameType,
 } from "../types/spotify";
 import { uniqueSigmoid } from "../other/basics";
 import { fadeBetween } from "../other/Colours";
@@ -44,10 +43,15 @@ const emptyUnqiueObject = {
     ],
 };
 
-export function useUniqueness(): [
-    Uniqueness,
-    { short_term: boolean; medium_term: boolean; long_term: boolean }
-] {
+export function useUniqueness(): {
+    uniqueness: Uniqueness;
+    loading: {
+        short_term: boolean;
+        medium_term: boolean;
+        long_term: boolean;
+    };
+    setArtists: (artists: artistApiResponseType) => void;
+} {
     const [uniqueness, setUniqueness] = useState<Uniqueness>({
         short_term: emptyUnqiueObject,
         medium_term: emptyUnqiueObject,
@@ -58,7 +62,15 @@ export function useUniqueness(): [
         medium_term: true,
         long_term: true,
     });
-    const [allArtists, _] = useArtists();
+    const [allArtists, setAllArtists] = useState<artistApiResponseType>({
+        short_term: false,
+        long_term: false,
+        medium_term: false,
+    });
+
+    function setArtists(newArtists: artistApiResponseType) {
+        setAllArtists(newArtists);
+    }
 
     useEffect(() => {
         setLoading({
@@ -95,7 +107,7 @@ export function useUniqueness(): [
         });
     }, [allArtists]);
 
-    return [uniqueness, loading];
+    return { uniqueness, loading, setArtists };
 }
 
 function getUniquenessForTime(artists: artistsType): SingleUniqueness {

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { admins } from "../../../server/constants";
 import { ApiError } from "../../../utils/types/errors";
 import { getSession } from "../../../server/sessions/session";
-import { getRedisClient } from "../../../server/utils/redis";
+import { getRedisClient, quitRedis } from "../../../server/utils/redis";
 
 export default async function errors(
     req: NextApiRequest,
@@ -20,7 +20,7 @@ export default async function errors(
             res.status(403).json({
                 error: "You are not logged in as an admin.",
             });
-            redisClient.quit();
+            quitRedis(redisClient);
             return;
         }
         console.log(`Admin: ${user.id} logged in.`);
@@ -34,7 +34,7 @@ export default async function errors(
         console.log("Error at /api/admin/errors: " + error);
         res.status(500).json({ error });
     }
-    redisClient.quit();
+    quitRedis(redisClient);
 }
 
 function userIsAdmin(userId: string): boolean {

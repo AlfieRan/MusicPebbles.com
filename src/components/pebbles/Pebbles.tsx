@@ -17,6 +17,7 @@ import { useAudio } from "../../utils/hooks/useAudio";
 import { useSongs } from "../../utils/hooks/useSongs";
 import AudioPebble from "./audioPebble";
 import { useArtists } from "../../utils/hooks/useArtists";
+import { useProfile } from "../../utils/hooks/useProfile";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -30,6 +31,7 @@ export default function Pebbles() {
     const [time, setTime] = useState<timeFrameType>("medium_term");
     const [songs] = useSongs();
     const [artists] = useArtists();
+    const profile = useProfile();
     const audioPlayer = useAudio();
 
     useEffect(() => {
@@ -64,11 +66,13 @@ export default function Pebbles() {
                     hide={hideOverlay}
                     audioPlayer={audioPlayer}
                     time={time}
+                    profile={profile}
                 />
                 <ProfilePebble
                     info={pebbleState.profile}
                     setHovering={setHoveringState}
                     setOverlay={setOverlayState}
+                    profile={profile}
                 />
                 <SongPebble
                     info={pebbleState.song}
@@ -88,6 +92,7 @@ export default function Pebbles() {
                     info={pebbleState.unique}
                     setHovering={setHoveringState}
                     time={time}
+                    artists={artists}
                 />
                 <GenrePebble
                     info={pebbleState.genre}

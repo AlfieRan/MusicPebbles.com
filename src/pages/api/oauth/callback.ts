@@ -14,7 +14,7 @@ import {
 import { storeError } from "../../../server/utils/errorWrapper";
 import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
 import { createLoginCookie } from "../../../server/utils/cookies";
-import { getRedisClient } from "../../../server/utils/redis";
+import { getRedisClient, quitRedis } from "../../../server/utils/redis";
 import Redis from "ioredis";
 
 // Stages of callback:
@@ -77,7 +77,7 @@ export default async function callback(
             if (LOGGING)
                 console.log(`[Callback] [${LoggingId}] Query Data Error.`);
             res.redirect(`/error?error=${encodeURIComponent(code.error)}`);
-            redisClient.quit();
+            quitRedis(redisClient);
             return;
         }
 
@@ -116,7 +116,7 @@ export default async function callback(
                         : "Access token undefined"
                 )}`
             );
-            redisClient.quit();
+            quitRedis(redisClient);
             return;
         }
 
@@ -157,7 +157,7 @@ export default async function callback(
                     )}`
                 );
             }
-            redisClient.quit();
+            quitRedis(redisClient);
             return;
         }
         if (LOGGING)
@@ -216,7 +216,7 @@ export default async function callback(
             redisClient
         );
     }
-    if (redisClient.status !== "end") redisClient.quit();
+    quitRedis(redisClient);
     return;
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { songApiResponseType, songType } from "../types/spotify";
+import { songApiResponseType } from "../types/spotify";
 import { wrapSongs } from "../spotify/wrappers";
 
 export function useSongs(): [songApiResponseType, () => void] {

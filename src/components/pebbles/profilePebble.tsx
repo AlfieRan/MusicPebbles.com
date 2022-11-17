@@ -1,18 +1,17 @@
-import { useProfile } from "../../utils/hooks/useProfile";
 import { Center } from "@chakra-ui/react";
 import Image from "next/image";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import { Dispatch, SetStateAction } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
+import { profileHookType } from "../../utils/types/oauth";
 
 export default function ProfilePebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
+    profile: profileHookType;
 }) {
-    const profile = useProfile();
-
     function openSongOverlay() {
         props.setOverlay({
             hidden: false,
@@ -38,8 +37,8 @@ export default function ProfilePebble(props: {
                 props.setHovering({
                     hovering: true,
                     type: "text",
-                    text: profile.profile?.display_name
-                        ? `Hi ${profile.profile?.display_name}!`
+                    text: props.profile.profile?.display_name
+                        ? `Hi ${props.profile.profile?.display_name}!`
                         : "Loading...",
                     x: "right",
                     y: "top",
@@ -51,8 +50,10 @@ export default function ProfilePebble(props: {
             onClick={openSongOverlay}
         >
             <Image
-                src={profile.profile?.image_url ?? "/unknown.png"}
-                alt={"Profile picture of " + profile.profile?.display_name}
+                src={props.profile.profile?.image_url ?? "/unknown.png"}
+                alt={
+                    "Profile picture of " + props.profile.profile?.display_name
+                }
                 width={props.info.dims.width}
                 height={props.info.dims.height}
             />

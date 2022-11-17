@@ -24,3 +24,9 @@ export interface profileType {
     id: string;
     image_url: string | undefined;
 }
+
+export type profileHookType = {
+    profile: profileType | undefined;
+    loading: boolean;
+    error: boolean;
+};

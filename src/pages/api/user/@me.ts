@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "../../../server/sessions/session";
 import { profileType } from "../../../utils/types/oauth";
-import { getRedisClient } from "../../../server/utils/redis";
+import { getRedisClient, quitRedis } from "../../../server/utils/redis";
 
 export default async function me(req: NextApiRequest, res: NextApiResponse) {
     const redisClient = getRedisClient();
     const userProfile = await getSession(req, redisClient);
     if (!userProfile) {
         res.status(401).json({ error: "Unauthorized" });
-        redisClient.quit();
+        quitRedis(redisClient);
         return;
     }
 
@@ -19,5 +19,6 @@ export default async function me(req: NextApiRequest, res: NextApiResponse) {
     };
 
     res.status(200).json(simpleProfile);
-    redisClient.quit();
+    console.log("Quitting @me redis client");
+    quitRedis(redisClient);
 }

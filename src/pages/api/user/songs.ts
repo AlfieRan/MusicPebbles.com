@@ -2,7 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "../../../server/sessions/session";
 import { profileFull } from "../../../utils/types/oauth";
 import { getAccessCode } from "../../../server/sessions/access";
-import { getRedisClient, wrapRedis } from "../../../server/utils/redis";
+import {
+    getRedisClient,
+    quitRedis,
+    wrapRedis,
+} from "../../../server/utils/redis";
 import {
     songApiResponseType,
     songType,
@@ -17,7 +21,7 @@ export default async function songs(req: NextApiRequest, res: NextApiResponse) {
     const userProfile = await getSession(req, redisClient);
     if (!userProfile) {
         res.status(401).json({ error: "Unauthorized" });
-        redisClient.quit();
+        quitRedis(redisClient);
         return;
     }
 
@@ -36,10 +40,10 @@ export default async function songs(req: NextApiRequest, res: NextApiResponse) {
 
         res.redirect("/api/error?error=" + JSON.stringify(errorObj));
 
-        redisClient.quit();
+        quitRedis(redisClient);
         return;
     }
-    redisClient.quit();
+    quitRedis(redisClient);
 }
 
 export async function wrapSongsAllTimeFrames(

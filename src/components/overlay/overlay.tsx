@@ -6,12 +6,14 @@ import { audioPlayerType } from "../../utils/types/state";
 import { timeFrameType } from "../../utils/types/spotify";
 import { useScreen } from "../../utils/hooks/useScreen";
 import ProfileOverlay from "./profileOverlay";
+import { profileHookType } from "../../utils/types/oauth";
 
 export function Overlay(props: {
     info: overlayStateType;
     hide: () => void;
     audioPlayer: audioPlayerType;
     time: timeFrameType;
+    profile: profileHookType;
 }) {
     const screenHook = useScreen();
     const HU = screenHook.height / 10;
@@ -43,7 +45,11 @@ export function Overlay(props: {
                             />
                         )}
                         {props.info.type === "profile" && (
-                            <ProfileOverlay WU={WU} HU={HU} />
+                            <ProfileOverlay
+                                WU={WU}
+                                HU={HU}
+                                profile={props.profile}
+                            />
                         )}
                     </motion.div>
                 )}

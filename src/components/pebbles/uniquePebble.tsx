@@ -3,14 +3,23 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import { useUniqueness } from "../../utils/hooks/useUniqueness";
 import Image from "next/image";
-import { timeFrameType } from "../../utils/types/spotify";
+import {
+    artistApiResponseType,
+    timeFrameType,
+} from "../../utils/types/spotify";
+import { useEffect } from "react";
 
 export default function UniquePebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     time: timeFrameType;
+    artists: artistApiResponseType;
 }) {
-    const [uniqueness, loading] = useUniqueness();
+    const uniqueness = useUniqueness();
+
+    useEffect(() => {
+        uniqueness.setArtists(props.artists);
+    }, [props.artists]);
 
     return (
         <Flex
@@ -40,7 +49,7 @@ export default function UniquePebble(props: {
                 props.setHovering({ hovering: false });
             }}
         >
-            {!loading[props.time] ? (
+            {!uniqueness.loading[props.time] ? (
                 <Flex flexDir={"row"} alignItems={"center"}>
                     <Flex
                         flexDir={"row"}
@@ -49,7 +58,7 @@ export default function UniquePebble(props: {
                         borderRadius={"full"}
                         justifyContent={"center"}
                         alignItems={"center"}
-                        borderColor={uniqueness[props.time].colour}
+                        borderColor={uniqueness.uniqueness[props.time].colour}
                         borderWidth={"5px"}
                     >
                         <Flex justifyContent={"center"} flexDir={"column"}>
@@ -59,7 +68,9 @@ export default function UniquePebble(props: {
                                 fontSize={"5xl"}
                                 mb={1}
                             >
-                                {uniqueness[props.time].rating.toString()}
+                                {uniqueness.uniqueness[
+                                    props.time
+                                ].rating.toString()}
                             </Text>
                         </Flex>
                     </Flex>
@@ -74,7 +85,7 @@ export default function UniquePebble(props: {
                             Uniqueness
                         </Text>
                         <Flex pb={5}>
-                            {uniqueness[props.time].artists
+                            {uniqueness.uniqueness[props.time].artists
                                 .slice(0, 3)
                                 .map((artist, index) => (
                                     <Flex

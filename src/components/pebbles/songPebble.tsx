@@ -9,10 +9,7 @@ import {
     timeFrameType,
 } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useSongs } from "../../utils/hooks/useSongs";
 import { overlayStateType } from "../../utils/types/overlay";
-import { useAudio } from "../../utils/hooks/useAudio";
-import SongOverlay from "../overlay/songOverlay";
 
 export default function SongPebble(props: {
     info: pebblePhysics;

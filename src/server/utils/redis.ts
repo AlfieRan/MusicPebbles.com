@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 import dotenv from "dotenv";
+import { LOGGING } from "../constants";
 dotenv.config();
 
 const RedisUrl = process.env.REDIS_URL ?? "";
@@ -35,4 +36,15 @@ export async function wrapRedis<T>(
     const recent = await fn();
     await redis.setex(key, seconds, JSON.stringify(recent));
     return recent;
+}
+
+export function quitRedis(redisConnection: Redis) {
+    try {
+        redisConnection.quit();
+    } catch (e) {
+        console.error(
+            "[Redis Connection] Error quiting redis connection, probably already closed."
+        );
+        if (LOGGING) console.error("[Redis Connection] Full Error: ", e);
+    }
 }
