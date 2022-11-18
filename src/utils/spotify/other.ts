@@ -14,11 +14,20 @@ async function wrapOneImage(image: imageType) {
     };
 }
 
+async function wrapOneImageOffline(image: imageType) {
+    const max = Math.max(image.width, image.height);
+    return {
+        height: image.height / max,
+        width: image.width / max,
+        url: image.url,
+    };
+}
+
 export async function wrapImages(images: imageType[]) {
     const newImages: imageType[] = [];
     for (const image of images) {
         try {
-            newImages.push(await wrapOneImage(image));
+            newImages.push(await wrapOneImageOffline(image));
         } catch (e) {
             console.error(e);
         }
