@@ -4,6 +4,7 @@ import { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/provider";
 import { extendTheme } from "@chakra-ui/react";
 import "tailwindcss/tailwind.css";
+import { Analytics } from "@vercel/analytics/react";
 
 const theme = extendTheme({
     styles: {
@@ -48,6 +49,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <Component {...pageProps} />
                 </Flex>
             </ChakraProvider>
+            <Analytics />
         </>
     );
 }
