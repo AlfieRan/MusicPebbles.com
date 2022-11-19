@@ -7,6 +7,8 @@ import { timeFrameType } from "../../utils/types/spotify";
 import { useScreen } from "../../utils/hooks/useScreen";
 import ProfileOverlay from "./profileOverlay";
 import { profileHookType } from "../../utils/types/oauth";
+import UniqueOverlay from "./uniqueOverlay";
+import ArtistOverlay from "./artistOverlay";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -50,6 +52,12 @@ export function Overlay(props: {
                                 HU={HU}
                                 profile={props.profile}
                             />
+                        )}
+                        {props.info.type === "unique" && (
+                            <UniqueOverlay WU={WU} HU={HU} />
+                        )}
+                        {props.info.type === "artists" && (
+                            <ArtistOverlay WU={WU} HU={HU} />
                         )}
                     </motion.div>
                 )}

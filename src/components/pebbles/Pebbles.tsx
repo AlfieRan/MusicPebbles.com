@@ -87,12 +87,14 @@ export default function Pebbles() {
                     setHovering={setHoveringState}
                     time={time}
                     allArtists={artists}
+                    setOverlay={setOverlayState}
                 />
                 <UniquePebble
                     info={pebbleState.unique}
                     setHovering={setHoveringState}
                     time={time}
                     artists={artists}
+                    setOverlay={setOverlayState}
                 />
                 <GenrePebble
                     info={pebbleState.genre}

@@ -1,4 +1,4 @@
-import { Center, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import { useUniqueness } from "../../utils/hooks/useUniqueness";
@@ -7,19 +7,32 @@ import {
     artistApiResponseType,
     timeFrameType,
 } from "../../utils/types/spotify";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { overlayStateType } from "../../utils/types/overlay";
 
 export default function UniquePebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     time: timeFrameType;
     artists: artistApiResponseType;
+    setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
     const uniqueness = useUniqueness();
+
+    const HU = props.info.dims.height / 10; // Height Unit
+    const WU = props.info.dims.width / 10; // Width Unit
 
     useEffect(() => {
         uniqueness.setArtists(props.artists);
     }, [props.artists]);
+
+    function openUniqueOverlay() {
+        props.setOverlay({
+            hidden: false,
+            type: "unique",
+        });
+        console.log("open song overlay");
+    }
 
     return (
         <Flex
@@ -32,8 +45,10 @@ export default function UniquePebble(props: {
             overflow={"hidden"}
             bg={"blackAlpha.600"}
             pos={"absolute"}
-            py={3}
-            px={5}
+            py={`${HU * 0.5}px`}
+            px={`${WU * 0.5}px`}
+            flexDir={"column"}
+            cursor={"pointer"}
             _hover={{ bg: "blackAlpha.700", transform: "scale(1.01)" }}
             transition={"0.1s ease-in-out"}
             onMouseOver={() => {
@@ -48,64 +63,93 @@ export default function UniquePebble(props: {
             onMouseOut={() => {
                 props.setHovering({ hovering: false });
             }}
+            onClick={openUniqueOverlay}
         >
+            <Text
+                h={`${HU * 1.2}px`}
+                w={`${WU * 9}px`}
+                fontSize={`${HU * 1.2}px`}
+                fontWeight={"bold"}
+                color={"white"}
+                textAlign={"center"}
+                mb={2}
+            >
+                Your Uniqueness
+            </Text>
             {!uniqueness.loading[props.time] ? (
-                <Flex flexDir={"row"} alignItems={"center"}>
+                <Flex
+                    flexDir={"row"}
+                    alignItems={"center"}
+                    h={`${HU * 6.5}px`}
+                    w={`${WU * 9}px`}
+                >
                     <Flex
-                        flexDir={"row"}
-                        w={`${props.info.dims.width * 0.27}px`}
-                        h={`${props.info.dims.width * 0.27}px`}
-                        borderRadius={"full"}
-                        justifyContent={"center"}
+                        h={`${HU * 6.5}px`}
+                        py={`${HU * 0.25}px`}
                         alignItems={"center"}
-                        borderColor={uniqueness.uniqueness[props.time].colour}
-                        borderWidth={"5px"}
                     >
-                        <Flex justifyContent={"center"} flexDir={"column"}>
-                            <Text
-                                textAlign={"center"}
-                                h={"fit-content"}
-                                fontSize={"5xl"}
-                                mb={1}
-                            >
-                                {uniqueness.uniqueness[
-                                    props.time
-                                ].rating.toString()}
-                            </Text>
+                        <Flex
+                            flexDir={"row"}
+                            w={`${WU * 2.5}px`}
+                            h={`${HU * 5}px`}
+                            borderRadius={"full"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            borderColor={
+                                uniqueness.uniqueness[props.time].colour
+                            }
+                            borderWidth={"5px"}
+                        >
+                            <Flex justifyContent={"center"} flexDir={"column"}>
+                                <Text
+                                    textAlign={"center"}
+                                    h={"fit-content"}
+                                    fontSize={`${WU}px`}
+                                    mb={1}
+                                >
+                                    {uniqueness.uniqueness[
+                                        props.time
+                                    ].rating.toString()}
+                                </Text>
+                            </Flex>
                         </Flex>
                     </Flex>
-                    <Flex w={"65%"} ml={5} flexDir={"column"}>
-                        <Text
-                            fontSize={"2xl"}
-                            fontWeight={"bold"}
-                            color={"white"}
-                            textAlign={"center"}
-                            mb={2}
-                        >
-                            Uniqueness
-                        </Text>
-                        <Flex pb={5}>
+                    <Flex
+                        ml={`${WU * 0.5}px`}
+                        w={`${WU * 6}px`}
+                        h={`${HU * 2}px`}
+                        flexDir={"column"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                    >
+                        <Flex flexDir={"row"} justifyContent={"space-evenly"}>
                             {uniqueness.uniqueness[props.time].artists
                                 .slice(0, 3)
                                 .map((artist, index) => (
                                     <Flex
-                                        mx={2}
+                                        h={`${HU * 4}px`}
+                                        w={`${WU * 2}px`}
+                                        px={`${WU * 0.1}px`}
+                                        py={`${HU * 0.1}px`}
                                         key={
                                             artist.artist.name +
                                             "uniquePreview" +
                                             Math.random()
                                         }
+                                        flexDir={"column"}
                                     >
                                         <Image
                                             src={artist.artist.images[0].url}
                                             alt={artist.artist.name}
                                             width={
                                                 artist.artist.images[0].width *
-                                                100
+                                                WU *
+                                                1.8
                                             }
                                             height={
                                                 artist.artist.images[0].height *
-                                                100
+                                                HU *
+                                                3.6
                                             }
                                         />
                                     </Flex>
@@ -116,6 +160,17 @@ export default function UniquePebble(props: {
             ) : (
                 <Text>Loading...</Text>
             )}
+            <Text
+                h={`${HU * 0.65}px`}
+                w={`${WU * 9}px`}
+                fontSize={`${HU * 0.65}px`}
+                fontWeight={"semibold"}
+                color={"whiteAlpha.500"}
+                textAlign={"center"}
+                mb={2}
+            >
+                Click for more info
+            </Text>
         </Flex>
     );
 }

@@ -1,4 +1,4 @@
-import { artistType } from "./spotify";
+import { artistApiResponseType, artistType } from "./spotify";
 
 export type SingleUniqueness = {
     rating: number;
@@ -18,3 +18,9 @@ export interface uniqueArtistWrapperType {
     uniqueness: number;
     userRating: number; // 0-50, 0 being the most listened to
 }
+
+export type uniqueHookType = {
+    uniqueness: Uniqueness;
+    loading: { short_term: boolean; medium_term: boolean; long_term: boolean };
+    setArtists: (artists: artistApiResponseType) => void;
+};

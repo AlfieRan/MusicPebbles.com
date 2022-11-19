@@ -1,17 +1,18 @@
-import { useSpring } from "framer-motion";
-import { MutableRefObject, Ref, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useMouse() {
-    const mouse = {
-        x: useSpring(0, { stiffness: 75, damping: 15 }),
-        y: useSpring(0, { stiffness: 100, damping: 15 }),
-    };
+    const [fastMouse, setFastMouse] = useState({
+        x: 0,
+        y: 0,
+    });
 
     const updateMouse = (e: MouseEvent) => {
         const { pageX, pageY } = e;
 
-        mouse.x.set(pageX);
-        mouse.y.set(pageY);
+        setFastMouse({
+            x: pageX,
+            y: pageY,
+        });
     };
 
     useEffect(() => {
@@ -21,5 +22,5 @@ export function useMouse() {
         }
     }, [window, updateMouse]);
 
-    return { mouse };
+    return { mouse: fastMouse };
 }

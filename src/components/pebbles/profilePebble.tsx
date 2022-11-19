@@ -1,4 +1,4 @@
-import { Center } from "@chakra-ui/react";
+import { Center, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
@@ -19,6 +19,9 @@ export default function ProfilePebble(props: {
         });
         console.log("open song overlay");
     }
+
+    const HU = props.info.dims.height / 10; // Height Unit
+    const WU = props.info.dims.width / 10; // Width Unit
 
     return (
         <Center
@@ -49,6 +52,19 @@ export default function ProfilePebble(props: {
             }}
             onClick={openSongOverlay}
         >
+            <Flex pos={"absolute"} bottom={0}>
+                <Text
+                    h={`${HU * 0.6}px`}
+                    w={`${WU * 9}px`}
+                    fontSize={`${HU * 0.6}px`}
+                    fontWeight={"semibold"}
+                    color={"white"}
+                    textAlign={"center"}
+                    mb={`${HU * 0.3}px`}
+                >
+                    Click for Settings
+                </Text>
+            </Flex>
             <Image
                 src={props.profile.profile?.image_url ?? "/unknown.png"}
                 alt={

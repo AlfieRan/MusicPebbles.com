@@ -13,15 +13,18 @@ export default function ProfileOverlay(props: {
         <Flex
             flexDir={"column"}
             bg={"MidGrey"}
-            px={`${props.WU * 0.1}px`}
-            py={4}
+            px={4}
+            py={3}
             borderRadius={"10px"}
-            maxW={`${props.WU * 4}px`}
-            maxH={`${props.HU * 4}px`}
-            minW={`${props.WU * 2.5}px`}
+            w={{
+                base: `${props.WU * 8}px`,
+                md: "400px",
+            }}
             key={"ProfileOverlay"}
         >
-            <Text>Hi {props.profile.profile?.display_name || ""}!</Text>
+            <Text fontSize={"xl"}>
+                Hi {props.profile.profile?.display_name || ""}!
+            </Text>
             <Text fontSize={"md"}>What do you want to do?</Text>
             <Flex flexDir={"column"} mt={2}>
                 <Link

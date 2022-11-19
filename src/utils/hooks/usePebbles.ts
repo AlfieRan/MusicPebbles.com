@@ -147,17 +147,17 @@ export function usePebbles() {
             const newPebbleState: pebbleObjType = {
                 profile: getGridItemPosition(pebbleSizes.profile, {
                     x: 0,
-                    y: 5,
+                    y: 4,
                 }),
                 artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 6 }),
-                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 2 }),
-                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 1 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 1 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 3 }),
                 genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
                     x: 0,
-                    y: 4,
+                    y: 5,
                 }),
-                time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 5 }),
+                time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 4 }),
             };
             setPebbleState(newPebbleState);
             setComponentHeight(
