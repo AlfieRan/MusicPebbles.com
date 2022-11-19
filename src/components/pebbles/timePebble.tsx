@@ -16,10 +16,13 @@ export default function TimePebble(props: {
         "long_term",
     ];
 
+    const WU = props.info.dims.width / 10; // Width Unit
+    const HU = props.info.dims.height / 10; // Height Unit
+
     return (
         <Center
-            w={`${props.info.dims.width}px`}
-            h={`${props.info.dims.height}px`}
+            w={`${WU * 10}px`}
+            h={`${HU * 10}px`}
             bottom={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={"15px"}
@@ -45,6 +48,7 @@ export default function TimePebble(props: {
                         _hover={{ bg: "MidDarkBlue" }}
                         _active={{ bg: "DarkBlue" }}
                         onClick={() => props.setTime(timeOption)}
+                        fontSize={`${WU * 0.9}`}
                     >
                         <Text>{wrapTimeString(timeOption)}</Text>
                     </Button>

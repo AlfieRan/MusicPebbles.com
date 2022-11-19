@@ -83,15 +83,26 @@ export default function SongOverlay(props: {
                         </Flex>
                         <Flex
                             maxH={`${props.HU}px`}
-                            w={`${props.WU * 4}px`}
+                            w={{
+                                base: `${props.WU * 5}px`,
+                                md: `${props.WU * 4}px`,
+                            }}
                             justifyContent={"center"}
                             flexDir={"column"}
                         >
-                            <Text fontSize={`${props.WU / 8}px`}>
+                            <Text
+                                fontSize={{
+                                    base: `${props.WU / 4}px`,
+                                    md: `${props.WU / 8}px`,
+                                }}
+                            >
                                 {currentSong.song}
                             </Text>
                             <Text
-                                fontSize={`${props.WU / 10}px`}
+                                fontSize={{
+                                    base: `${props.WU / 4}px`,
+                                    md: `${props.WU / 10}px`,
+                                }}
                                 hidden={currentSong.artist === ""}
                             >
                                 {currentSong.artist}
@@ -168,18 +179,44 @@ export default function SongOverlay(props: {
                                     bg={"blackAlpha.400"}
                                     borderRadius={"10px"}
                                     my={1}
-                                    py={2}
-                                    px={3}
+                                    py={`${props.WU * 0.15}px`}
+                                    px={`${props.WU * 0.2}px`}
                                     flexDir={"row"}
                                     alignItems={"center"}
                                     justifyContent={"space-between"}
                                 >
-                                    <Flex>
+                                    <Flex w={`${props.WU * 6}px`}>
                                         <Flex
                                             overflow={"hidden"}
-                                            borderRadius={"5px"}
-                                            width={"auto"}
+                                            borderRadius={`${Math.min(
+                                                props.WU * 0.1,
+                                                5
+                                            )}px`}
                                             height={"auto"}
+                                            w={{
+                                                base: `${
+                                                    props.WU *
+                                                    2 *
+                                                    song.album.images[0].width
+                                                }px`,
+                                                md: `${
+                                                    props.WU *
+                                                    0.5 *
+                                                    song.album.images[0].width
+                                                }px`,
+                                            }}
+                                            h={{
+                                                base: `${
+                                                    props.WU *
+                                                    2 *
+                                                    song.album.images[0].width
+                                                }px`,
+                                                md: `${
+                                                    props.WU *
+                                                    0.5 *
+                                                    song.album.images[0].height
+                                                }px`,
+                                            }}
                                         >
                                             <Image
                                                 src={song.album.images[0].url}
@@ -189,22 +226,29 @@ export default function SongOverlay(props: {
                                                 }
                                                 width={
                                                     props.WU *
-                                                    0.5 *
+                                                    2 *
                                                     song.album.images[0].width
                                                 }
                                                 height={
                                                     props.WU *
-                                                    0.5 *
+                                                    2 *
                                                     song.album.images[0].height
                                                 }
                                             />
                                         </Flex>
                                         <Flex
                                             ml={`${props.WU / 10}px`}
+                                            maxW={{
+                                                base: `${props.WU * 3.75}px`,
+                                                md: `${props.WU * 5}px`,
+                                            }}
                                             flexDir={"column"}
                                         >
                                             <Text
-                                                fontSize={`${props.WU / 9}px`}
+                                                fontSize={{
+                                                    base: `${props.WU / 3.5}px`,
+                                                    md: `${props.WU / 9}px`,
+                                                }}
                                             >
                                                 {`${
                                                     packetIndex * 10 +
@@ -213,13 +257,19 @@ export default function SongOverlay(props: {
                                                 }. ${song.name}`}
                                             </Text>
                                             <Text
-                                                fontSize={`${props.WU / 10}px`}
+                                                fontSize={{
+                                                    base: `${props.WU / 3.5}px`,
+                                                    md: `${props.WU / 10}px`,
+                                                }}
                                                 color={"whiteAlpha.700"}
                                             >
                                                 {song.album.name}
                                             </Text>
                                             <Text
-                                                fontSize={`${props.WU / 10}px`}
+                                                fontSize={{
+                                                    base: `${props.WU / 4}px`,
+                                                    md: `${props.WU / 10}px`,
+                                                }}
                                             >
                                                 {song.artists
                                                     .map(
@@ -229,12 +279,24 @@ export default function SongOverlay(props: {
                                             </Text>
                                         </Flex>
                                     </Flex>
-                                    <Flex flexDir={"column"}>
+                                    <Flex
+                                        flexDir={"column"}
+                                        w={{
+                                            base: `${props.WU * 0.5}px`,
+                                            md: `${props.WU * 0.2}px`,
+                                        }}
+                                    >
                                         <Center
                                             bg={""}
                                             p={0}
-                                            h={`${props.WU * 0.2}px`}
-                                            w={`${props.WU * 0.2}px`}
+                                            h={{
+                                                base: `${props.WU * 0.5}px`,
+                                                md: `${props.WU * 0.2}px`,
+                                            }}
+                                            w={{
+                                                base: `${props.WU * 0.5}px`,
+                                                md: `${props.WU * 0.2}px`,
+                                            }}
                                             mb={`${props.WU * 0.05}px`}
                                             _hover={{
                                                 transform: "scale(1.1)",
@@ -248,7 +310,10 @@ export default function SongOverlay(props: {
                                             }}
                                         >
                                             <Text
-                                                fontSize={`${props.WU * 0.2}px`}
+                                                fontSize={{
+                                                    base: `${props.WU * 0.5}px`,
+                                                    md: `${props.WU * 0.2}px`,
+                                                }}
                                             >
                                                 {"▶︎"}
                                             </Text>
@@ -261,6 +326,14 @@ export default function SongOverlay(props: {
                                             _active={{
                                                 transform: "scale(0.9)",
                                             }}
+                                            h={{
+                                                base: `${props.WU * 0.5}px`,
+                                                md: `${props.WU * 0.2}px`,
+                                            }}
+                                            w={{
+                                                base: `${props.WU * 0.5}px`,
+                                                md: `${props.WU * 0.2}px`,
+                                            }}
                                             isExternal
                                         >
                                             <Image
@@ -268,8 +341,8 @@ export default function SongOverlay(props: {
                                                     "/spotifyBranding/icons/white.png"
                                                 }
                                                 alt={"Spotify Icon"}
-                                                width={props.WU * 0.2}
-                                                height={props.WU * 0.2}
+                                                width={props.WU}
+                                                height={props.WU}
                                             />
                                         </Link>
                                     </Flex>

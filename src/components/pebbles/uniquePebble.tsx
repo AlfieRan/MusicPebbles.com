@@ -91,22 +91,17 @@ export default function UniquePebble(props: {
                         <Flex
                             flexDir={"row"}
                             w={`${WU * 2.5}px`}
-                            h={`${HU * 5}px`}
+                            h={`${WU * 2.55}px`}
                             borderRadius={"full"}
                             justifyContent={"center"}
                             alignItems={"center"}
                             borderColor={
                                 uniqueness.uniqueness[props.time].colour
                             }
-                            borderWidth={"5px"}
+                            borderWidth={`${WU * 0.1}px`}
                         >
                             <Flex justifyContent={"center"} flexDir={"column"}>
-                                <Text
-                                    textAlign={"center"}
-                                    h={"fit-content"}
-                                    fontSize={`${WU}px`}
-                                    mb={1}
-                                >
+                                <Text textAlign={"center"} fontSize={`${WU}px`}>
                                     {uniqueness.uniqueness[
                                         props.time
                                     ].rating.toString()}
