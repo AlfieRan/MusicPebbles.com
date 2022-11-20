@@ -1,37 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../server/sessions/session";
 import { profileFull } from "../../../utils/types/oauth";
-import { getAccessCode } from "../../../server/sessions/access";
-import {
-    getRedisClient,
-    quitRedis,
-    wrapRedis,
-} from "../../../server/utils/redis";
+import { getAccessCode } from "../../sessions/access";
+import { wrapRedis } from "../redis";
 import {
     artistApiResponseType,
     artistsType,
     timeFrameType,
 } from "../../../utils/types/spotify";
-import { storeError } from "../../../server/utils/errorWrapper";
-import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
+import { storeError } from "../errorWrapper";
+import { spotifyWrapRequest } from "../spotifyApiWrapper";
 import Redis from "ioredis";
 
-export default async function artists(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-    const redisClient = getRedisClient();
+export async function getArtists(
+    user: profileFull,
+    redisClient: Redis
+): Promise<artistApiResponseType | undefined> {
     try {
-        const userProfile = await getSession(req, redisClient);
-        if (!userProfile) {
-            res.status(403).json({ error: "Unauthorized" });
-            quitRedis(redisClient);
-            return;
-        }
-
-        const data = await wrapArtistsAllTimeFrames(userProfile, redisClient);
-        res.status(200).json(data);
-        quitRedis(redisClient);
+        return await wrapArtistsAllTimeFrames(user, redisClient);
     } catch (e) {
         await storeError(
             {
@@ -43,9 +27,8 @@ export default async function artists(
             },
             redisClient
         );
-        await res.status(500).json(e);
+        return undefined;
     }
-    quitRedis(redisClient);
 }
 
 async function wrapArtistsAllTimeFrames(

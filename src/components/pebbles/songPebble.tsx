@@ -1,13 +1,12 @@
-import { Button, Center, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import { audioPlayerType, setHoveringType } from "../../utils/types/state";
-import Image from "next/image";
-import { useScreen } from "../../utils/hooks/useScreen";
 import {
-    songApiResponseType,
-    songType,
-    timeFrameType,
-} from "../../utils/types/spotify";
+    audioPlayerType,
+    profileHookType,
+    setHoveringType,
+} from "../../utils/types/state";
+import Image from "next/image";
+import { songType, timeFrameType } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
 
@@ -17,7 +16,7 @@ export default function SongPebble(props: {
     time: timeFrameType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
     audioPlayer: audioPlayerType;
-    allSongs: songApiResponseType;
+    profile: profileHookType;
 }) {
     // TODO: Add links to spotify everywhere lol
     const [loaded, setLoaded] = useState(true);
@@ -26,12 +25,14 @@ export default function SongPebble(props: {
     const WU = props.info.dims.width / 10;
 
     useEffect(() => {
-        setLoaded(false);
-        const current = props.allSongs[props.time];
-        if (current) {
-            setSongs(current);
+        if (props.profile.profile.songs !== undefined) {
+            setLoaded(false);
+            const current = props.profile.profile.songs[props.time];
+            if (current) {
+                setSongs(current);
+            }
         }
-    }, [props.allSongs, props.time]);
+    }, [props.profile.profile.songs, props.time]);
 
     useEffect(() => {
         console.log("Rendering song pebble");
@@ -46,7 +47,11 @@ export default function SongPebble(props: {
         props.setOverlay({
             hidden: false,
             type: "songs",
-            songs: props.allSongs,
+            songs: props.profile.profile.songs ?? {
+                short_term: false,
+                medium_term: false,
+                long_term: false,
+            },
         });
         console.log("open song overlay");
     }

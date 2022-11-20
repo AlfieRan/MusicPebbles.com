@@ -2,11 +2,10 @@ import { overlayStateType } from "../../utils/types/overlay";
 import { AnimatePresence, motion } from "framer-motion";
 import BlurredBackground from "./blurredBackground";
 import SongOverlay from "./songOverlay";
-import { audioPlayerType } from "../../utils/types/state";
+import { audioPlayerType, profileHookType } from "../../utils/types/state";
 import { timeFrameType } from "../../utils/types/spotify";
 import { useScreen } from "../../utils/hooks/useScreen";
 import ProfileOverlay from "./profileOverlay";
-import { profileHookType } from "../../utils/types/oauth";
 import UniqueOverlay from "./uniqueOverlay";
 import ArtistOverlay from "./artistOverlay";
 

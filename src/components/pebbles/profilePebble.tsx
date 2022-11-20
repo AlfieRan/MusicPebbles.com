@@ -1,10 +1,9 @@
 import { Center, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import { setHoveringType } from "../../utils/types/state";
+import { profileHookType, setHoveringType } from "../../utils/types/state";
 import { Dispatch, SetStateAction } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
-import { profileHookType } from "../../utils/types/oauth";
 
 export default function ProfilePebble(props: {
     info: pebblePhysics;
@@ -41,8 +40,8 @@ export default function ProfilePebble(props: {
                 props.setHovering({
                     hovering: true,
                     type: "text",
-                    text: props.profile.profile?.display_name
-                        ? `Hi ${props.profile.profile?.display_name}!`
+                    text: props.profile.profile?.profile?.display_name
+                        ? `Hi ${props.profile.profile.profile?.display_name}!`
                         : "Loading...",
                     x: "right",
                     y: "top",
@@ -66,9 +65,12 @@ export default function ProfilePebble(props: {
                 <Text fontSize={`${WU}px`}>⚙</Text>
             </Center>
             <Image
-                src={props.profile.profile?.image_url ?? "/unknown.png"}
+                src={
+                    props.profile.profile?.profile?.image_url ?? "/unknown.png"
+                }
                 alt={
-                    "Profile picture of " + props.profile.profile?.display_name
+                    "Profile picture of " +
+                    props.profile.profile?.profile?.display_name
                 }
                 width={props.info.dims.width}
                 height={props.info.dims.height}

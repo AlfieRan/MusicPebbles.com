@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { songType } from "./spotify";
+import { profileDataType } from "./oauth";
 
 interface hoveringComponentState {
     hovering: true;
@@ -54,4 +55,10 @@ export type songOverlayInfo = {
     song: string;
     artist: string;
     album: string;
+};
+
+export type profileHookType = {
+    profile: profileDataType;
+    loading: boolean;
+    error: boolean;
 };

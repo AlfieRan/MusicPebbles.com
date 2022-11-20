@@ -1,7 +1,6 @@
 import { Button, Flex, Link, Text } from "@chakra-ui/react";
-import { useProfile } from "../../utils/hooks/useProfile";
 import { useRouter } from "next/router";
-import { profileHookType } from "../../utils/types/oauth";
+import { profileHookType } from "../../utils/types/state";
 
 export default function ProfileOverlay(props: {
     HU: number;
@@ -23,7 +22,8 @@ export default function ProfileOverlay(props: {
             key={"ProfileOverlay"}
         >
             <Text fontSize={"xl"}>
-                Hi {props.profile.profile?.display_name || ""}!
+                Hi{" "}
+                {props.profile.profile?.profile?.display_name || "Loading..."}!
             </Text>
             <Text fontSize={"md"}>What do you want to do?</Text>
             <Flex flexDir={"column"} mt={2}>

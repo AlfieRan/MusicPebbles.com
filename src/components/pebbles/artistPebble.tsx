@@ -2,31 +2,29 @@ import { Center, Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { setHoveringType } from "../../utils/types/state";
-import {
-    artistApiResponseType,
-    artistsType,
-    timeFrameType,
-} from "../../utils/types/spotify";
+import { profileHookType, setHoveringType } from "../../utils/types/state";
+import { artistsType, timeFrameType } from "../../utils/types/spotify";
 import { overlayStateType } from "../../utils/types/overlay";
 
 export default function ArtistPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     time: timeFrameType;
-    allArtists: artistApiResponseType;
+    profile: profileHookType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
     const [loaded, setLoaded] = useState(false);
     const [artists, setArtists] = useState<artistsType>([]);
 
     useEffect(() => {
-        setLoaded(false);
-        const currentArtists = props.allArtists[props.time];
-        if (currentArtists) {
-            setArtists(currentArtists);
+        if (props.profile.profile.artists !== undefined) {
+            setLoaded(false);
+            const currentArtists = props.profile.profile.artists[props.time];
+            if (currentArtists) {
+                setArtists(currentArtists);
+            }
         }
-    }, [props.allArtists, props.time]);
+    }, [props.profile.profile.artists, props.time]);
 
     useEffect(() => {
         console.log("Rendering song pebble");
@@ -42,7 +40,11 @@ export default function ArtistPebble(props: {
         props.setOverlay({
             hidden: false,
             type: "artists",
-            artists: props.allArtists,
+            artists: props.profile.profile.artists ?? {
+                short_term: false,
+                medium_term: false,
+                long_term: false,
+            },
         });
         console.log("open artist overlay");
     }

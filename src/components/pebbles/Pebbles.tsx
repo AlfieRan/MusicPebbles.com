@@ -14,9 +14,7 @@ import { timeFrameType } from "../../utils/types/spotify";
 import { overlayStateType } from "../../utils/types/overlay";
 import { Overlay } from "../overlay/overlay";
 import { useAudio } from "../../utils/hooks/useAudio";
-import { useSongs } from "../../utils/hooks/useSongs";
 import AudioPebble from "./audioPebble";
-import { useArtists } from "../../utils/hooks/useArtists";
 import { useProfile } from "../../utils/hooks/useProfile";
 
 export default function Pebbles() {
@@ -29,18 +27,20 @@ export default function Pebbles() {
         hidden: true,
     });
     const [time, setTime] = useState<timeFrameType>("medium_term");
-    const [songs] = useSongs();
-    const [artists] = useArtists();
     const profile = useProfile();
     const audioPlayer = useAudio();
 
     useEffect(() => {
-        const currentSongs = songs[time];
-        if (currentSongs !== false && currentSongs.length > 0) {
-            console.log(`Adding ${currentSongs.length} songs to audio player`);
-            audioPlayer.addSongs(currentSongs);
+        if (profile.profile.songs !== undefined) {
+            const currentSongs = profile.profile.songs[time];
+            if (currentSongs !== false && currentSongs.length > 0) {
+                console.log(
+                    `Adding ${currentSongs.length} songs to audio player`
+                );
+                audioPlayer.addSongs(currentSongs);
+            }
         }
-    }, [time, songs]);
+    }, [time, profile.profile.songs]);
 
     function hideOverlay() {
         setOverlayState({ hidden: true });
@@ -80,21 +80,21 @@ export default function Pebbles() {
                     time={time}
                     setOverlay={setOverlayState}
                     audioPlayer={audioPlayer}
-                    allSongs={songs}
+                    profile={profile}
                 />
                 <ArtistPebble
                     info={pebbleState.artist}
                     setHovering={setHoveringState}
                     time={time}
-                    allArtists={artists}
                     setOverlay={setOverlayState}
+                    profile={profile}
                 />
                 <UniquePebble
                     info={pebbleState.unique}
                     setHovering={setHoveringState}
                     time={time}
-                    artists={artists}
                     setOverlay={setOverlayState}
+                    profile={profile}
                 />
                 <GenrePebble
                     info={pebbleState.genre}

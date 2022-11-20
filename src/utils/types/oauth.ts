@@ -1,3 +1,5 @@
+import { artistApiResponseType, songApiResponseType } from "./spotify";
+
 export interface SpotifyCallbackResponse {
     code: string;
     state: string;
@@ -25,8 +27,8 @@ export interface profileType {
     image_url: string | undefined;
 }
 
-export type profileHookType = {
+export type profileDataType = {
     profile: profileType | undefined;
-    loading: boolean;
-    error: boolean;
+    artists: artistApiResponseType | undefined;
+    songs: songApiResponseType | undefined;
 };

@@ -1,33 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../server/sessions/session";
 import { profileFull } from "../../../utils/types/oauth";
-import { getAccessCode } from "../../../server/sessions/access";
-import {
-    getRedisClient,
-    quitRedis,
-    wrapRedis,
-} from "../../../server/utils/redis";
+import { getAccessCode } from "../../sessions/access";
+import { wrapRedis } from "../redis";
 import {
     songApiResponseType,
     songType,
     timeFrameType,
 } from "../../../utils/types/spotify";
 import { ApiError } from "../../../utils/types/errors";
-import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
+import { spotifyWrapRequest } from "../spotifyApiWrapper";
 import Redis from "ioredis";
 
-export default async function songs(req: NextApiRequest, res: NextApiResponse) {
-    const redisClient = getRedisClient();
-    const userProfile = await getSession(req, redisClient);
-    if (!userProfile) {
-        res.status(401).json({ error: "Unauthorized" });
-        quitRedis(redisClient);
-        return;
-    }
-
+export async function getSongs(
+    userProfile: profileFull,
+    redisClient: Redis
+): Promise<undefined | songApiResponseType> {
     try {
-        const data = await wrapSongsAllTimeFrames(userProfile, redisClient);
-        res.status(200).json(data);
+        return await wrapSongsAllTimeFrames(userProfile, redisClient);
     } catch (error) {
         console.log(error);
         const errorObj: ApiError = {
@@ -38,12 +26,8 @@ export default async function songs(req: NextApiRequest, res: NextApiResponse) {
         };
         await redisClient.lpush("errors", JSON.stringify(errorObj));
 
-        res.redirect("/api/error?error=" + JSON.stringify(errorObj));
-
-        quitRedis(redisClient);
-        return;
+        return undefined;
     }
-    quitRedis(redisClient);
 }
 
 export async function wrapSongsAllTimeFrames(

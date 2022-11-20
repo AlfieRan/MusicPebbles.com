@@ -1,6 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import { setHoveringType } from "../../utils/types/state";
+import { profileHookType, setHoveringType } from "../../utils/types/state";
 import { useUniqueness } from "../../utils/hooks/useUniqueness";
 import Image from "next/image";
 import {
@@ -14,7 +14,7 @@ export default function UniquePebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     time: timeFrameType;
-    artists: artistApiResponseType;
+    profile: profileHookType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
     const uniqueness = useUniqueness();
@@ -23,8 +23,10 @@ export default function UniquePebble(props: {
     const WU = props.info.dims.width / 10; // Width Unit
 
     useEffect(() => {
-        uniqueness.setArtists(props.artists);
-    }, [props.artists]);
+        if (props.profile.profile.artists !== undefined) {
+            uniqueness.setArtists(props.profile.profile.artists);
+        }
+    }, [props.profile.profile.artists]);
 
     function openUniqueOverlay() {
         props.setOverlay({

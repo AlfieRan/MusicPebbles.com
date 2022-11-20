@@ -1,4 +1,9 @@
-import { artistType, songType } from "../types/spotify";
+import {
+    artistApiResponseType,
+    artistType,
+    songApiResponseType,
+    songType,
+} from "../types/spotify";
 import { wrapImages } from "./other";
 
 async function wrapSong(song: songType): Promise<songType> {
@@ -41,4 +46,29 @@ export async function wrapArtists(
     }
 
     return newArtists;
+}
+
+export async function wrapAllArtists(
+    data: artistApiResponseType | undefined
+): Promise<artistApiResponseType> {
+    return {
+        short_term:
+            data !== undefined ? await wrapArtists(data.short_term) : false,
+        medium_term:
+            data !== undefined ? await wrapArtists(data.medium_term) : false,
+        long_term:
+            data !== undefined ? await wrapArtists(data.long_term) : false,
+    };
+}
+
+export async function wrapAllSongs(
+    data: songApiResponseType | undefined
+): Promise<songApiResponseType> {
+    return {
+        short_term:
+            data !== undefined ? await wrapSongs(data.short_term) : false,
+        medium_term:
+            data !== undefined ? await wrapSongs(data.medium_term) : false,
+        long_term: data !== undefined ? await wrapSongs(data.long_term) : false,
+    };
 }
