@@ -2,7 +2,7 @@ import ProfilePebble from "./profilePebble";
 import ArtistPebble from "./artistPebble";
 import SongPebble from "./songPebble";
 import UniquePebble from "./uniquePebble";
-import GenrePebble from "./genrePebble";
+import InfoPebble from "./infoPebble";
 import TimePebble from "./timePebble";
 import { usePebbles } from "../../utils/hooks/usePebbles";
 import { Center } from "@chakra-ui/react";
@@ -77,7 +77,6 @@ export default function Pebbles() {
                 />
                 <SongPebble
                     info={pebbleState.song}
-                    setHovering={setHoveringState}
                     time={time}
                     setOverlay={setOverlayState}
                     audioPlayer={audioPlayer}
@@ -85,7 +84,6 @@ export default function Pebbles() {
                 />
                 <ArtistPebble
                     info={pebbleState.artist}
-                    setHovering={setHoveringState}
                     time={time}
                     setOverlay={setOverlayState}
                     profile={profile}
@@ -97,10 +95,7 @@ export default function Pebbles() {
                     setOverlay={setOverlayState}
                     profile={profile}
                 />
-                <GenrePebble
-                    info={pebbleState.genre}
-                    setHovering={setHoveringState}
-                />
+                <InfoPebble info={pebbleState.genre} />
                 <TimePebble
                     info={pebbleState.time}
                     setHovering={setHoveringState}

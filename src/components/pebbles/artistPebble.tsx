@@ -2,13 +2,12 @@ import { Center, Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { profileHookType, setHoveringType } from "../../utils/types/state";
+import { profileHookType } from "../../utils/types/state";
 import { artistsType, timeFrameType } from "../../utils/types/spotify";
 import { overlayStateType } from "../../utils/types/overlay";
 
 export default function ArtistPebble(props: {
     info: pebblePhysics;
-    setHovering: setHoveringType;
     time: timeFrameType;
     profile: profileHookType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
@@ -69,18 +68,6 @@ export default function ArtistPebble(props: {
             cursor={"pointer"}
             _hover={{ bg: "blackAlpha.700", transform: "scale(1.01)" }}
             transition={"0.1s ease-in-out"}
-            onMouseOver={() => {
-                props.setHovering({
-                    hovering: true,
-                    type: "text",
-                    text: "Artists",
-                    x: "right",
-                    y: "bottom",
-                });
-            }}
-            onMouseOut={() => {
-                props.setHovering({ hovering: false });
-            }}
             onClick={openArtistOverlay}
         >
             <Text

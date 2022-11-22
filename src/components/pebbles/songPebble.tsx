@@ -1,10 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import {
-    audioPlayerType,
-    profileHookType,
-    setHoveringType,
-} from "../../utils/types/state";
+import { audioPlayerType, profileHookType } from "../../utils/types/state";
 import Image from "next/image";
 import { songType, timeFrameType } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -12,7 +8,6 @@ import { overlayStateType } from "../../utils/types/overlay";
 
 export default function SongPebble(props: {
     info: pebblePhysics;
-    setHovering: setHoveringType;
     time: timeFrameType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
     audioPlayer: audioPlayerType;
@@ -56,22 +51,6 @@ export default function SongPebble(props: {
         console.log("open song overlay");
     }
 
-    function openSongHovering() {
-        props.setHovering({
-            hovering: true,
-            type: "text",
-            text: "Songs",
-            x: "left",
-            y: "top",
-        });
-    }
-
-    function closeHovering() {
-        props.setHovering({
-            hovering: false,
-        });
-    }
-
     return (
         <Flex
             w={`${props.info.dims.width}px`}
@@ -93,8 +72,6 @@ export default function SongPebble(props: {
             transition={"0.1s ease-in-out"}
             cursor={"pointer"}
             onClick={openSongOverlay}
-            onMouseOver={openSongHovering}
-            onMouseLeave={closeHovering}
         >
             <Text
                 h={`${HU * 0.75}px`}
