@@ -8,7 +8,6 @@ import { useScreen } from "../../utils/hooks/useScreen";
 import ProfileOverlay from "./profileOverlay";
 import UniqueOverlay from "./uniqueOverlay";
 import ArtistOverlay from "./artistOverlay";
-import { Center } from "@chakra-ui/react";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -31,7 +30,9 @@ export function Overlay(props: {
                 {!props.info.hidden && (
                     <motion.div
                         key={"overlayMain"}
-                        className={`fixed flex z-50 w-fit h-fit max-w-[100%] max-h-[100%] top-0 md:top-auto`}
+                        className={
+                            "fixed flex z-50 w-fit h-full md:h-fit max-w-[100%] max-h-[100%] top-0 p-2 md:p-0 md:top-auto items-center"
+                        }
                         exit={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         initial={{ scale: 0.5, opacity: 0 }}
@@ -44,6 +45,7 @@ export function Overlay(props: {
                                 allSongs={props.info.songs}
                                 HU={HU}
                                 WU={WU}
+                                exit={props.hide}
                             />
                         )}
                         {props.info.type === "profile" && (
@@ -51,13 +53,14 @@ export function Overlay(props: {
                                 WU={WU}
                                 HU={HU}
                                 profile={props.profile}
+                                exit={props.hide}
                             />
                         )}
                         {props.info.type === "unique" && (
-                            <UniqueOverlay WU={WU} HU={HU} />
+                            <UniqueOverlay WU={WU} HU={HU} exit={props.hide} />
                         )}
                         {props.info.type === "artists" && (
-                            <ArtistOverlay WU={WU} HU={HU} />
+                            <ArtistOverlay WU={WU} HU={HU} exit={props.hide} />
                         )}
                     </motion.div>
                 )}

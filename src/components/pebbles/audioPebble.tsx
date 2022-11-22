@@ -81,28 +81,8 @@ export default function AudioPebble(props: {
             flexDir={"column"}
         >
             <Center
-                pos={"absolute"}
-                right={0}
-                top={0}
-                p={`${HU * 0.4}px`}
-                bg={"black"}
-                borderBottomLeftRadius={`${HU * 0.7}px`}
-                cursor={"pointer"}
-                _hover={{ transform: "scale(1.1)" }}
-                _active={{ transform: "scale(0.9)" }}
-                transition={"0.1s ease-in-out"}
-                onClick={redirectToSpotify}
-            >
-                <Image
-                    src={"/spotifyBranding/icons/white.png"}
-                    width={Math.max(HU * 0.8, 21)}
-                    height={Math.max(HU * 0.8, 21)}
-                    alt={"Spotify Icon, click to go to Spotify"}
-                />
-            </Center>
-            <Center
-                width={`${WU * 7}px`}
-                height={`${HU * 6.5}px`}
+                width={`${WU * 7.5}px`}
+                height={`${HU * 7.5}px`}
                 fontSize={"xs"}
                 borderRadius={"10px"}
             >
@@ -148,7 +128,7 @@ export default function AudioPebble(props: {
                             }
                             h={
                                 mode === "normal"
-                                    ? `${HU * 2.5}px`
+                                    ? `${HU * 2.7}px`
                                     : `${HU * 6.5}px`
                             }
                             px={mode === "wide" ? `${WU * 0.25}px` : ""}
@@ -172,7 +152,7 @@ export default function AudioPebble(props: {
                             >
                                 <Flex h={`${HU}px`} hidden={mode === "wide"}>
                                     <motion.div
-                                        className={"flex w-fit-content h-full"}
+                                        className={"flex w-fit-content h-fit"}
                                         initial={{ x: "90%" }}
                                         animate={{ x: ["90%", "-90%"] }}
                                         transition={{
@@ -199,22 +179,19 @@ export default function AudioPebble(props: {
                                     hidden={mode === "normal"}
                                     flexDir={"column"}
                                     pb={`${HU * 0.5}px`}
+                                    fontSize={`${HU * 0.7}px`}
                                 >
-                                    <Text fontSize={`${HU * 0.7}px`}>
-                                        {currentSong.song}
-                                    </Text>
-                                    <Text fontSize={`${HU * 0.7}px`}>
+                                    <Text>{currentSong.song}</Text>
+                                    <Text color={"whiteAlpha.700"}>
                                         {currentSong.album}
                                     </Text>
-                                    <Text fontSize={`${HU * 0.7}px`}>
-                                        {currentSong.artist}
-                                    </Text>
+                                    <Text>{currentSong.artist}</Text>
                                 </Flex>
                             </Flex>
                             <AudioControls
                                 audioPlayer={props.audioPlayer}
-                                HU={HU * 0.7}
-                                WU={WU * 0.7}
+                                HU={mode === "normal" ? HU * 1.5 : HU * 1.75}
+                                WU={mode === "normal" ? WU * 6 : WU * 5}
                             />
                         </Flex>
                     </Center>

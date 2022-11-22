@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import AudioControls from "../other/audioControls";
 import Image from "next/image";
 import { wrapNames } from "../../utils/other/wrapNames";
+import ExitButton from "./utils/exitButton";
 
 export default function SongOverlay(props: {
     audioPlayer: audioPlayerType;
@@ -16,6 +17,7 @@ export default function SongOverlay(props: {
     HU: number;
     WU: number;
     allSongs: songApiResponseType;
+    exit: () => void;
 }) {
     const [songs, setSongs] = useState<songType[]>([]);
     const [currentSong, setCurrentSong] = useState<songOverlayInfo>({
@@ -40,128 +42,93 @@ export default function SongOverlay(props: {
             flexDir={"column"}
             alignItems={"center"}
             bg={"MidGrey"}
-            px={`${props.WU * 0.25}px`}
+            px={{ base: `${props.WU * 0.25}px`, md: `${props.WU * 0.1}px` }}
             py={4}
             borderRadius={"10px"}
             w={{
                 base: `${props.WU * 9.5}px`,
                 md: `${props.WU * 8}px`,
             }}
-            maxH={`${props.HU * 8}px`}
+            maxH={`${props.HU * 9}px`}
             key={"SongOverlay"}
         >
-            <Flex w={"100%"} justifyContent={"center"}>
+            <Flex
+                w={"100%"}
+                flexDir={"column"}
+                bg={"whiteAlpha.300"}
+                p={`${props.WU * 0.1}px`}
+                borderRadius={{ base: "5px", md: "10px" }}
+            >
                 <Flex
-                    py={2}
-                    overflow={"hidden"}
-                    bg={"whiteAlpha.300"}
-                    borderRadius={"10px"}
+                    flexDir={"row"}
+                    w={"100%"}
                     justifyContent={"space-between"}
-                    w={{
-                        base: `${props.WU * 9}px`,
-                        md: `${props.WU * 7.5}px`,
-                    }}
-                    px={`${props.WU * 0.25}px`}
-                    maxH={`${props.HU * 2}px`}
+                    alignItems={"center"}
+                    mb={2}
                 >
+                    <AudioControls
+                        audioPlayer={props.audioPlayer}
+                        WU={Math.min(props.HU, props.WU * 1.2, 65) * 3.2}
+                        HU={Math.min(props.HU, props.WU * 1.2, 65)}
+                    />
+                    <ExitButton
+                        fn={props.exit}
+                        size={Math.min(props.HU, props.WU * 1.2, 65)}
+                    />
+                </Flex>
+                <Flex flexDir={"row"} w={"100%"}>
                     <Flex
-                        w={`${props.WU * 5}px`}
-                        alignItems={{ base: "flex-start", md: "center" }}
-                        flexDir={{ base: "column", md: "row" }}
-                    >
-                        <Flex
-                            w={{
-                                base: `${props.WU * 3}px`,
-                                md: `${(props.WU / 2) * 3}px`,
-                            }}
-                            maxH={{
-                                base: `${props.HU * 2}px`,
-                                md: `${props.HU}px`,
-                            }}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                        >
-                            <AudioControls
-                                audioPlayer={props.audioPlayer}
-                                WU={props.WU / 4}
-                                HU={props.HU / 4}
-                            />
-                        </Flex>
-                        <Flex
-                            maxH={`${props.HU}px`}
-                            w={{
-                                base: `${props.WU * 5}px`,
-                                md: `${props.WU * 4}px`,
-                            }}
-                            justifyContent={"center"}
-                            flexDir={"column"}
-                        >
-                            <Text
-                                fontSize={{
-                                    base: `${props.WU / 4}px`,
-                                    md: `${props.WU / 8}px`,
-                                }}
-                            >
-                                {currentSong.song}
-                            </Text>
-                            <Text
-                                fontSize={{
-                                    base: `${props.WU / 4}px`,
-                                    md: `${props.WU / 10}px`,
-                                }}
-                                hidden={currentSong.artist === ""}
-                            >
-                                {currentSong.artist}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                    <Link
-                        _hover={{ transform: "scale(1.05)" }}
-                        _active={{ transform: "scale(0.95)" }}
-                        maxW={{
-                            base: `${props.WU * 2}px`,
-                            md: `${props.WU}px`,
+                        maxH={`${props.HU}px`}
+                        w={{
+                            base: `${props.WU * 8.8}px`,
+                            md: `${props.WU * 7.6}px`,
                         }}
-                        href={
-                            props.audioPlayer.playing !== undefined
-                                ? props.audioPlayer.playing.external_urls
-                                      .spotify
-                                : "https://open.spotify.com/"
-                        }
-                        isExternal
+                        justifyContent={"center"}
+                        flexDir={"column"}
                     >
-                        <Flex
-                            w={{
-                                base: `${props.WU * 2}px`,
-                                md: `${props.WU}px`,
+                        <Text
+                            fontSize={{
+                                base: `${props.WU * 0.4}px`,
+                                md: `${props.WU * 0.2}px`,
                             }}
-                            h={"100%"}
-                            justifyContent={"flex-start"}
-                            alignItems={"center"}
-                            pos={"relative"}
                         >
-                            <Image
-                                src={"/spotifyBranding/logos/white.png"}
-                                alt={"Spotify Icon"}
-                                className={"object-contain"}
-                                fill
-                            />
-                        </Flex>
-                    </Link>
+                            {currentSong.song}
+                        </Text>
+                        <Text
+                            fontSize={{
+                                base: `${props.WU * 0.4}px`,
+                                md: `${props.WU * 0.15}px`,
+                            }}
+                            hidden={currentSong.album === ""}
+                            color={"whiteAlpha.700"}
+                        >
+                            {currentSong.album}
+                        </Text>
+                        <Text
+                            fontSize={{
+                                base: `${props.WU * 0.4}px`,
+                                md: `${props.WU * 0.15}px`,
+                            }}
+                            hidden={currentSong.artist === ""}
+                        >
+                            {currentSong.artist}
+                        </Text>
+                    </Flex>
                 </Flex>
             </Flex>
+
             <Flex
                 flexDir={{ base: "column", md: "row" }}
                 justifyContent={{ base: "flex-start", md: "space-around" }}
                 alignItems={{ base: "center", md: "flex-start" }}
                 w={{
                     base: `${props.WU * 9}px`,
-                    md: `${props.WU * 7.5}px`,
+                    md: `${props.WU * 7.8}px`,
                 }}
                 maxH={`${props.HU * 7.5}px`}
-                mt={2}
+                mt={`${props.HU * 0.1}px`}
                 bg={"whiteAlpha.300"}
-                borderRadius={"10px"}
+                borderRadius={{ base: "5px", md: "10px" }}
                 overflowY={"scroll"}
             >
                 {[songs.slice(0, 10), songs.slice(10, 20)].map(
