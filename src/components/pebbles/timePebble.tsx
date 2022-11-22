@@ -23,7 +23,7 @@ export default function TimePebble(props: {
         <Center
             w={`${WU * 10}px`}
             h={`${HU * 10}px`}
-            bottom={`${props.info.pos.y}px`}
+            top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={"15px"}
             boxShadow={"#333 2px 4px 8px"}

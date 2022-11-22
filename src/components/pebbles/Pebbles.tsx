@@ -59,6 +59,7 @@ export default function Pebbles() {
                 minH={Math.max(componentHeight, screen.height)}
                 w={screen.width}
                 pos={"absolute"}
+                top={0}
             >
                 <Hovering {...hoveringState} />
                 <Overlay

@@ -71,7 +71,7 @@ export default function AudioPebble(props: {
             w={`${props.info.dims.width}px`}
             h={`${props.info.dims.height}px`}
             boxShadow={"#333 2px 4px 8px"}
-            bottom={`${props.info.pos.y}px`}
+            top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={"15px"}
             overflow={"hidden"}

@@ -131,15 +131,15 @@ export function usePebbles() {
                     x: 2,
                     y: 1,
                 }),
-                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 1 }),
-                song: getGridItemPosition(pebbleSizes.song, { x: 3, y: 0 }),
-                unique: getGridItemPosition(pebbleSizes.unique, { x: 2, y: 2 }),
-                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
+                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 0 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 3, y: 1 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 2, y: 0 }),
+                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 2 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
                     x: 2,
-                    y: 0,
+                    y: 2,
                 }),
-                time: getGridItemPosition(pebbleSizes.time, { x: 4, y: 2 }),
+                time: getGridItemPosition(pebbleSizes.time, { x: 4, y: 0 }),
             };
             setPebbleState(newPebbleState);
             setComponentHeight(screenHook.height);
@@ -147,22 +147,20 @@ export function usePebbles() {
             const newPebbleState: pebbleObjType = {
                 profile: getGridItemPosition(pebbleSizes.profile, {
                     x: 0,
-                    y: 4,
+                    y: 3,
                 }),
-                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 6 }),
-                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 1 }),
-                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 3 }),
-                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
+                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 0 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 5 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 2 }),
+                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 7 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
                     x: 0,
-                    y: 5,
+                    y: 4,
                 }),
-                time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 4 }),
+                time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 3 }),
             };
             setPebbleState(newPebbleState);
-            setComponentHeight(
-                (gridSize.h + 3) * (padding + gridItemSize) + padding
-            );
+            setComponentHeight(gridSize.h * (padding + gridItemSize) + padding);
         }
     }, [screenHook]);
 

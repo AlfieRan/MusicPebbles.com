@@ -8,6 +8,7 @@ import { useScreen } from "../../utils/hooks/useScreen";
 import ProfileOverlay from "./profileOverlay";
 import UniqueOverlay from "./uniqueOverlay";
 import ArtistOverlay from "./artistOverlay";
+import { Center } from "@chakra-ui/react";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -30,7 +31,7 @@ export function Overlay(props: {
                 {!props.info.hidden && (
                     <motion.div
                         key={"overlayMain"}
-                        className={"fixed z-50 w-fit h-fit max-w-[80%]"}
+                        className={`fixed flex z-50 w-fit h-fit max-w-[100%] max-h-[100%] top-0 md:top-auto`}
                         exit={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         initial={{ scale: 0.5, opacity: 0 }}

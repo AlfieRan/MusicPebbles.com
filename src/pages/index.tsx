@@ -10,6 +10,7 @@ const Page = () => {
 
     useEffect(() => {
         if (profile.profile.profile) {
+            console.log("Redirecting to dashboard, profile: ", profile);
             router.push("/dashboard").catch(console.error);
         }
     }, [profile]);

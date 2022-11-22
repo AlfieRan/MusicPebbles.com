@@ -15,7 +15,12 @@ const Page = () => {
     });
 
     useEffect(() => {
-        if (profileState.error) {
+        if (
+            (profileState.error ||
+                profileState.profile.profile === undefined) &&
+            !profileState.loading
+        ) {
+            console.log("Redirecting to index, profile:", profileState);
             router.push("/").catch(console.error);
         } else if (profileState.profile && curComponent.type !== "main") {
             setCurComponent({
