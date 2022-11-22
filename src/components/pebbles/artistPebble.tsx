@@ -118,7 +118,7 @@ export default function ArtistPebble(props: {
                                     src={artists[0].images[0].url}
                                     alt={"Artist Image"}
                                     width={
-                                        artists[0].images[0].width * WU * 2.4
+                                        artists[0].images[0].width * HU * 2.4
                                     }
                                     height={
                                         artists[0].images[0].height * HU * 2.4
@@ -161,7 +161,7 @@ export default function ArtistPebble(props: {
                                         src={artist.images[0].url}
                                         alt={"Artist Image"}
                                         width={
-                                            artist.images[0].width * WU * 1.2
+                                            artist.images[0].width * HU * 1.2
                                         }
                                         height={
                                             artist.images[0].height * HU * 1.2
@@ -176,12 +176,12 @@ export default function ArtistPebble(props: {
                                     justifyContent={"center"}
                                     overflow={"hidden"}
                                 >
-                                    <Text fontSize={`${HU * 0.35}px`}>
+                                    <Text fontSize={`${WU * 0.35}px`}>
                                         {index + 2}. {artist.name}
                                     </Text>
 
                                     <Text
-                                        fontSize={`${HU * 0.3}px`}
+                                        fontSize={`${WU * 0.3}px`}
                                         color={"whiteAlpha.500"}
                                     >
                                         {artist.genres

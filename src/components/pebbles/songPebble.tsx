@@ -139,12 +139,12 @@ export default function SongPebble(props: {
                                         alt={`${song.name} album art`}
                                         width={
                                             song.album.images[0].width *
-                                            WU *
+                                            HU *
                                             1.4
                                         }
                                         height={
                                             song.album.images[0].width *
-                                            WU *
+                                            HU *
                                             1.4
                                         }
                                     />
@@ -154,8 +154,8 @@ export default function SongPebble(props: {
                                     <Text
                                         fontSize={
                                             song.name.length < 35
-                                                ? `${HU * 0.35}px`
-                                                : `${HU * 0.3}px`
+                                                ? `${WU * 0.35}px`
+                                                : `${WU * 0.3}px`
                                         }
                                     >
                                         {`${i + 1}. ${song.name}`.substring(
@@ -163,7 +163,7 @@ export default function SongPebble(props: {
                                             45
                                         )}
                                     </Text>
-                                    <Text fontSize={`${HU * 0.3}px`}>
+                                    <Text fontSize={`${WU * 0.3}px`}>
                                         {song.artists
                                             .map((artist) => artist.name)
                                             .join(", ")}
@@ -171,8 +171,8 @@ export default function SongPebble(props: {
                                     <Text
                                         fontSize={
                                             song.album.name.length < 35
-                                                ? `${HU * 0.3}px`
-                                                : `${HU * 0.25}px`
+                                                ? `${WU * 0.3}px`
+                                                : `${WU * 0.25}px`
                                         }
                                         color={"whiteAlpha.500"}
                                     >
