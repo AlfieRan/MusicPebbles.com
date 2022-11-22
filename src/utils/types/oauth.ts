@@ -19,6 +19,8 @@ export interface profileFull {
     id: string;
     image_url: string | undefined;
     refresh_token: string;
+    artists: artistApiResponseType;
+    songs: songApiResponseType;
 }
 
 export interface profileType {

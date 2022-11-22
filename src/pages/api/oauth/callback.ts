@@ -16,6 +16,8 @@ import { spotifyWrapRequest } from "../../../server/utils/spotifyApiWrapper";
 import { createLoginCookie } from "../../../server/utils/cookies";
 import { getRedisClient, quitRedis } from "../../../server/utils/redis";
 import Redis from "ioredis";
+import { getArtists } from "../../../server/utils/profileData/artists";
+import { getSongs } from "../../../server/utils/profileData/songs";
 
 // Stages of callback:
 // 1. [Main] get code, state and error from query
@@ -164,6 +166,14 @@ export default async function callback(
             console.log(`[Callback] [${LoggingId}] User profile is valid.`);
 
         // Step 8.
+        const artists = await getArtists(
+            redisClient,
+            accessToken.data.access_token
+        );
+        const songs = await getSongs(
+            redisClient,
+            accessToken.data.access_token
+        );
         const fullProfile: profileFull = {
             display_name: userProfile.data.display_name,
             id: userProfile.data.id,
@@ -172,6 +182,22 @@ export default async function callback(
                     ? userProfile.data.images[0].url
                     : undefined,
             refresh_token: accessToken.data.refresh_token,
+            artists:
+                artists !== undefined
+                    ? artists
+                    : {
+                          short_term: false,
+                          medium_term: false,
+                          long_term: false,
+                      },
+            songs:
+                songs !== undefined
+                    ? songs
+                    : {
+                          short_term: false,
+                          medium_term: false,
+                          long_term: false,
+                      },
         };
 
         if (LOGGING)
@@ -184,7 +210,7 @@ export default async function callback(
         );
         redisClient.setex(
             `spotify:${fullProfile.id}:profile`,
-            3600 * 24 * 7,
+            3600 * 24 * 2,
             JSON.stringify(fullProfile)
         );
 

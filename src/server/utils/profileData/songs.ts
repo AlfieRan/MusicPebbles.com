@@ -11,11 +11,11 @@ import { spotifyWrapRequest } from "../spotifyApiWrapper";
 import Redis from "ioredis";
 
 export async function getSongs(
-    userProfile: profileFull,
-    redisClient: Redis
+    redisClient: Redis,
+    accessToken: string
 ): Promise<undefined | songApiResponseType> {
     try {
-        return await wrapSongsAllTimeFrames(userProfile, redisClient);
+        return await wrapSongsAllTimeFrames(accessToken, redisClient);
     } catch (error) {
         console.log(error);
         const errorObj: ApiError = {
@@ -31,55 +31,28 @@ export async function getSongs(
 }
 
 export async function wrapSongsAllTimeFrames(
-    user: profileFull,
+    accessToken: string,
     redisClient: Redis
 ): Promise<songApiResponseType> {
     return {
-        long_term: await wrapSongs(user, "long_term", redisClient),
-        medium_term: await wrapSongs(user, "medium_term", redisClient),
-        short_term: await wrapSongs(user, "short_term", redisClient),
+        long_term: await getSongApiCall(accessToken, "long_term", redisClient),
+        medium_term: await getSongApiCall(
+            accessToken,
+            "medium_term",
+            redisClient
+        ),
+        short_term: await getSongApiCall(
+            accessToken,
+            "short_term",
+            redisClient
+        ),
     };
 }
-
-async function wrapSongs(
-    user: profileFull,
-    timeFrame: timeFrameType,
-    redisClient: Redis
-): Promise<false | songType[]> {
-    try {
-        return await wrapRedis<false | songType[]>(
-            `spotify:${user.id}:songs:${timeFrame}`,
-            async () => {
-                const songs = await getSongApiCall(
-                    user,
-                    timeFrame,
-                    redisClient
-                );
-                if (songs === false) {
-                    throw Error("Unauthorized");
-                }
-                return songs;
-            },
-            redisClient,
-            86400
-        );
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-}
-
 async function getSongApiCall(
-    user: profileFull,
+    accessToken: string,
     timeFrame: timeFrameType,
     redisClient: Redis
 ): Promise<false | songType[]> {
-    const accessToken = await getAccessCode(user, redisClient);
-
-    if (accessToken === false) {
-        return false;
-    }
-
     const raw = await spotifyWrapRequest<{ items: any[] }>(
         "https://api.spotify.com/v1/me/top/tracks",
         {

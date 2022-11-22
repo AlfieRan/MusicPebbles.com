@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "../../../server/sessions/session";
 import { profileDataType, profileType } from "../../../utils/types/oauth";
 import { getRedisClient, quitRedis } from "../../../server/utils/redis";
-import { getArtists } from "../../../server/utils/profileData/artists";
-import { getSongs } from "../../../server/utils/profileData/songs";
 
 export default async function me(req: NextApiRequest, res: NextApiResponse) {
     const redisClient = getRedisClient();
@@ -23,8 +21,8 @@ export default async function me(req: NextApiRequest, res: NextApiResponse) {
 
         const response: profileDataType = {
             profile: simpleProfile,
-            artists: await getArtists(userProfile, redisClient),
-            songs: await getSongs(userProfile, redisClient),
+            artists: userProfile.artists,
+            songs: userProfile.songs,
         };
 
         res.status(200).json(response);
