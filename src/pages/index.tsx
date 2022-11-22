@@ -9,7 +9,7 @@ const Page = () => {
     const router = useRouter();
 
     useEffect(() => {
-        if (profile.profile) {
+        if (profile.profile.profile) {
             router.push("/dashboard").catch(console.error);
         }
     }, [profile]);
