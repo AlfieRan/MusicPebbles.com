@@ -43,18 +43,18 @@ export default function UniqueOverlay(props: {
                 borderRadius={{ base: "5px", md: "10px" }}
                 bg={"whiteAlpha.300"}
             >
-                <Flex>
+                <Flex flexDir={"row"}>
                     <Flex
                         width={{
-                            base: `${props.WU * 5}px`,
+                            base: `${props.WU * 3}px`,
                             md: `${props.WU * 2}px`,
                         }}
                         height={{
-                            base: `${props.WU * 5}px`,
+                            base: `${props.WU * 3}px`,
                             md: `${props.WU * 2}px`,
                         }}
                         fontSize={{
-                            base: `${props.WU * 5}px`,
+                            base: `${props.WU * 4}px`,
                             md: `${props.WU * 2}px`,
                         }}
                     >
@@ -67,7 +67,9 @@ export default function UniqueOverlay(props: {
                                 props.uniqueness.uniqueness[props.timeFrame]
                                     .colour
                             }
+                            trackColor={"whiteAlpha.400"}
                             size={"full"}
+                            thickness={"8px"}
                         >
                             <CircularProgressLabel>
                                 {
@@ -76,6 +78,39 @@ export default function UniqueOverlay(props: {
                                 }
                             </CircularProgressLabel>
                         </CircularProgress>
+                    </Flex>
+                    <Flex
+                        width={{
+                            base: `${props.WU * 6}px`,
+                            md: `${props.WU * 2.5}px`,
+                        }}
+                        h={"full"}
+                        justifyContent={"center"}
+                        ml={`${props.WU * 0.1}px`}
+                        flexDir={"column"}
+                    >
+                        <Text
+                            fontSize={{
+                                base: `${props.WU * 0.4}px`,
+                                md: `${props.WU * 0.2}px`,
+                            }}
+                            fontWeight={"bold"}
+                        >
+                            Your Uniqueness Rating
+                        </Text>
+                        <Text
+                            fontSize={{
+                                base: `${props.WU * 0.35}px`,
+                                md: `${props.WU * 0.15}px`,
+                            }}
+                            fontWeight={"semibold"}
+                            color={"whiteAlpha.800"}
+                        >
+                            {
+                                props.uniqueness.uniqueness[props.timeFrame]
+                                    .details
+                            }
+                        </Text>
                     </Flex>
                 </Flex>
                 <Flex></Flex>

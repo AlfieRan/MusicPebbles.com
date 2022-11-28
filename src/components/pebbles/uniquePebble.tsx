@@ -1,4 +1,9 @@
-import { Flex, Text } from "@chakra-ui/react";
+import {
+    CircularProgress,
+    CircularProgressLabel,
+    Flex,
+    Text,
+} from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { profileHookType, setHoveringType } from "../../utils/types/state";
 import {
@@ -88,24 +93,30 @@ export default function UniquePebble(props: {
                         alignItems={"center"}
                     >
                         <Flex
-                            flexDir={"row"}
-                            w={`${WU * 2.5}px`}
-                            h={`${WU * 2.55}px`}
-                            borderRadius={"full"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            borderColor={
-                                props.uniqueness.uniqueness[props.time].colour
-                            }
-                            borderWidth={`${WU * 0.1}px`}
+                            width={`${WU * 2.5}px`}
+                            height={`${WU * 2.5}px`}
+                            fontSize={`${WU * 3}px`}
                         >
-                            <Flex justifyContent={"center"} flexDir={"column"}>
-                                <Text textAlign={"center"} fontSize={`${WU}px`}>
-                                    {props.uniqueness.uniqueness[
-                                        props.time
-                                    ].rating.toString()}
-                                </Text>
-                            </Flex>
+                            <CircularProgress
+                                value={
+                                    props.uniqueness.uniqueness[props.time]
+                                        .rating
+                                }
+                                color={
+                                    props.uniqueness.uniqueness[props.time]
+                                        .colour
+                                }
+                                thickness={`${WU * 0.2}px`}
+                                trackColor={"whiteAlpha.400"}
+                                size={"full"}
+                            >
+                                <CircularProgressLabel>
+                                    {
+                                        props.uniqueness.uniqueness[props.time]
+                                            .rating
+                                    }
+                                </CircularProgressLabel>
+                            </CircularProgress>
                         </Flex>
                     </Flex>
                     <Flex
