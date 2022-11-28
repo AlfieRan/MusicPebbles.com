@@ -78,18 +78,25 @@ export function usePebbles() {
     useEffect(() => {
         let gridSize = { w: 5, h: 3 };
         let sizingMode: "width" | "height" = "width";
+        let overflow = false;
         let pebbleSizes = pebbleSizesLarge;
         const padding = Math.max(screenHook.width / 50, 10);
 
-        if (screenHook.width < 600) {
+        if (screenHook.width < screenHook.height) {
+            overflow = true;
             gridSize = { w: 2, h: 10 };
             pebbleSizes = { ...pebbleSizesLarge, ...pebbleOverridesSmall };
         }
-        const gridItemSize =
+        let gridItemSize =
             (screenHook.width - padding * (gridSize.w + 1)) / gridSize.w;
 
         if (screenHook.height / gridSize.h < screenHook.width / gridSize.w) {
             sizingMode = "height";
+        }
+
+        if (gridItemSize * gridSize.h > screenHook.height && !overflow) {
+            gridItemSize =
+                (screenHook.height - padding * (gridSize.h + 1)) / gridSize.h;
         }
 
         function getGridItemPosition(

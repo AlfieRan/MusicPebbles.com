@@ -9,6 +9,7 @@ import ProfileOverlay from "./profileOverlay";
 import UniqueOverlay from "./uniqueOverlay";
 import ArtistOverlay from "./artistOverlay";
 import BugOverlay from "./bugOverlay";
+import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -16,6 +17,7 @@ export function Overlay(props: {
     audioPlayer: audioPlayerType;
     time: timeFrameType;
     profile: profileHookType;
+    uniqueness: useUniquenessType;
 }) {
     const screenHook = useScreen();
     const HU = screenHook.height / 10;
@@ -59,7 +61,13 @@ export function Overlay(props: {
                             />
                         )}
                         {props.info.type === "unique" && (
-                            <UniqueOverlay WU={WU} HU={HU} exit={props.hide} />
+                            <UniqueOverlay
+                                WU={WU}
+                                HU={HU}
+                                exit={props.hide}
+                                uniqueness={props.uniqueness}
+                                timeFrame={props.time}
+                            />
                         )}
                         {props.info.type === "artists" && (
                             <ArtistOverlay

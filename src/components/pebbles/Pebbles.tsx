@@ -16,6 +16,7 @@ import { Overlay } from "../overlay/overlay";
 import { useAudio } from "../../utils/hooks/useAudio";
 import AudioPebble from "./audioPebble";
 import { useProfile } from "../../utils/hooks/useProfile";
+import { useUniqueness } from "../../utils/hooks/useUniqueness";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -29,6 +30,7 @@ export default function Pebbles() {
     const [time, setTime] = useState<timeFrameType>("medium_term");
     const profile = useProfile();
     const audioPlayer = useAudio();
+    const uniqueness = useUniqueness();
 
     useEffect(() => {
         if (profile.profile.songs !== undefined) {
@@ -41,6 +43,12 @@ export default function Pebbles() {
             }
         }
     }, [time, profile.profile.songs]);
+
+    useEffect(() => {
+        if (profile.profile.artists !== undefined) {
+            uniqueness.setArtists(profile.profile.artists);
+        }
+    }, [profile.profile.artists]);
 
     function hideOverlay() {
         setOverlayState({ hidden: true });
@@ -68,6 +76,7 @@ export default function Pebbles() {
                     audioPlayer={audioPlayer}
                     time={time}
                     profile={profile}
+                    uniqueness={uniqueness}
                 />
                 <ProfilePebble
                     info={pebbleState.profile}
@@ -93,6 +102,7 @@ export default function Pebbles() {
                     setHovering={setHoveringState}
                     time={time}
                     setOverlay={setOverlayState}
+                    uniqueness={uniqueness}
                     profile={profile}
                 />
                 <InfoPebble

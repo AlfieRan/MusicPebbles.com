@@ -79,7 +79,7 @@ export default function ArtistOverlay(props: {
                         <ArtistObject
                             artist={artist}
                             rating={index + 11}
-                            key={artist.id}
+                            key={artist.id + "artistOverlayObject"}
                             WU={props.WU}
                         />
                     ))}
@@ -92,13 +92,11 @@ export default function ArtistOverlay(props: {
 function ArtistObject(props: {
     artist: artistType;
     rating: number;
-    key: string;
     WU: number;
 }) {
     return (
         <Flex
             flexDir={"row"}
-            key={props.key}
             bg={"whiteAlpha.200"}
             w={{ base: `${props.WU * 9.2}px`, md: `${props.WU * 4.5}px` }}
             borderRadius={{ base: "5px", md: "10px" }}

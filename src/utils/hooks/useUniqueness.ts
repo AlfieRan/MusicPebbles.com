@@ -43,7 +43,7 @@ const emptyUnqiueObject = {
     ],
 };
 
-export function useUniqueness(): {
+export type useUniquenessType = {
     uniqueness: Uniqueness;
     loading: {
         short_term: boolean;
@@ -51,7 +51,9 @@ export function useUniqueness(): {
         long_term: boolean;
     };
     setArtists: (artists: artistApiResponseType) => void;
-} {
+};
+
+export function useUniqueness(): useUniquenessType {
     const [uniqueness, setUniqueness] = useState<Uniqueness>({
         short_term: emptyUnqiueObject,
         medium_term: emptyUnqiueObject,

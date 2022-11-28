@@ -1,7 +1,10 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { profileHookType, setHoveringType } from "../../utils/types/state";
-import { useUniqueness } from "../../utils/hooks/useUniqueness";
+import {
+    useUniqueness,
+    useUniquenessType,
+} from "../../utils/hooks/useUniqueness";
 import Image from "next/image";
 import {
     artistApiResponseType,
@@ -9,6 +12,7 @@ import {
 } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
+import { Uniqueness } from "../../utils/types/uniqueness";
 
 export default function UniquePebble(props: {
     info: pebblePhysics;
@@ -16,17 +20,10 @@ export default function UniquePebble(props: {
     time: timeFrameType;
     profile: profileHookType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
+    uniqueness: useUniquenessType;
 }) {
-    const uniqueness = useUniqueness();
-
     const HU = props.info.dims.height / 10; // Height Unit
     const WU = props.info.dims.width / 10; // Width Unit
-
-    useEffect(() => {
-        if (props.profile.profile.artists !== undefined) {
-            uniqueness.setArtists(props.profile.profile.artists);
-        }
-    }, [props.profile.profile.artists]);
 
     function openUniqueOverlay() {
         props.setOverlay({
@@ -78,7 +75,7 @@ export default function UniquePebble(props: {
             >
                 Your Uniqueness
             </Text>
-            {!uniqueness.loading[props.time] ? (
+            {!props.uniqueness.loading[props.time] ? (
                 <Flex
                     flexDir={"row"}
                     alignItems={"center"}
@@ -98,13 +95,13 @@ export default function UniquePebble(props: {
                             justifyContent={"center"}
                             alignItems={"center"}
                             borderColor={
-                                uniqueness.uniqueness[props.time].colour
+                                props.uniqueness.uniqueness[props.time].colour
                             }
                             borderWidth={`${WU * 0.1}px`}
                         >
                             <Flex justifyContent={"center"} flexDir={"column"}>
                                 <Text textAlign={"center"} fontSize={`${WU}px`}>
-                                    {uniqueness.uniqueness[
+                                    {props.uniqueness.uniqueness[
                                         props.time
                                     ].rating.toString()}
                                 </Text>
@@ -120,7 +117,7 @@ export default function UniquePebble(props: {
                         alignItems={"center"}
                     >
                         <Flex flexDir={"row"} justifyContent={"space-evenly"}>
-                            {uniqueness.uniqueness[props.time].artists
+                            {props.uniqueness.uniqueness[props.time].artists
                                 .slice(0, 3)
                                 .map((artist, index) => (
                                     <Flex
