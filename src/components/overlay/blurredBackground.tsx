@@ -6,9 +6,10 @@ import { setupKeyPresses } from "../../utils/other/usability";
 export default function BlurredBackground(props: {
     hidden: boolean;
     hide: (value?: boolean) => void;
+    simple: boolean;
 }) {
     useEffect(() => {
-        return setupKeyPresses(() => props.hide(false));
+        return setupKeyPresses(() => props.hide(false), props.simple);
     }, []);
 
     return (

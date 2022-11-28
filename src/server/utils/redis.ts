@@ -25,19 +25,6 @@ export function getRedisClient() {
     });
 }
 
-export async function wrapRedis<T>(
-    key: string,
-    fn: () => Promise<T>,
-    redis: Redis,
-    seconds: number = 3600
-): Promise<T> {
-    const cached = await redis.get(key);
-    if (cached) return JSON.parse(cached);
-    const recent = await fn();
-    await redis.setex(key, seconds, JSON.stringify(recent));
-    return recent;
-}
-
 export function quitRedis(redisConnection: Redis) {
     try {
         redisConnection.quit();

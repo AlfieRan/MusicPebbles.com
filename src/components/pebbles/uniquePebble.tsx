@@ -57,7 +57,7 @@ export default function UniquePebble(props: {
                 props.setHovering({
                     hovering: true,
                     type: "text",
-                    text: "How unique is your taste?",
+                    text: "How unique is your music taste?",
                     x: "left",
                     y: "bottom",
                 });

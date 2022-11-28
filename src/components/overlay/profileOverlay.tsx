@@ -86,7 +86,7 @@ export default function ProfileOverlay(props: {
                                 bg: "whiteAlpha.100",
                                 transform: "scale(0.98)",
                             }}
-                            href={"https://monzo.me/alfieranstead"}
+                            href={"https://www.buymeacoffee.com/alfieranstead"}
                             isExternal
                         >
                             <Text textAlign={"center"}>Donate 🔥</Text>

@@ -23,6 +23,11 @@ export interface profileComponentOverlay {
     type: "profile";
 }
 
+export interface bugComponentOverlay {
+    hidden: false;
+    type: "bug";
+}
+
 export interface hiddenOverlay {
     hidden: true;
 }
@@ -32,4 +37,5 @@ export type overlayStateType =
     | artistComponentOverlay
     | uniqueComponentOverlay
     | profileComponentOverlay
+    | bugComponentOverlay
     | hiddenOverlay;

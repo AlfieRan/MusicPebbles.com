@@ -1,8 +1,12 @@
 const escapeKeys = ["Escape", "Esc", "Space", "Enter", " ", ""];
+const simpleKeys = ["Escape", "Esc"];
 
-export function setupKeyPresses(hideComponent: (value?: boolean) => void) {
+export function setupKeyPresses(
+    hideComponent: (value?: boolean) => void,
+    simple: boolean
+) {
     function handleKeyPress(e: KeyboardEvent) {
-        if (escapeKeys.includes(e.key)) {
+        if (checkKey(e.key, simple)) {
             hideComponent(true);
         }
     }
@@ -10,4 +14,13 @@ export function setupKeyPresses(hideComponent: (value?: boolean) => void) {
     return () => {
         document.removeEventListener("keydown", handleKeyPress);
     };
+}
+
+function checkKey(key: string, simple: boolean) {
+    if (simple) {
+        console.log("simple");
+        return simpleKeys.includes(key);
+    }
+    console.log("not simple");
+    return escapeKeys.includes(key);
 }

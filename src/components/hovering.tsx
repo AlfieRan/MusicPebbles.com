@@ -8,7 +8,7 @@ export default function Hovering(props: hoveringType) {
     const { mouse } = useMouse();
     const screen = useScreen();
 
-    if (screen.width < 500) {
+    if (screen.width < screen.height) {
         // Don't show on mobile, can cause weird bugs
         return <></>;
     }
@@ -18,7 +18,7 @@ export default function Hovering(props: hoveringType) {
             {props.hovering && (
                 <motion.div
                     className={
-                        "bg-MidGrey absolute w-fit h-fit pointer-events-none z-40 m-1 overflow-hidden whitespace-nowrap"
+                        "absolute w-fit h-fit pointer-events-none z-40 m-1 overflow-hidden whitespace-nowrap p-[2px] rounded-lg"
                     }
                     style={{
                         x: mouse.x,
@@ -33,8 +33,35 @@ export default function Hovering(props: hoveringType) {
                     initial={{ scale: 0.5, opacity: 0 }}
                     transition={{ duration: 0.15 }}
                 >
-                    <Flex bg={"MidGrey"} px={5} py={3} borderRadius={"lg"}>
-                        {props.type === "text" && <Text>{props.text}</Text>}
+                    <Flex
+                        className={"absolute inset-0 blur-sm"}
+                        bg={"whiteAlpha.500"}
+                        borderRadius={"lg"}
+                    />
+                    <Flex
+                        bg={"MidGrey"}
+                        pos={"relative"}
+                        px={5}
+                        py={3}
+                        borderRadius={"lg"}
+                        zIndex={1}
+                    >
+                        {props.type === "text" && (
+                            <Flex
+                                maxW={`${Math.min(screen.width * 0.9, 400)}px`}
+                                minW={`${Math.min(
+                                    400,
+                                    props.text.length * 8
+                                )}px`}
+                            >
+                                <Text
+                                    fontSize={"md"}
+                                    whiteSpace={"break-spaces"}
+                                >
+                                    {props.text}
+                                </Text>
+                            </Flex>
+                        )}
                         {props.type === "component" && <>{props.component}</>}
                     </Flex>
                 </motion.div>

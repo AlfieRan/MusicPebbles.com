@@ -8,6 +8,7 @@ import { useScreen } from "../../utils/hooks/useScreen";
 import ProfileOverlay from "./profileOverlay";
 import UniqueOverlay from "./uniqueOverlay";
 import ArtistOverlay from "./artistOverlay";
+import BugOverlay from "./bugOverlay";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -26,6 +27,7 @@ export function Overlay(props: {
                 <BlurredBackground
                     hidden={props.info.hidden}
                     hide={props.hide}
+                    simple={!props.info.hidden && props.info.type === "bug"}
                 />
                 {!props.info.hidden && (
                     <motion.div
@@ -60,7 +62,16 @@ export function Overlay(props: {
                             <UniqueOverlay WU={WU} HU={HU} exit={props.hide} />
                         )}
                         {props.info.type === "artists" && (
-                            <ArtistOverlay WU={WU} HU={HU} exit={props.hide} />
+                            <ArtistOverlay
+                                WU={WU}
+                                HU={HU}
+                                exit={props.hide}
+                                profile={props.profile}
+                                timeFrame={props.time}
+                            />
+                        )}
+                        {props.info.type === "bug" && (
+                            <BugOverlay HU={HU} WU={WU} exit={props.hide} />
                         )}
                     </motion.div>
                 )}

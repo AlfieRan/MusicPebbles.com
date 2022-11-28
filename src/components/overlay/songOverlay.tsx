@@ -85,6 +85,7 @@ export default function SongOverlay(props: {
                         }}
                         justifyContent={"center"}
                         flexDir={"column"}
+                        my={1}
                     >
                         <Text
                             fontSize={{
@@ -137,7 +138,7 @@ export default function SongOverlay(props: {
                             key={packetIndex + "SongOverlayPacket"}
                             w={{
                                 base: `${props.WU * 8.5}px`,
-                                md: `${props.WU * 3.5}px`,
+                                md: `${props.WU * 3.8}px`,
                             }}
                             h={"fit-content"}
                             py={"5px"}
@@ -154,9 +155,9 @@ export default function SongOverlay(props: {
                                     }
                                     bg={"blackAlpha.400"}
                                     borderRadius={"10px"}
-                                    my={1}
-                                    py={`${props.WU * 0.15}px`}
-                                    px={`${props.WU * 0.2}px`}
+                                    my={0.5}
+                                    py={`${props.WU * 0.1}px`}
+                                    px={`${props.WU * 0.12}px`}
                                     flexDir={"row"}
                                     alignItems={"center"}
                                     justifyContent={"space-between"}

@@ -95,7 +95,11 @@ export default function Pebbles() {
                     setOverlay={setOverlayState}
                     profile={profile}
                 />
-                <InfoPebble info={pebbleState.genre} />
+                <InfoPebble
+                    info={pebbleState.genre}
+                    setHovering={setHoveringState}
+                    setOverlay={setOverlayState}
+                />
                 <TimePebble
                     info={pebbleState.time}
                     setHovering={setHoveringState}
