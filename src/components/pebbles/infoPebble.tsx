@@ -58,7 +58,10 @@ export default function InfoPebble(props: {
                         justifyContent={"center"}
                     >
                         <Text
-                            fontSize={`${HU * 0.75}px`}
+                            fontSize={{
+                                base: `${HU * 0.8}px`,
+                                md: `${HU * 0.75}px`,
+                            }}
                             textAlign={"center"}
                             fontWeight={"semibold"}
                         >
@@ -99,7 +102,10 @@ export default function InfoPebble(props: {
                         justifyContent={"center"}
                     >
                         <Text
-                            fontSize={`${HU * 0.75}px`}
+                            fontSize={{
+                                base: `${HU * 0.8}px`,
+                                md: `${HU * 0.75}px`,
+                            }}
                             textAlign={"center"}
                             fontWeight={"semibold"}
                         >
@@ -114,10 +120,12 @@ export default function InfoPebble(props: {
                 textAlign={"center"}
                 mt={`${HU * 0.1}px`}
             >
-                <Text fontSize={`${HU * 0.7}px`}>
+                <Text fontSize={{ base: `${HU * 0.9}px`, md: `${HU * 0.7}px` }}>
                     An Alfie Ranstead Project
                 </Text>
-                <Text fontSize={`${HU * 0.5}px`}>
+                <Text
+                    fontSize={{ base: `${HU * 0.65}px`, md: `${HU * 0.5}px` }}
+                >
                     Not affiliated with Spotify
                 </Text>
             </Flex>

@@ -56,7 +56,7 @@ export default function SongOverlay(props: {
                 w={"100%"}
                 flexDir={"column"}
                 bg={"whiteAlpha.300"}
-                p={`${props.WU * 0.1}px`}
+                p={{ base: `${props.WU * 0.25}px`, md: `${props.WU * 0.1}px` }}
                 borderRadius={{ base: "5px", md: "10px" }}
             >
                 <Flex
@@ -81,7 +81,7 @@ export default function SongOverlay(props: {
                         maxH={`${props.HU}px`}
                         w={{
                             base: `${props.WU * 8.8}px`,
-                            md: `${props.WU * 7.6}px`,
+                            md: `${props.WU * 7.4}px`,
                         }}
                         justifyContent={"center"}
                         flexDir={"column"}
@@ -90,7 +90,7 @@ export default function SongOverlay(props: {
                         <Text
                             fontSize={{
                                 base: `${props.WU * 0.4}px`,
-                                md: `${props.WU * 0.2}px`,
+                                md: `${props.WU * 0.16}px`,
                             }}
                         >
                             {currentSong.song}
@@ -98,7 +98,7 @@ export default function SongOverlay(props: {
                         <Text
                             fontSize={{
                                 base: `${props.WU * 0.4}px`,
-                                md: `${props.WU * 0.15}px`,
+                                md: `${props.WU * 0.12}px`,
                             }}
                             hidden={currentSong.album === ""}
                             color={"whiteAlpha.700"}
@@ -108,7 +108,7 @@ export default function SongOverlay(props: {
                         <Text
                             fontSize={{
                                 base: `${props.WU * 0.4}px`,
-                                md: `${props.WU * 0.15}px`,
+                                md: `${props.WU * 0.14}px`,
                             }}
                             hidden={currentSong.artist === ""}
                         >

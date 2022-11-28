@@ -7,7 +7,7 @@ export function Main() {
         <Center h={"full"} w={"full"} flexDir={"column"} overflow={"hidden"}>
             <motion.div
                 className={
-                    "flex overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
+                    "flex absolute overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
                 }
                 animate={{
                     scale: [5, 1.3, 1.5, 1.5, 0],
@@ -35,9 +35,7 @@ export function Main() {
                 <Text>Pebbles</Text>
             </motion.div>
             <motion.div
-                className={
-                    "flex absolute w-fit h-fit justify-center items-center z-1"
-                }
+                className={"flex w-fit h-fit justify-center items-center z-1"}
                 animate={{
                     scale: [0, 1.05, 1],
                     opacity: [0, 1, 1],

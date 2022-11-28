@@ -85,19 +85,12 @@ export function usePebbles() {
             gridSize = { w: 2, h: 10 };
             pebbleSizes = { ...pebbleSizesLarge, ...pebbleOverridesSmall };
         }
-        const gridItemSize = (() => {
-            if (
-                screenHook.height / gridSize.h >
-                screenHook.width / gridSize.w
-            ) {
-                return (
-                    (screenHook.width - padding * (gridSize.w + 1)) / gridSize.w
-                );
-            }
+        const gridItemSize =
+            (screenHook.width - padding * (gridSize.w + 1)) / gridSize.w;
+
+        if (screenHook.height / gridSize.h < screenHook.width / gridSize.w) {
             sizingMode = "height";
-            const h = Math.min(maxHeight, gridSize.h);
-            return (screenHook.height - padding * (h + 1)) / h;
-        })();
+        }
 
         function getGridItemPosition(
             gridItem: { width: number; height: number },

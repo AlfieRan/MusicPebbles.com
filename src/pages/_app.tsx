@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <ChakraProvider theme={theme}>
                 <Flex
                     w={"100%"}
-                    h={"100vh"}
+                    h={"fit-content"}
                     overflow={"hidden"}
                     minH={0}
                     bgGradient={"linear(to-br, MidBlue, MidGreen)"}

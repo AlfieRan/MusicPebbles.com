@@ -3,7 +3,11 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { profileHookType } from "../../utils/types/state";
-import { artistsType, timeFrameType } from "../../utils/types/spotify";
+import {
+    artistsType,
+    artistType,
+    timeFrameType,
+} from "../../utils/types/spotify";
 import { overlayStateType } from "../../utils/types/overlay";
 
 export default function ArtistPebble(props: {
@@ -125,8 +129,7 @@ export default function ArtistPebble(props: {
                                     1. {artists[0].name}
                                 </Text>
                                 <Text fontSize={"sm"} color={"whiteAlpha.500"}>
-                                    {artists[0].genres.slice(0, 3).join(", ")}
-                                    ...
+                                    {getArtistGenres(artists[0])}
                                 </Text>
                             </Flex>
                         </Flex>
@@ -171,11 +174,7 @@ export default function ArtistPebble(props: {
                                         fontSize={`${WU * 0.3}px`}
                                         color={"whiteAlpha.500"}
                                     >
-                                        {artist.genres
-                                            .slice(0, 2)
-                                            .join(", ")
-                                            .substring(0, 40)}
-                                        ...
+                                        {getArtistGenres(artist)}
                                     </Text>
                                 </Flex>
                             </Flex>
@@ -200,4 +199,21 @@ export default function ArtistPebble(props: {
             </Text>
         </Flex>
     );
+}
+
+export function getArtistGenres(artist: artistType) {
+    let genreString = "";
+    if (artist.genres.length === 0) {
+        return "This artist has no known genres";
+    } else if (artist.genres.length < 4) {
+        genreString = artist.genres.join(", ");
+    } else {
+        genreString = artist.genres.slice(0, 3).join(", ") + "...";
+    }
+
+    if (genreString.length > 30) {
+        genreString = genreString.substring(0, 30) + "...";
+    }
+
+    return genreString;
 }
