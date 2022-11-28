@@ -3,10 +3,12 @@ import { useProfile } from "../utils/hooks/useProfile";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useScreen } from "../utils/hooks/useScreen";
 
 const Page = () => {
     const profile = useProfile();
     const router = useRouter();
+    const screenHook = useScreen();
 
     useEffect(() => {
         if (profile.profile.profile) {
@@ -17,7 +19,8 @@ const Page = () => {
 
     return (
         <Flex
-            h={"100%"}
+            h={`${screenHook.height}px`}
+            minH={"70vh"}
             w={"100%"}
             flexDir={"column"}
             justifyContent={"space-between"}
