@@ -94,7 +94,10 @@ export function usePebbles() {
             sizingMode = "height";
         }
 
-        if (gridItemSize * gridSize.h > screenHook.height && !overflow) {
+        if (
+            gridItemSize * (gridSize.h + padding) > screenHook.height &&
+            !overflow
+        ) {
             gridItemSize =
                 (screenHook.height - padding * (gridSize.h + 1)) / gridSize.h;
         }
