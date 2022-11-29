@@ -142,6 +142,7 @@ export default function UniquePebble(props: {
                                             Math.random()
                                         }
                                         flexDir={"column"}
+                                        pointerEvents={"none"}
                                     >
                                         <Image
                                             src={artist.artist.images[0].url}

@@ -67,6 +67,7 @@ export function Overlay(props: {
                                 exit={props.hide}
                                 uniqueness={props.uniqueness}
                                 timeFrame={props.time}
+                                profile={props.profile}
                             />
                         )}
                         {props.info.type === "artists" && (
