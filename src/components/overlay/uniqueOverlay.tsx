@@ -9,6 +9,11 @@ import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 import { timeFrameType } from "../../utils/types/spotify";
 import { profileHookType } from "../../utils/types/state";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { sleep } from "../../utils/other/time";
+
+const timeQuadraticAdjustment = 2; // must be between 0 and 2
+const timeQuadraticAdjustment2 = (1 - timeQuadraticAdjustment) / 100;
 
 export default function UniqueOverlay(props: {
     HU: number;
@@ -18,6 +23,43 @@ export default function UniqueOverlay(props: {
     timeFrame: timeFrameType;
     profile: profileHookType;
 }) {
+    const [ratingNum, setRatingNum] = useState<number>(0);
+
+    function calcSleepTime(a: number, b: number) {
+        // inversed normalised difference
+        const dif = Math.abs(a - b);
+        const alteredDif =
+            dif * timeQuadraticAdjustment + dif ** 2 * timeQuadraticAdjustment2;
+        return 1 - alteredDif / 100;
+    }
+
+    async function changeRating(target: number, time: number) {
+        let continueLoop = true;
+        let sleepTime = 0;
+        while (continueLoop) {
+            setRatingNum((prev) => {
+                sleepTime = calcSleepTime(prev, target) * time;
+                if (prev < target) {
+                    return prev + 1;
+                } else if (prev > target) {
+                    return prev - 1;
+                } else {
+                    continueLoop = false;
+                    return prev;
+                }
+            });
+            await sleep(sleepTime);
+        }
+    }
+
+    useEffect(() => {
+        sleep(250).then(() => {
+            const newRating =
+                props.uniqueness.uniqueness[props.timeFrame].rating;
+            changeRating(newRating, 150).catch(console.error);
+        });
+    }, [props.uniqueness.uniqueness]);
+
     return (
         <Flex
             flexDir={"column"}
@@ -69,10 +111,7 @@ export default function UniqueOverlay(props: {
                             }}
                         >
                             <CircularProgress
-                                value={
-                                    props.uniqueness.uniqueness[props.timeFrame]
-                                        .rating
-                                }
+                                value={ratingNum}
                                 color={
                                     props.uniqueness.uniqueness[props.timeFrame]
                                         .colour
@@ -80,13 +119,10 @@ export default function UniqueOverlay(props: {
                                 trackColor={"whiteAlpha.400"}
                                 size={"full"}
                                 thickness={"8px"}
+                                transition={"all 0.01s ease-in-out"}
                             >
                                 <CircularProgressLabel>
-                                    {
-                                        props.uniqueness.uniqueness[
-                                            props.timeFrame
-                                        ].rating
-                                    }
+                                    {ratingNum}
                                 </CircularProgressLabel>
                             </CircularProgress>
                         </Flex>
