@@ -25,7 +25,7 @@ export default function TimePebble(props: {
             h={`${HU * 10}px`}
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
-            borderRadius={"15px"}
+            borderRadius={`${HU * 0.75}px`}
             boxShadow={"#333 2px 4px 8px"}
             overflow={"hidden"}
             bg={"blackAlpha.600"}
@@ -36,8 +36,8 @@ export default function TimePebble(props: {
                 flexDir={"column"}
                 w={"100%"}
                 h={"100%"}
-                p={2}
-                px={4}
+                py={`${HU * 0.5}px`}
+                px={`${HU * 1}px`}
                 justifyContent={"center"}
             >
                 {timeOptions.map((timeOption) => (
@@ -49,6 +49,7 @@ export default function TimePebble(props: {
                         _active={{ bg: "DarkBlue" }}
                         onClick={() => props.setTime(timeOption)}
                         fontSize={`${WU * 0.9}`}
+                        borderRadius={`${HU * 0.5}px`}
                     >
                         <Text>{wrapTimeString(timeOption)}</Text>
                     </Button>

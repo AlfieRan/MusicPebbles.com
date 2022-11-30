@@ -119,8 +119,9 @@ export default function SongOverlay(props: {
             </Flex>
 
             <Flex
-                flexDir={{ base: "column", md: "row" }}
-                justifyContent={{ base: "flex-start", md: "space-around" }}
+                flexDir={"row"}
+                wrap={"wrap"}
+                justifyContent={"space-around"}
                 alignItems={{ base: "center", md: "flex-start" }}
                 w={{
                     base: `${props.WU * 9}px`,
@@ -128,208 +129,189 @@ export default function SongOverlay(props: {
                 }}
                 maxH={`${props.HU * 7.5}px`}
                 mt={`${props.HU * 0.1}px`}
+                py={`${props.HU * 0.1}px`}
                 bg={"whiteAlpha.300"}
                 borderRadius={{ base: "5px", md: "10px" }}
                 overflowY={"scroll"}
             >
-                {[songs.slice(0, 10), songs.slice(10, 20)].map(
-                    (songPacket, packetIndex) => (
-                        <Flex
-                            key={packetIndex + "SongOverlayPacket"}
-                            w={{
-                                base: `${props.WU * 8.5}px`,
-                                md: `${props.WU * 3.8}px`,
-                            }}
-                            h={"fit-content"}
-                            py={"5px"}
-                            mb={{ base: "0px", md: "10px" }}
-                            flexDir={"column"}
-                        >
-                            {songPacket.map((song, songIndex) => (
-                                <Flex
-                                    key={
-                                        "SongOverlayPacket" +
-                                        packetIndex +
-                                        "Song" +
-                                        song.id
+                {songs.slice(0, 20).map((song, songIndex) => (
+                    <Flex
+                        key={"SongOverlay" + songIndex + "Song" + song.id}
+                        bg={"blackAlpha.400"}
+                        borderRadius={"10px"}
+                        w={{
+                            base: `${props.WU * 8.8}px`,
+                            md: `${props.WU * 3.8}px`,
+                        }}
+                        px={{
+                            base: `${props.WU * 0.15}px`,
+                            md: `${props.WU * 0.075}px`,
+                        }}
+                        py={{
+                            base: `${props.WU * 0.15}px`,
+                            md: `${props.WU * 0.075}px`,
+                        }}
+                        my={{
+                            base: `${props.WU * 0.075}px`,
+                            md: `${props.WU * 0.025}px`,
+                        }}
+                        mx={`${props.WU * 0.05}px`}
+                        flexDir={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                    >
+                        <Flex w={`${props.WU * 7}px`}>
+                            <Flex
+                                overflow={"hidden"}
+                                borderRadius={`${Math.min(
+                                    props.WU * 0.1,
+                                    5
+                                )}px`}
+                                height={"auto"}
+                                w={{
+                                    base: `${
+                                        props.WU *
+                                        2 *
+                                        song.album.images[0].width
+                                    }px`,
+                                    md: `${
+                                        props.WU *
+                                        0.5 *
+                                        song.album.images[0].width
+                                    }px`,
+                                }}
+                                h={{
+                                    base: `${
+                                        props.WU *
+                                        2 *
+                                        song.album.images[0].width
+                                    }px`,
+                                    md: `${
+                                        props.WU *
+                                        0.5 *
+                                        song.album.images[0].height
+                                    }px`,
+                                }}
+                            >
+                                <Image
+                                    src={song.album.images[0].url}
+                                    alt={"Album Cover for " + song.name}
+                                    width={
+                                        props.WU *
+                                        2 *
+                                        song.album.images[0].width
                                     }
-                                    bg={"blackAlpha.400"}
-                                    borderRadius={"10px"}
-                                    my={0.5}
-                                    py={`${props.WU * 0.1}px`}
-                                    px={`${props.WU * 0.12}px`}
-                                    flexDir={"row"}
-                                    alignItems={"center"}
-                                    justifyContent={"space-between"}
+                                    height={
+                                        props.WU *
+                                        2 *
+                                        song.album.images[0].height
+                                    }
+                                />
+                            </Flex>
+                            <Flex
+                                ml={`${props.WU / 10}px`}
+                                maxW={{
+                                    base: `${props.WU * 4.75}px`,
+                                    md: `${props.WU * 5}px`,
+                                }}
+                                flexDir={"column"}
+                            >
+                                <Text
+                                    fontSize={{
+                                        base: `${props.WU / 3.2}px`,
+                                        md: `${props.WU / 9}px`,
+                                    }}
                                 >
-                                    <Flex w={`${props.WU * 7}px`}>
-                                        <Flex
-                                            overflow={"hidden"}
-                                            borderRadius={`${Math.min(
-                                                props.WU * 0.1,
-                                                5
-                                            )}px`}
-                                            height={"auto"}
-                                            w={{
-                                                base: `${
-                                                    props.WU *
-                                                    2 *
-                                                    song.album.images[0].width
-                                                }px`,
-                                                md: `${
-                                                    props.WU *
-                                                    0.5 *
-                                                    song.album.images[0].width
-                                                }px`,
-                                            }}
-                                            h={{
-                                                base: `${
-                                                    props.WU *
-                                                    2 *
-                                                    song.album.images[0].width
-                                                }px`,
-                                                md: `${
-                                                    props.WU *
-                                                    0.5 *
-                                                    song.album.images[0].height
-                                                }px`,
-                                            }}
-                                        >
-                                            <Image
-                                                src={song.album.images[0].url}
-                                                alt={
-                                                    "Album Cover for " +
-                                                    song.name
-                                                }
-                                                width={
-                                                    props.WU *
-                                                    2 *
-                                                    song.album.images[0].width
-                                                }
-                                                height={
-                                                    props.WU *
-                                                    2 *
-                                                    song.album.images[0].height
-                                                }
-                                            />
-                                        </Flex>
-                                        <Flex
-                                            ml={`${props.WU / 10}px`}
-                                            maxW={{
-                                                base: `${props.WU * 4.75}px`,
-                                                md: `${props.WU * 5}px`,
-                                            }}
-                                            flexDir={"column"}
-                                        >
-                                            <Text
-                                                fontSize={{
-                                                    base: `${props.WU / 3.2}px`,
-                                                    md: `${props.WU / 9}px`,
-                                                }}
-                                            >
-                                                {`${
-                                                    packetIndex * 10 +
-                                                    songIndex +
-                                                    1
-                                                }. ${song.name}`}
-                                            </Text>
-                                            <Text
-                                                fontSize={{
-                                                    base: `${props.WU / 3.5}px`,
-                                                    md: `${props.WU / 10}px`,
-                                                }}
-                                                color={"whiteAlpha.700"}
-                                            >
-                                                {song.album.name}
-                                            </Text>
-                                            <Text
-                                                fontSize={{
-                                                    base: `${props.WU / 3.5}px`,
-                                                    md: `${props.WU / 10}px`,
-                                                }}
-                                            >
-                                                {song.artists
-                                                    .map(
-                                                        (artist) => artist.name
-                                                    )
-                                                    .join(", ")}
-                                            </Text>
-                                        </Flex>
-                                    </Flex>
-                                    <Flex
-                                        flexDir={"column"}
-                                        w={{
-                                            base: `${props.WU * 0.75}px`,
-                                            md: `${props.WU * 0.2}px`,
-                                        }}
-                                    >
-                                        <Center
-                                            bg={""}
-                                            p={0}
-                                            h={{
-                                                base: `${props.WU * 0.75}px`,
-                                                md: `${props.WU * 0.2}px`,
-                                            }}
-                                            w={{
-                                                base: `${props.WU * 0.75}px`,
-                                                md: `${props.WU * 0.2}px`,
-                                            }}
-                                            mb={`${props.WU * 0.05}px`}
-                                            _hover={{
-                                                transform: "scale(1.1)",
-                                            }}
-                                            _active={{
-                                                transform: "scale(0.9)",
-                                            }}
-                                            cursor={"pointer"}
-                                            onClick={() => {
-                                                props.audioPlayer.setSong(song);
-                                            }}
-                                        >
-                                            <Text
-                                                fontSize={{
-                                                    base: `${
-                                                        props.WU * 0.75
-                                                    }px`,
-                                                    md: `${props.WU * 0.2}px`,
-                                                }}
-                                            >
-                                                {"▶︎"}
-                                            </Text>
-                                        </Center>
-                                        <Link
-                                            href={song.external_urls.spotify}
-                                            _hover={{
-                                                transform: "scale(1.1)",
-                                            }}
-                                            _active={{
-                                                transform: "scale(0.9)",
-                                            }}
-                                            h={{
-                                                base: `${props.WU * 0.75}px`,
-                                                md: `${props.WU * 0.2}px`,
-                                            }}
-                                            w={{
-                                                base: `${props.WU * 0.75}px`,
-                                                md: `${props.WU * 0.2}px`,
-                                            }}
-                                            isExternal
-                                        >
-                                            <Image
-                                                src={
-                                                    "/spotifyBranding/icons/white.png"
-                                                }
-                                                alt={"Spotify Icon"}
-                                                width={props.WU}
-                                                height={props.WU}
-                                            />
-                                        </Link>
-                                    </Flex>
-                                </Flex>
-                            ))}
+                                    {`${songIndex + 1}. ${song.name}`}
+                                </Text>
+                                <Text
+                                    fontSize={{
+                                        base: `${props.WU / 3.5}px`,
+                                        md: `${props.WU / 10}px`,
+                                    }}
+                                    color={"whiteAlpha.700"}
+                                >
+                                    {song.album.name}
+                                </Text>
+                                <Text
+                                    fontSize={{
+                                        base: `${props.WU / 3.5}px`,
+                                        md: `${props.WU / 10}px`,
+                                    }}
+                                >
+                                    {song.artists
+                                        .map((artist) => artist.name)
+                                        .join(", ")}
+                                </Text>
+                            </Flex>
                         </Flex>
-                    )
-                )}
+                        <Flex
+                            flexDir={"column"}
+                            w={{
+                                base: `${props.WU * 0.75}px`,
+                                md: `${props.WU * 0.2}px`,
+                            }}
+                        >
+                            <Center
+                                bg={""}
+                                p={0}
+                                h={{
+                                    base: `${props.WU * 0.75}px`,
+                                    md: `${props.WU * 0.2}px`,
+                                }}
+                                w={{
+                                    base: `${props.WU * 0.75}px`,
+                                    md: `${props.WU * 0.2}px`,
+                                }}
+                                mb={`${props.WU * 0.05}px`}
+                                _hover={{
+                                    transform: "scale(1.1)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.9)",
+                                }}
+                                cursor={"pointer"}
+                                onClick={() => {
+                                    props.audioPlayer.setSong(song);
+                                }}
+                            >
+                                <Text
+                                    fontSize={{
+                                        base: `${props.WU * 0.75}px`,
+                                        md: `${props.WU * 0.2}px`,
+                                    }}
+                                >
+                                    {"▶︎"}
+                                </Text>
+                            </Center>
+                            <Link
+                                href={song.external_urls.spotify}
+                                _hover={{
+                                    transform: "scale(1.1)",
+                                }}
+                                _active={{
+                                    transform: "scale(0.9)",
+                                }}
+                                h={{
+                                    base: `${props.WU * 0.75}px`,
+                                    md: `${props.WU * 0.2}px`,
+                                }}
+                                w={{
+                                    base: `${props.WU * 0.75}px`,
+                                    md: `${props.WU * 0.2}px`,
+                                }}
+                                isExternal
+                            >
+                                <Image
+                                    src={"/spotifyBranding/icons/white.png"}
+                                    alt={"Spotify Icon"}
+                                    width={props.WU}
+                                    height={props.WU}
+                                />
+                            </Link>
+                        </Flex>
+                    </Flex>
+                ))}
             </Flex>
         </Flex>
     );

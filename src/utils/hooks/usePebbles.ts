@@ -95,7 +95,8 @@ export function usePebbles() {
         }
 
         if (
-            gridItemSize * (gridSize.h + padding) > screenHook.height &&
+            gridSize.h * (gridItemSize + padding) + padding >
+                screenHook.height &&
             !overflow
         ) {
             gridItemSize =
@@ -133,6 +134,7 @@ export function usePebbles() {
             const height =
                 gridItem.height * gridItemSize +
                 padding * (gridItem.height - 1);
+            console.log("gridItem size:", gridItemSize, "width:", width);
             return { dims: { width, height }, pos: { x, y } };
         }
 

@@ -59,7 +59,7 @@ export default function ArtistPebble(props: {
             h={`${props.info.dims.height}px`}
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
-            borderRadius={"15px"}
+            borderRadius={`${HU * 0.375}px`}
             boxShadow={"#333 2px 4px 8px"}
             py={`${HU * 0.25}px`}
             px={`${WU * 0.25}px`}
@@ -125,10 +125,13 @@ export default function ArtistPebble(props: {
                                 justifyContent={"center"}
                                 overflow={"hidden"}
                             >
-                                <Text fontSize={"md"}>
+                                <Text fontSize={`${WU * 0.5}px`}>
                                     1. {artists[0].name}
                                 </Text>
-                                <Text fontSize={"sm"} color={"whiteAlpha.500"}>
+                                <Text
+                                    fontSize={`${WU * 0.33}px`}
+                                    color={"whiteAlpha.500"}
+                                >
                                     {getArtistGenres(artists[0])}
                                 </Text>
                             </Flex>
@@ -162,7 +165,8 @@ export default function ArtistPebble(props: {
                                     ml={3}
                                     flexDir={"column"}
                                     maxW={"70%"}
-                                    h={HU}
+                                    maxH={"100%"}
+                                    h={`${HU}px`}
                                     justifyContent={"center"}
                                     overflow={"hidden"}
                                 >

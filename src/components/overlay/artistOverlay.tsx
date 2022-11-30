@@ -59,31 +59,21 @@ export default function ArtistOverlay(props: {
                 <ExitButton fn={props.exit} size={props.HU * 0.5} />
             </Flex>
             <Flex
-                flexDir={{ base: "column", md: "row" }}
+                flexDir={"row"}
+                wrap={"wrap"}
                 w={`${props.WU * 9.4}px`}
                 maxH={`${props.HU * 8}px`}
                 overflowY={"scroll"}
+                justifyContent={"space-around"}
             >
-                <Flex flexDir={"column"} px={`${props.WU * 0.1}px`}>
-                    {artists.slice(0, 10).map((artist, index) => (
-                        <ArtistObject
-                            artist={artist}
-                            rating={index + 1}
-                            key={artist.id}
-                            WU={props.WU}
-                        />
-                    ))}
-                </Flex>
-                <Flex flexDir={"column"} px={`${props.WU * 0.1}px`}>
-                    {artists.slice(10, 20).map((artist, index) => (
-                        <ArtistObject
-                            artist={artist}
-                            rating={index + 11}
-                            key={artist.id + "artistOverlayObject"}
-                            WU={props.WU}
-                        />
-                    ))}
-                </Flex>
+                {artists.slice(0, 20).map((artist, index) => (
+                    <ArtistObject
+                        artist={artist}
+                        rating={index + 1}
+                        key={artist.id}
+                        WU={props.WU}
+                    />
+                ))}
             </Flex>
         </Flex>
     );
@@ -102,7 +92,8 @@ function ArtistObject(props: {
             borderRadius={{ base: "5px", md: "10px" }}
             px={{ base: `${props.WU * 0.15}px`, md: `${props.WU * 0.075}px` }}
             py={{ base: `${props.WU * 0.1}px`, md: `${props.WU * 0.05}px` }}
-            my={`${props.WU * 0.02}px`}
+            my={{ base: `${props.WU * 0.075}px`, md: `${props.WU * 0.025}px` }}
+            mx={`${props.WU * 0.05}px`}
             justifyContent={"space-between"}
         >
             <Flex>

@@ -57,7 +57,7 @@ export default function SongPebble(props: {
             h={`${props.info.dims.height}px`}
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
-            borderRadius={"15px"}
+            borderRadius={`${HU * 0.375}px`}
             boxShadow={"#333 2px 4px 8px"}
             overflow={"hidden"}
             bg={"blackAlpha.600"}
