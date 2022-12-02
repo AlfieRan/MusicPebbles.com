@@ -2,6 +2,7 @@ import {
     CircularProgress,
     CircularProgressLabel,
     Flex,
+    Link,
     Text,
 } from "@chakra-ui/react";
 import ExitButton from "./utils/exitButton";
@@ -11,6 +12,7 @@ import { profileHookType } from "../../utils/types/state";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { sleep } from "../../utils/other/time";
+import { fadeBetween } from "../../utils/other/Colours";
 
 const timeQuadraticAdjustment = 2; // must be between 0 and 2
 const timeQuadraticAdjustment2 = (1 - timeQuadraticAdjustment) / 100;
@@ -52,6 +54,13 @@ export default function UniqueOverlay(props: {
         }
     }
 
+    function shortString(str: string, limit: number = 30) {
+        if (str.length > limit) {
+            return str.substring(0, limit) + "...";
+        }
+        return str;
+    }
+
     useEffect(() => {
         sleep(250).then(() => {
             const newRating =
@@ -69,7 +78,7 @@ export default function UniqueOverlay(props: {
             borderRadius={"10px"}
             w={`${props.WU * 9.5}px`}
             maxH={`${props.HU * 8}px`}
-            overflowY={"scroll"}
+            overflowY={"hidden"}
             key={"ProfileOverlay"}
         >
             <Flex
@@ -88,6 +97,8 @@ export default function UniqueOverlay(props: {
                 p={{ base: `${props.WU * 0.2}px`, md: `${props.WU * 0.1}px` }}
                 borderRadius={{ base: "5px", md: "10px" }}
                 bg={"whiteAlpha.300"}
+                overflowY={"scroll"}
+                overflowX={"hidden"}
             >
                 <Flex
                     flexDir={"row"}
@@ -128,7 +139,7 @@ export default function UniqueOverlay(props: {
                         </Flex>
                         <Flex
                             width={{
-                                base: `${props.WU * 6}px`,
+                                base: `${props.WU * 5.8}px`,
                                 md: `${props.WU * 4}px`,
                             }}
                             h={"full"}
@@ -136,22 +147,25 @@ export default function UniqueOverlay(props: {
                             ml={`${props.WU * 0.1}px`}
                             flexDir={"column"}
                         >
-                            <Text
+                            <Flex
+                                flexDir={{ base: "column", md: "row" }}
                                 fontSize={{
-                                    base: `${props.WU * 0.4}px`,
+                                    base: `${props.WU * 0.45}px`,
                                     md: `${props.WU * 0.2}px`,
                                 }}
                                 fontWeight={"bold"}
                             >
-                                {props.profile.profile.profile !== undefined
-                                    ? props.profile.profile.profile
-                                          .display_name + "'s"
-                                    : "Your"}{" "}
-                                Uniqueness Rating
-                            </Text>
+                                <Text mr={`${props.WU * 0.05}px`}>
+                                    {props.profile.profile.profile !== undefined
+                                        ? props.profile.profile.profile
+                                              .display_name + "'s"
+                                        : "Your"}{" "}
+                                </Text>
+                                <Text>Uniqueness Rating</Text>
+                            </Flex>
                             <Text
                                 fontSize={{
-                                    base: `${props.WU * 0.35}px`,
+                                    base: `${props.WU * 0.36}px`,
                                     md: `${props.WU * 0.15}px`,
                                 }}
                                 fontWeight={"semibold"}
@@ -166,11 +180,11 @@ export default function UniqueOverlay(props: {
                     </Flex>
                     <Flex
                         width={{
-                            base: `${props.WU * 3}px`,
+                            base: `${0}px`,
                             md: `${props.WU * 1.5}px`,
                         }}
                         height={{
-                            base: `${props.WU * 3}px`,
+                            base: `${0}px`,
                             md: `${props.WU * 1.5}px`,
                         }}
                         overflow={"hidden"}
@@ -190,7 +204,156 @@ export default function UniqueOverlay(props: {
                         />
                     </Flex>
                 </Flex>
-                <Flex flexDir={"column"}></Flex>
+                <Flex
+                    flexDir={"row"}
+                    wrap={"wrap"}
+                    justifyContent={"center"}
+                    w={{
+                        base: `${props.WU * 9.1}px`,
+                        md: `${props.WU * 9.3}px`,
+                    }}
+                    p={{
+                        base: `${props.WU * 0.2}px`,
+                        md: `${props.WU * 0.1}px`,
+                    }}
+                >
+                    {props.uniqueness.uniqueness[props.timeFrame].artists
+                        .slice(0, 10)
+                        .map((artist, index) => (
+                            <Flex
+                                key={"UniquenessOverlay" + artist.artist.id}
+                                bg={"blackAlpha.500"}
+                                borderRadius={{ base: "5px", md: "10px" }}
+                                m={{
+                                    base: `${props.WU * 0.1}px`,
+                                    md: `${props.WU * 0.02}px`,
+                                }}
+                                pos={"relative"}
+                                overflow={"hidden"}
+                                flexDir={"row"}
+                            >
+                                <Flex
+                                    pos={"absolute"}
+                                    borderBottomRightRadius={`${
+                                        props.WU * 0.1
+                                    }px`}
+                                    bg={"blackAlpha.600"}
+                                    p={{
+                                        base: `${props.WU * 0.1}px`,
+                                        md: `${props.WU * 0.05}px`,
+                                    }}
+                                >
+                                    <Link
+                                        href={
+                                            artist.artist.external_urls.spotify
+                                        }
+                                        _hover={{
+                                            transform: "scale(1.1)",
+                                        }}
+                                        _active={{
+                                            transform: "scale(0.9)",
+                                        }}
+                                        h={{
+                                            base: `${props.WU * 0.75}px`,
+                                            md: `${props.WU * 0.1}px`,
+                                        }}
+                                        w={{
+                                            base: `${props.WU * 0.75}px`,
+                                            md: `${props.WU * 0.1}px`,
+                                        }}
+                                        minH={"21px"}
+                                        minW={"21px"}
+                                        isExternal
+                                    >
+                                        <Image
+                                            src={
+                                                "/spotifyBranding/icons/white.png"
+                                            }
+                                            alt={"Spotify Icon"}
+                                            width={props.WU}
+                                            height={props.WU}
+                                        />
+                                    </Link>
+                                </Flex>
+                                <Flex
+                                    flexDir={"row"}
+                                    justifyContent={"space-between"}
+                                    w={"full"}
+                                >
+                                    <Flex
+                                        h={"full"}
+                                        minW={`${props.WU * 1.5}px`}
+                                        maxW={`${props.WU * 2}px`}
+                                        flexDir={"column"}
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                        pl={{
+                                            base: `${props.WU * 0.5}px`,
+                                            md: `${props.WU * 0.25}px`,
+                                        }}
+                                        pr={{
+                                            base: `${props.WU * 0.2}px`,
+                                            md: `${props.WU * 0.1}px`,
+                                        }}
+                                        py={{
+                                            base: `${props.WU * 0.1}px`,
+                                            md: `${props.WU * 0.05}px`,
+                                        }}
+                                    >
+                                        <Text
+                                            fontSize={{
+                                                base: `${props.WU * 0.36}px`,
+                                                md: `${props.WU * 0.13}px`,
+                                            }}
+                                        >
+                                            {shortString(
+                                                artist.artist.name,
+                                                25
+                                            )}
+                                        </Text>
+                                        <Text
+                                            color={fadeBetween(
+                                                "#ff0000",
+                                                "#11ff00",
+                                                100,
+                                                artist.uniqueness
+                                            )}
+                                            fontSize={{
+                                                base: `${props.WU * 0.25}px`,
+                                                md: `${props.WU * 0.12}px`,
+                                            }}
+                                        >
+                                            {artist.uniqueness.toFixed(2)}%
+                                            Niche
+                                        </Text>
+                                    </Flex>
+                                    <Flex
+                                        flexDir={"column"}
+                                        justifyContent={"center"}
+                                        ml={`${props.WU * 0.1}px`}
+                                        w={{
+                                            base: `${props.WU * 1.5}px`,
+                                            md: `${props.WU}px`,
+                                        }}
+                                        h={{
+                                            base: `${props.WU * 1.5}px`,
+                                            md: `${props.WU}px`,
+                                        }}
+                                    >
+                                        <Image
+                                            src={
+                                                artist.artist.images[0].url ??
+                                                "/unknown.png"
+                                            }
+                                            alt={artist.artist.name}
+                                            width={props.WU * 1.5}
+                                            height={props.WU * 1.5}
+                                        />
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+                        ))}
+                </Flex>
             </Flex>
         </Flex>
     );

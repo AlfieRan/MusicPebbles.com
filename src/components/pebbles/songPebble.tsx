@@ -127,12 +127,24 @@ export default function SongPebble(props: {
                                     />
                                 </Flex>
 
-                                <Flex flexDir={"column"} ml={2}>
+                                <Flex
+                                    flexDir={"column"}
+                                    ml={2}
+                                    maxW={`${WU * 9 - HU * 1.5}px`}
+                                >
                                     <Text
                                         fontSize={
                                             song.name.length < 35
-                                                ? `${WU * 0.35}px`
-                                                : `${WU * 0.3}px`
+                                                ? `${
+                                                      HU === WU
+                                                          ? WU * 0.35
+                                                          : HU * 0.27
+                                                  }px`
+                                                : `${
+                                                      HU === WU
+                                                          ? WU * 0.3
+                                                          : HU * 0.23
+                                                  }px`
                                         }
                                     >
                                         {`${i + 1}. ${song.name}`.substring(
@@ -140,20 +152,33 @@ export default function SongPebble(props: {
                                             45
                                         )}
                                     </Text>
-                                    <Text fontSize={`${WU * 0.3}px`}>
-                                        {song.artists
-                                            .map((artist) => artist.name)
-                                            .join(", ")}
-                                    </Text>
+
                                     <Text
                                         fontSize={
                                             song.album.name.length < 35
-                                                ? `${WU * 0.3}px`
-                                                : `${WU * 0.25}px`
+                                                ? `${
+                                                      HU === WU
+                                                          ? WU * 0.3
+                                                          : HU * 0.22
+                                                  }px`
+                                                : `${
+                                                      HU === WU
+                                                          ? WU * 0.25
+                                                          : HU * 0.2
+                                                  }px`
                                         }
                                         color={"whiteAlpha.500"}
                                     >
                                         {song.album.name}
+                                    </Text>
+                                    <Text
+                                        fontSize={`${
+                                            HU === WU ? WU * 0.3 : HU * 0.23
+                                        }px`}
+                                    >
+                                        {song.artists
+                                            .map((artist) => artist.name)
+                                            .join(", ")}
                                     </Text>
                                 </Flex>
                             </Flex>

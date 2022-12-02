@@ -300,6 +300,8 @@ export default function SongOverlay(props: {
                                     base: `${props.WU * 0.75}px`,
                                     md: `${props.WU * 0.2}px`,
                                 }}
+                                minH={"21px"}
+                                minW={"21px"}
                                 isExternal
                             >
                                 <Image

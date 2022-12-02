@@ -125,7 +125,7 @@ export default function ArtistPebble(props: {
                                 justifyContent={"center"}
                                 overflow={"hidden"}
                             >
-                                <Text fontSize={`${WU * 0.5}px`}>
+                                <Text fontSize={`${HU * 0.5}px`}>
                                     1. {artists[0].name}
                                 </Text>
                                 <Text
@@ -170,7 +170,7 @@ export default function ArtistPebble(props: {
                                     justifyContent={"center"}
                                     overflow={"hidden"}
                                 >
-                                    <Text fontSize={`${WU * 0.35}px`}>
+                                    <Text fontSize={`${HU * 0.35}px`}>
                                         {index + 2}. {artist.name}
                                     </Text>
 
