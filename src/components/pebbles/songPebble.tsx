@@ -1,7 +1,6 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Image } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { audioPlayerType, profileHookType } from "../../utils/types/state";
-import Image from "next/image";
 import { songType, timeFrameType } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { overlayStateType } from "../../utils/types/overlay";

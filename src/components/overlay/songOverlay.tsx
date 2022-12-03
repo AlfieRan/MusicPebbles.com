@@ -1,4 +1,4 @@
-import { Center, Flex, Link, Text } from "@chakra-ui/react";
+import { Center, Flex, Link, Text, Image } from "@chakra-ui/react";
 import { audioPlayerType, songOverlayInfo } from "../../utils/types/state";
 import {
     songApiResponseType,
@@ -7,7 +7,6 @@ import {
 } from "../../utils/types/spotify";
 import { useEffect, useState } from "react";
 import AudioControls from "../other/audioControls";
-import Image from "next/image";
 import { wrapNames } from "../../utils/other/wrapNames";
 import ExitButton from "./utils/exitButton";
 
@@ -140,8 +139,8 @@ export default function SongOverlay(props: {
                         bg={"blackAlpha.400"}
                         borderRadius={"10px"}
                         w={{
-                            base: `${props.WU * 8.8}px`,
-                            md: `${props.WU * 3.8}px`,
+                            base: `${props.WU * 9}px`,
+                            md: `${props.WU * 3.75}px`,
                         }}
                         px={{
                             base: `${props.WU * 0.15}px`,
@@ -196,16 +195,6 @@ export default function SongOverlay(props: {
                                 <Image
                                     src={song.album.images[0].url}
                                     alt={"Album Cover for " + song.name}
-                                    width={
-                                        props.WU *
-                                        2 *
-                                        song.album.images[0].width
-                                    }
-                                    height={
-                                        props.WU *
-                                        2 *
-                                        song.album.images[0].height
-                                    }
                                 />
                             </Flex>
                             <Flex
@@ -307,8 +296,6 @@ export default function SongOverlay(props: {
                                 <Image
                                     src={"/spotifyBranding/icons/white.png"}
                                     alt={"Spotify Icon"}
-                                    width={props.WU}
-                                    height={props.WU}
                                 />
                             </Link>
                         </Flex>

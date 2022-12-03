@@ -4,12 +4,12 @@ import {
     Flex,
     Link,
     Text,
+    Image,
 } from "@chakra-ui/react";
 import ExitButton from "./utils/exitButton";
 import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 import { timeFrameType } from "../../utils/types/spotify";
 import { profileHookType } from "../../utils/types/state";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { sleep } from "../../utils/other/time";
 import { fadeBetween } from "../../utils/other/Colours";
@@ -200,8 +200,6 @@ export default function UniqueOverlay(props: {
                                 "Profile picture of " +
                                 props.profile.profile?.profile?.display_name
                             }
-                            width={props.WU * 3}
-                            height={props.WU * 3}
                         />
                     </Flex>
                 </Flex>
@@ -267,8 +265,6 @@ export default function UniqueOverlay(props: {
                                                 "/spotifyBranding/icons/white.png"
                                             }
                                             alt={"Spotify Icon"}
-                                            width={props.WU}
-                                            height={props.WU}
                                         />
                                     </Link>
                                 </Flex>
@@ -364,8 +360,6 @@ export default function UniqueOverlay(props: {
                                                 "/unknown.png"
                                             }
                                             alt={artist.artist.name}
-                                            width={props.WU * 5}
-                                            height={props.WU * 5}
                                         />
                                     </Flex>
                                 </Flex>

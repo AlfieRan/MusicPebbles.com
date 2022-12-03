@@ -1,6 +1,5 @@
-import { Center, Flex, Text } from "@chakra-ui/react";
+import { Center, Flex, Text, Image } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { profileHookType } from "../../utils/types/state";
 import {

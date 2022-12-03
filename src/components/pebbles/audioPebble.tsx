@@ -1,11 +1,10 @@
-import { Button, Center, Flex, Link, Text } from "@chakra-ui/react";
+import { Center, Flex, Image, Text } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import {
     audioPlayerType,
     setHoveringType,
     songOverlayInfo,
 } from "../../utils/types/state";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import AudioControls from "../other/audioControls";
 import { useEffect, useState } from "react";
@@ -105,6 +104,8 @@ export default function AudioPebble(props: {
                             }
                             pos={"relative"}
                             flexDir={"column"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
                             borderRadius={`${WU * 0.2}px`}
                             overflow={"hidden"}
                             onMouseOver={openHover}
@@ -118,7 +119,6 @@ export default function AudioPebble(props: {
                                 }
                                 className={"object-contain"}
                                 alt={"Currently playing song"}
-                                fill
                             />
                         </Flex>
                         <Flex

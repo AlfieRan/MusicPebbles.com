@@ -1,4 +1,4 @@
-import { Flex, Text, Link } from "@chakra-ui/react";
+import { Flex, Text, Link, Image } from "@chakra-ui/react";
 import ExitButton from "./utils/exitButton";
 import { profileHookType } from "../../utils/types/state";
 import { useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import {
     artistType,
     timeFrameType,
 } from "../../utils/types/spotify";
-import Image from "next/image";
 import { getArtistGenres } from "../pebbles/artistPebble";
 
 export default function ArtistOverlay(props: {
@@ -121,8 +120,6 @@ function ArtistObject(props: {
                     <Image
                         src={props.artist.images[0].url ?? "/unknown.png"}
                         alt={"Artist Image of " + props.artist.name}
-                        width={props.WU * 2 * props.artist.images[0].width}
-                        height={props.WU * 2 * props.artist.images[0].height}
                     />
                 </Flex>
                 <Flex
@@ -170,12 +167,14 @@ function ArtistObject(props: {
                         minW={"70px"}
                         minH={"21px"}
                         pos={"relative"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
                     >
                         <Image
                             src={"/spotifyBranding/logos/white.png"}
                             className={"object-contain"}
                             alt={"Spotify Logo"}
-                            fill
+                            boxSize={"full"}
                         />
                     </Flex>
                 </Link>

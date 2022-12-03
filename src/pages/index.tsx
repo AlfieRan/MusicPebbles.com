@@ -1,8 +1,7 @@
-import { Center, Flex, Link, Text } from "@chakra-ui/react";
+import { Image, Flex, Link, Text } from "@chakra-ui/react";
 import { useProfile } from "../utils/hooks/useProfile";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { useScreen } from "../utils/hooks/useScreen";
 
 const Page = () => {
@@ -102,13 +101,13 @@ const Page = () => {
                                 h={"40px"}
                                 w={"40px"}
                                 justifyContent={"center"}
+                                alignItems={"center"}
                                 pos={"relative"}
                                 objectFit={"contain"}
                             >
                                 <Image
                                     src={"/spotifyBranding/icons/white.png"}
                                     alt={"Spotify Logo"}
-                                    fill
                                 />
                             </Flex>
                         </Flex>

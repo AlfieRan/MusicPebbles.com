@@ -3,6 +3,7 @@ import {
     CircularProgressLabel,
     Flex,
     Text,
+    Image,
 } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { profileHookType, setHoveringType } from "../../utils/types/state";
@@ -10,14 +11,9 @@ import {
     useUniqueness,
     useUniquenessType,
 } from "../../utils/hooks/useUniqueness";
-import Image from "next/image";
-import {
-    artistApiResponseType,
-    timeFrameType,
-} from "../../utils/types/spotify";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { timeFrameType } from "../../utils/types/spotify";
+import { Dispatch, SetStateAction } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
-import { Uniqueness } from "../../utils/types/uniqueness";
 
 export default function UniquePebble(props: {
     info: pebblePhysics;

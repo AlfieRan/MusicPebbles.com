@@ -1,6 +1,5 @@
 import { audioPlayerType } from "../../utils/types/state";
-import { Button, Flex, Text } from "@chakra-ui/react";
-import Image from "next/image";
+import { Button, Flex, Text, Image } from "@chakra-ui/react";
 
 export default function AudioControls(props: {
     audioPlayer: audioPlayerType;
@@ -36,12 +35,17 @@ export default function AudioControls(props: {
                 minW={0}
                 minH={0}
             >
-                <Flex w={"75%"} h={"75%"} pos={"relative"}>
+                <Flex
+                    w={"75%"}
+                    h={"75%"}
+                    p={"10%"}
+                    pos={"relative"}
+                    alignItems={"center"}
+                >
                     <Image
                         src={"/spotifyBranding/icons/white.png"}
                         className={"object-contain"}
                         alt={"Spotify Logo"}
-                        fill
                     />
                 </Flex>
             </Button>

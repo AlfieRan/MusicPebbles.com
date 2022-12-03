@@ -1,6 +1,4 @@
-import { Button, Flex, Link, Text } from "@chakra-ui/react";
-import ExitButton from "./utils/exitButton";
-import Image from "next/image";
+import { Button, Flex, Link, Text, Image } from "@chakra-ui/react";
 
 export default function PopUp(props: {
     HU: number;
