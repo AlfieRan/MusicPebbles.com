@@ -3,12 +3,7 @@ export function OauthLoginUrl(
     RedirectUri: string,
     State: string
 ): string {
-    const scopes = [
-        "user-read-private",
-        "user-modify-playback-state",
-        "user-read-currently-playing",
-        "user-top-read",
-    ];
+    const scopes = ["user-read-private", "user-top-read"];
     const url = new URL("https://accounts.spotify.com/authorize");
     url.searchParams.append("client_id", ClientId);
     url.searchParams.append("response_type", "code");

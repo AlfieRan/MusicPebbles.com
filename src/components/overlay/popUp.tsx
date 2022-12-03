@@ -7,6 +7,7 @@ export default function PopUp(props: {
     WU: number;
     exit: () => void;
 }) {
+    // TODO: This is buggy if it is displayed as soon as the page loads, but it works fine if it is displayed after a few seconds, so display it after a few seconds
     return (
         <Flex
             flexDir={"column"}
