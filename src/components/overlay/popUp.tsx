@@ -32,6 +32,7 @@ export default function PopUp(props: {
                         <Link
                             href={"https://www.alfieranstead.com/"}
                             color={"blue.200"}
+                            isExternal
                         >
                             {" "}
                             Alfie Ranstead
@@ -86,8 +87,6 @@ export default function PopUp(props: {
                                     <Image
                                         src={"/spotifyBranding/icons/white.png"}
                                         alt={"Spotify Icon"}
-                                        width={props.WU}
-                                        height={props.WU}
                                     />
                                 </Flex>
                             </Flex>

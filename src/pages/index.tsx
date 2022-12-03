@@ -1,6 +1,6 @@
 import { Image, Flex, Link, Text } from "@chakra-ui/react";
 import { useProfile } from "../utils/hooks/useProfile";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useScreen } from "../utils/hooks/useScreen";
 
@@ -8,11 +8,14 @@ const Page = () => {
     const profile = useProfile();
     const router = useRouter();
     const screenHook = useScreen();
+    const [loginLoaded, setLoginLoaded] = useState(false);
 
     useEffect(() => {
         if (profile.profile.profile) {
             console.log("Redirecting to dashboard, profile: ", profile);
             router.push("/dashboard").catch(console.error);
+        } else if (!profile.loading) {
+            setLoginLoaded(true);
         }
     }, [profile]);
 
@@ -82,35 +85,52 @@ const Page = () => {
                         }}
                         _active={{ bg: "green.700", transform: "scale(0.99)" }}
                     >
-                        <Flex
-                            flexDir={"row"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            fontWeight={"semibold"}
-                        >
-                            <Text
-                                w={"60%"}
-                                mr={{ base: "5px", md: 0 }}
-                                fontSize={{ base: "xl", md: "lg" }}
-                            >
-                                Login with Spotify
-                            </Text>
+                        {loginLoaded ? (
                             <Flex
-                                maxW={"20%"}
-                                minW={"10%"}
-                                h={"40px"}
-                                w={"40px"}
+                                flexDir={"row"}
                                 justifyContent={"center"}
                                 alignItems={"center"}
-                                pos={"relative"}
-                                objectFit={"contain"}
+                                fontWeight={"semibold"}
                             >
-                                <Image
-                                    src={"/spotifyBranding/icons/white.png"}
-                                    alt={"Spotify Logo"}
-                                />
+                                <Text
+                                    w={"60%"}
+                                    mr={{ base: "5px", md: 0 }}
+                                    fontSize={{ base: "xl", md: "lg" }}
+                                >
+                                    Login with Spotify
+                                </Text>
+                                <Flex
+                                    maxW={"20%"}
+                                    minW={"10%"}
+                                    h={"40px"}
+                                    w={"40px"}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                    pos={"relative"}
+                                    objectFit={"contain"}
+                                >
+                                    <Image
+                                        src={"/spotifyBranding/icons/white.png"}
+                                        alt={"Spotify Logo"}
+                                    />
+                                </Flex>
                             </Flex>
-                        </Flex>
+                        ) : (
+                            <Flex
+                                flexDir={"row"}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                                fontWeight={"semibold"}
+                            >
+                                <Text
+                                    w={"60%"}
+                                    mr={{ base: "5px", md: 0 }}
+                                    fontSize={{ base: "xl", md: "lg" }}
+                                >
+                                    Loading...
+                                </Text>
+                            </Flex>
+                        )}
                     </Link>
                     <Text fontSize={"xs"} color={"whiteAlpha.600"}>
                         Pebbles is not affiliated with Spotify

@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
 
 export function usePopUp() {
+    const [shouldPopUp, setShouldPopUp] = useState(false);
     const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
     useEffect(() => {
         const getLocal = localStorage.getItem("seenPopUp");
         if (getLocal) {
-            setIsPopUpOpen(false);
+            setShouldPopUp(false);
         } else {
-            setIsPopUpOpen(true);
+            setShouldPopUp(true);
         }
     }, []);
+
+    useEffect(() => {
+        // delay to prevent showing during page load
+        if (shouldPopUp) {
+            setTimeout(() => {
+                setIsPopUpOpen(true);
+            }, 3500);
+        } else {
+            setIsPopUpOpen(false);
+        }
+    }, [shouldPopUp]);
 
     function closePopUp() {
         setIsPopUpOpen(false);
