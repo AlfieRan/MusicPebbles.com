@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { sleep } from "../../utils/other/time";
 import { fadeBetween } from "../../utils/other/Colours";
+import { parseRating } from "../../utils/other/basics";
 
 const timeQuadraticAdjustment = 2; // must be between 0 and 2
 const timeQuadraticAdjustment2 = (1 - timeQuadraticAdjustment) / 100;
@@ -234,12 +235,8 @@ export default function UniqueOverlay(props: {
                             >
                                 <Flex
                                     pos={"absolute"}
-                                    borderBottomRightRadius={`${
-                                        props.WU * 0.1
-                                    }px`}
-                                    bg={"blackAlpha.600"}
                                     p={{
-                                        base: `${props.WU * 0.1}px`,
+                                        base: `${props.WU * 0.15}px`,
                                         md: `${props.WU * 0.05}px`,
                                     }}
                                 >
@@ -254,12 +251,12 @@ export default function UniqueOverlay(props: {
                                             transform: "scale(0.9)",
                                         }}
                                         h={{
-                                            base: `${props.WU * 0.75}px`,
-                                            md: `${props.WU * 0.1}px`,
+                                            base: `${props.WU * 0.6}px`,
+                                            md: `${props.WU * 0.15}px`,
                                         }}
                                         w={{
-                                            base: `${props.WU * 0.75}px`,
-                                            md: `${props.WU * 0.1}px`,
+                                            base: `${props.WU * 0.6}px`,
+                                            md: `${props.WU * 0.15}px`,
                                         }}
                                         minH={"21px"}
                                         minW={"21px"}
@@ -282,8 +279,14 @@ export default function UniqueOverlay(props: {
                                 >
                                     <Flex
                                         h={"full"}
-                                        minW={`${props.WU * 1.5}px`}
-                                        maxW={`${props.WU * 2}px`}
+                                        minW={{
+                                            base: `${props.WU * 6}px`,
+                                            md: `${props.WU * 1.5}px`,
+                                        }}
+                                        maxW={{
+                                            base: `${props.WU * 6}px`,
+                                            md: `${props.WU * 2}px`,
+                                        }}
                                         flexDir={"column"}
                                         justifyContent={"center"}
                                         alignItems={"center"}
@@ -302,9 +305,15 @@ export default function UniqueOverlay(props: {
                                     >
                                         <Text
                                             fontSize={{
-                                                base: `${props.WU * 0.36}px`,
+                                                base: `${props.WU * 0.4}px`,
                                                 md: `${props.WU * 0.13}px`,
                                             }}
+                                            maxW={{
+                                                base: `${props.WU * 4.5}px`,
+                                                md: `${props.WU * 11}px`,
+                                            }}
+                                            fontWeight={"semibold"}
+                                            textAlign={"center"}
                                         >
                                             {shortString(
                                                 artist.artist.name,
@@ -319,12 +328,21 @@ export default function UniqueOverlay(props: {
                                                 artist.uniqueness
                                             )}
                                             fontSize={{
-                                                base: `${props.WU * 0.25}px`,
+                                                base: `${props.WU * 0.33}px`,
                                                 md: `${props.WU * 0.12}px`,
                                             }}
                                         >
                                             {artist.uniqueness.toFixed(2)}%
                                             Niche
+                                        </Text>
+                                        <Text
+                                            fontSize={{
+                                                base: `${props.WU * 0.35}px`,
+                                                md: `${props.WU * 0.13}px`,
+                                            }}
+                                        >
+                                            {parseRating(artist.userRating)}{" "}
+                                            Most Listened
                                         </Text>
                                     </Flex>
                                     <Flex
@@ -332,11 +350,11 @@ export default function UniqueOverlay(props: {
                                         justifyContent={"center"}
                                         ml={`${props.WU * 0.1}px`}
                                         w={{
-                                            base: `${props.WU * 1.5}px`,
+                                            base: `${props.WU * 2.5}px`,
                                             md: `${props.WU}px`,
                                         }}
                                         h={{
-                                            base: `${props.WU * 1.5}px`,
+                                            base: `${props.WU * 2.5}px`,
                                             md: `${props.WU}px`,
                                         }}
                                     >
@@ -346,8 +364,8 @@ export default function UniqueOverlay(props: {
                                                 "/unknown.png"
                                             }
                                             alt={artist.artist.name}
-                                            width={props.WU * 1.5}
-                                            height={props.WU * 1.5}
+                                            width={props.WU * 5}
+                                            height={props.WU * 5}
                                         />
                                     </Flex>
                                 </Flex>

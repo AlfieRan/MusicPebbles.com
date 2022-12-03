@@ -122,6 +122,32 @@ export default function ProfileOverlay(props: {
                             my={2}
                             p={0}
                             fontSize={`${sizes.WU * 0.45}px`}
+                            fontWeight={"normal"}
+                            h={"100%"}
+                            w={"100%"}
+                            bg={"whiteAlpha.200"}
+                            borderRadius={"lg"}
+                            _hover={{
+                                bg: "whiteAlpha.300",
+                                transform: "scale(1.02)",
+                            }}
+                            _active={{
+                                bg: "whiteAlpha.100",
+                                transform: "scale(0.98)",
+                            }}
+                            onClick={() => {
+                                localStorage.clear();
+                                router.reload();
+                            }}
+                        >
+                            <Text h={"fit-content"}>Reset Storage 🔄</Text>
+                        </Button>
+                    </GridItem>
+                    <GridItem rowSpan={1} py={`${sizes.WU * 0.1}px`}>
+                        <Button
+                            my={2}
+                            p={0}
+                            fontSize={`${sizes.WU * 0.45}px`}
                             h={"100%"}
                             w={"100%"}
                             bg={"red.500"}

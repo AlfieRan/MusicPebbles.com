@@ -28,6 +28,11 @@ export interface bugComponentOverlay {
     type: "bug";
 }
 
+export interface popUpComponentOverlay {
+    hidden: false;
+    type: "popup";
+}
+
 export interface hiddenOverlay {
     hidden: true;
 }
@@ -38,4 +43,5 @@ export type overlayStateType =
     | uniqueComponentOverlay
     | profileComponentOverlay
     | bugComponentOverlay
+    | popUpComponentOverlay
     | hiddenOverlay;

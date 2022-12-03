@@ -105,6 +105,8 @@ export default function AudioPebble(props: {
                             }
                             pos={"relative"}
                             flexDir={"column"}
+                            borderRadius={`${WU * 0.2}px`}
+                            overflow={"hidden"}
                             onMouseOver={openHover}
                             onMouseLeave={closeHover}
                             onClick={redirectToSpotify}

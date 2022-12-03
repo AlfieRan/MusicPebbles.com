@@ -10,6 +10,7 @@ import UniqueOverlay from "./uniqueOverlay";
 import ArtistOverlay from "./artistOverlay";
 import BugOverlay from "./bugOverlay";
 import { useUniquenessType } from "../../utils/hooks/useUniqueness";
+import PopUp from "./popUp";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -18,6 +19,7 @@ export function Overlay(props: {
     time: timeFrameType;
     profile: profileHookType;
     uniqueness: useUniquenessType;
+    closePopUp: () => void;
 }) {
     const screenHook = useScreen();
     const HU = screenHook.height / 10;
@@ -81,6 +83,9 @@ export function Overlay(props: {
                         )}
                         {props.info.type === "bug" && (
                             <BugOverlay HU={HU} WU={WU} exit={props.hide} />
+                        )}
+                        {props.info.type === "popup" && (
+                            <PopUp WU={WU} HU={HU} exit={props.closePopUp} />
                         )}
                     </motion.div>
                 )}

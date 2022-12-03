@@ -17,6 +17,7 @@ import { useAudio } from "../../utils/hooks/useAudio";
 import AudioPebble from "./audioPebble";
 import { useProfile } from "../../utils/hooks/useProfile";
 import { useUniqueness } from "../../utils/hooks/useUniqueness";
+import { usePopUp } from "../../utils/hooks/usePopUp";
 
 export default function Pebbles() {
     const { pebbleState, componentHeight } = usePebbles();
@@ -31,6 +32,7 @@ export default function Pebbles() {
     const profile = useProfile();
     const audioPlayer = useAudio();
     const uniqueness = useUniqueness();
+    const popUp = usePopUp();
 
     useEffect(() => {
         if (profile.profile.songs !== undefined) {
@@ -49,6 +51,16 @@ export default function Pebbles() {
             uniqueness.setArtists(profile.profile.artists);
         }
     }, [profile.profile.artists]);
+
+    useEffect(() => {
+        if (popUp.isPopUpOpen) {
+            setOverlayState({ hidden: false, type: "popup" });
+        } else {
+            if (!overlayState.hidden && overlayState.type === "popup") {
+                setOverlayState({ hidden: true });
+            }
+        }
+    }, [popUp]);
 
     function hideOverlay() {
         setOverlayState({ hidden: true });
@@ -77,6 +89,7 @@ export default function Pebbles() {
                     time={time}
                     profile={profile}
                     uniqueness={uniqueness}
+                    closePopUp={popUp.closePopUp}
                 />
                 <ProfilePebble
                     info={pebbleState.profile}

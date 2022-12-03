@@ -38,12 +38,13 @@ export async function spotifyWrapRequestDirect<T>(
             decoded = await response.json();
         } catch (e) {
             console.error(
-                `Failed to decode spotify request, raw: ${response.body}`
+                `Failed to decode spotify request, status text: ${response.statusText}, raw: ${response}`
             );
             return {
                 success: false,
-                error: "Failed to decode spotify response",
-                raw: JSON.stringify(response.body),
+                error:
+                    "Failed to decode spotify response:" + response.statusText,
+                raw: JSON.stringify(response),
                 code: response.status,
             };
         }

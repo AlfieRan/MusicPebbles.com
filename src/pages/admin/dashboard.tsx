@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Center, Flex, Table, Text } from "@chakra-ui/react";
 import { ApiError } from "../../utils/types/errors";
+import { useScreen } from "../../utils/hooks/useScreen";
 
 const Page = () => {
     const [errors, setErrors] = useState<ApiError[]>([]);
@@ -8,6 +9,7 @@ const Page = () => {
         failed: false,
         error: "",
     });
+    const screenHook = useScreen();
 
     useEffect(() => {
         const fetchErrors = async () => {
@@ -28,7 +30,12 @@ const Page = () => {
     }, []);
 
     return (
-        <Center flexDir={"column"} w={"full"} h={"full"}>
+        <Center
+            flexDir={"column"}
+            w={"full"}
+            h={`${screenHook.height}px`}
+            minH={"70vh"}
+        >
             {failed.failed ? (
                 <Flex direction="column" align="center" pt={"xl"}>
                     <Text fontSize={"xl"}>Something went wrong :(</Text>
