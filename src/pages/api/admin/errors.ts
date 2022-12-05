@@ -12,11 +12,6 @@ export default async function errors(
     try {
         const user = await getSession(req, redisClient);
         if (user === false || !userIsAdmin(user.id)) {
-            console.log(
-                `User: ${
-                    user !== false ? user.id : "unknown"
-                } just tried to login as an admin.`
-            );
             res.status(403).json({
                 error: "You are not logged in as an admin.",
             });
@@ -25,7 +20,7 @@ export default async function errors(
         }
         console.log(`Admin: ${user.id} logged in.`);
 
-        const rawErrors = (await redisClient.lrange("errors", 0, 10)) || [];
+        const rawErrors = (await redisClient.lrange("errors", 0, 50)) || [];
         const errors: ApiError[] = rawErrors.map((rawError) =>
             JSON.parse(rawError)
         );
@@ -37,9 +32,11 @@ export default async function errors(
     quitRedis(redisClient);
 }
 
-function userIsAdmin(userId: string): boolean {
+export function userIsAdmin(userId: string): boolean {
     for (let i = 0; i < admins.length; i++) {
         if (admins[i] === userId) return true;
     }
+
+    console.log(`User: ${userId} just tried to login as an admin.`);
     return false;
 }

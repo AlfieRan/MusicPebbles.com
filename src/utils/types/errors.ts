@@ -21,3 +21,11 @@ export interface UnknownApiError {
 }
 
 export type ApiError = SpotifyApiError | InternalApiError | UnknownApiError;
+
+export interface errorReport {
+    error: string;
+    time: number;
+    ip: string;
+}
+
+export type errorReports = errorReport[];

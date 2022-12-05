@@ -7,6 +7,42 @@ export default function BugOverlay(props: {
     WU: number;
     exit: () => void;
 }) {
+    const [bugReport, setBugReport] = useState("");
+    const [error, setError] = useState<false | string>(false);
+    const [success, setSuccess] = useState(false);
+
+    async function sendBugReport() {
+        setError(false);
+        if (bugReport.length < 10 || bugReport.length > 1000) {
+            setError("Please enter a report between 10 and 1000 characters.");
+            return;
+        }
+
+        const data = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bugReport),
+        };
+        try {
+            const response = await fetch("/api/admin/reports", data);
+            if (response.status) {
+                setSuccess(true);
+            } else {
+                console.error(response.statusText);
+                setError(
+                    `Something went wrong, please try again later. (code: ${response.status})`
+                );
+            }
+        } catch (e) {
+            setError("Something went wrong while sending the report.");
+            console.error(e);
+            return;
+        }
+        console.log("Bug report sent.");
+    }
+
     return (
         <Flex
             flexDir={"column"}
@@ -21,42 +57,130 @@ export default function BugOverlay(props: {
                 flexDir={"row"}
                 justifyContent={"space-between"}
                 alignItems={"center"}
-                mb={3}
             >
                 <Text fontSize={"xl"}>Report a Bug</Text>
                 <ExitButton fn={props.exit} size={props.HU * 0.5} />
             </Flex>
-            <Flex flexDir={"column"} w={`${props.WU * 9}px`}>
-                <Textarea
-                    placeholder={"What went wrong?"}
-                    value={
-                        "Hi, this doesn't work right now and is just a ui placeholder, it will be added soon :)"
-                    }
-                    onChange={() => {}}
-                    variant="filled"
-                    bg={"LightGrey"}
-                    maxLength={2500}
-                />
-                <Flex
-                    w={"full"}
-                    justifyContent={"center"}
-                    mt={`${props.HU * 0.25}px`}
-                    mb={`${props.HU * 0.1}px`}
-                >
-                    <Button
-                        w={`${props.WU * 2}px`}
-                        fontSize={`${{
-                            base: "sm",
-                            md: "md",
-                        }}`}
-                        bg={"blue.500"}
-                        _hover={{ bg: "blue.600", transform: "scale(1.05)" }}
-                        _active={{ bg: "blue.700", transform: "scale(0.95)" }}
+            {!success ? (
+                <Flex flexDir={"column"} w={`${props.WU * 9}px`} mt={3}>
+                    {error !== false && (
+                        <Flex
+                            flexDir={"row"}
+                            justifyContent={"center"}
+                            w={"full"}
+                            mb={"5px"}
+                        >
+                            <Text
+                                color={"red"}
+                                maxW={`${props.WU * 7}px`}
+                                fontSize={"md"}
+                                textAlign={"center"}
+                            >
+                                Error: {error}
+                            </Text>
+                        </Flex>
+                    )}
+                    <Textarea
+                        placeholder={"What went wrong?"}
+                        value={bugReport}
+                        onChange={(e) => setBugReport(e.target.value)}
+                        variant="filled"
+                        bg={"LightGrey"}
+                        maxLength={1000}
+                        maxH={`${props.HU * 5}px`}
+                    />
+                    <Flex
+                        w={"full"}
+                        justifyContent={"center"}
+                        mt={`${props.HU * 0.25}px`}
+                        mb={`${props.HU * 0.1}px`}
                     >
-                        Submit
-                    </Button>
+                        <Button
+                            w={`${props.WU * 2}px`}
+                            fontSize={`${{
+                                base: "sm",
+                                md: "md",
+                            }}`}
+                            bg={"blue.500"}
+                            _hover={{
+                                bg: "blue.600",
+                                transform: "scale(1.05)",
+                            }}
+                            _active={{
+                                bg: "blue.700",
+                                transform: "scale(0.95)",
+                            }}
+                            onClick={sendBugReport}
+                        >
+                            Submit
+                        </Button>
+                    </Flex>
                 </Flex>
-            </Flex>
+            ) : (
+                <Flex
+                    flexDir={"column"}
+                    w={`${props.WU * 9}px`}
+                    alignItems={"center"}
+                >
+                    <Text
+                        color={"white"}
+                        maxW={`${props.WU * 7}px`}
+                        fontSize={{
+                            base: `${props.WU * 0.4}px`,
+                            md: `${props.WU * 0.2}px`,
+                        }}
+                        textAlign={"center"}
+                        mb={`${props.WU * 0.4}px`}
+                        mt={`${props.WU * 0.3}px`}
+                    >
+                        Thank you for helping to improve Pebbles!
+                    </Text>
+                    <Flex flexDir={"row"}>
+                        <Button
+                            minW={`${props.WU * 2}px`}
+                            mx={`${props.WU * 0.2}px`}
+                            fontSize={`${{
+                                base: "sm",
+                                md: "md",
+                            }}`}
+                            bg={"blue.500"}
+                            _hover={{
+                                bg: "blue.600",
+                                transform: "scale(1.05)",
+                            }}
+                            _active={{
+                                bg: "blue.700",
+                                transform: "scale(0.95)",
+                            }}
+                            onClick={() => {
+                                setSuccess(false);
+                            }}
+                        >
+                            New Report
+                        </Button>
+                        <Button
+                            minW={`${props.WU * 2}px`}
+                            mx={`${props.WU * 0.2}px`}
+                            fontSize={`${{
+                                base: "sm",
+                                md: "md",
+                            }}`}
+                            bg={"red.500"}
+                            _hover={{
+                                bg: "red.600",
+                                transform: "scale(1.05)",
+                            }}
+                            _active={{
+                                bg: "red.700",
+                                transform: "scale(0.95)",
+                            }}
+                            onClick={props.exit}
+                        >
+                            Close
+                        </Button>
+                    </Flex>
+                </Flex>
+            )}
         </Flex>
     );
 }
