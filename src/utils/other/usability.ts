@@ -10,6 +10,7 @@ export function setupKeyPresses(
             hideComponent(true);
         }
     }
+
     document.addEventListener("keydown", handleKeyPress);
     return () => {
         document.removeEventListener("keydown", handleKeyPress);
@@ -18,9 +19,7 @@ export function setupKeyPresses(
 
 function checkKey(key: string, simple: boolean) {
     if (simple) {
-        console.log("simple");
         return simpleKeys.includes(key);
     }
-    console.log("not simple");
     return escapeKeys.includes(key);
 }

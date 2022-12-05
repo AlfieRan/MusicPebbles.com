@@ -10,7 +10,7 @@ export default function BlurredBackground(props: {
 }) {
     useEffect(() => {
         return setupKeyPresses(() => props.hide(false), props.simple);
-    }, []);
+    }, [props.simple]);
 
     return (
         <AnimatePresence>
