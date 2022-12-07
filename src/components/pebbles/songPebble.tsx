@@ -108,7 +108,7 @@ export default function SongPebble(props: {
                             >
                                 <Flex
                                     alignItems={"center"}
-                                    borderRadius={`${WU * 0.2}px`}
+                                    borderRadius={`${Math.min(WU * 0.1, 5)}px`}
                                     overflow={"hidden"}
                                 >
                                     <Image
@@ -196,7 +196,7 @@ export default function SongPebble(props: {
                 w={`${WU * 9}px`}
                 fontSize={`${HU * 0.32}px`}
                 fontWeight={"semibold"}
-                color={"whiteAlpha.500"}
+                color={"whiteAlpha.800"}
                 textAlign={"center"}
                 mb={2}
             >

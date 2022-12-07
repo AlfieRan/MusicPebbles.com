@@ -167,7 +167,7 @@ export default function UniquePebble(props: {
                 w={`${WU * 9}px`}
                 fontSize={`${HU * 0.65}px`}
                 fontWeight={"semibold"}
-                color={"whiteAlpha.500"}
+                color={"whiteAlpha.800"}
                 textAlign={"center"}
                 mb={2}
             >

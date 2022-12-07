@@ -1,4 +1,4 @@
-import { Center, Image, Text } from "@chakra-ui/react";
+import { Center, Image, Text, Flex } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { profileHookType, setHoveringType } from "../../utils/types/state";
 import { Dispatch, SetStateAction } from "react";
@@ -35,6 +35,7 @@ export default function ProfilePebble(props: {
             _hover={{ bg: "blackAlpha.700", transform: "scale(1.01)" }}
             transition={"0.1s ease-in-out"}
             cursor={"pointer"}
+            flexDir={"column"}
             onMouseOver={() => {
                 props.setHovering({
                     hovering: true,
@@ -51,18 +52,6 @@ export default function ProfilePebble(props: {
             }}
             onClick={openSongOverlay}
         >
-            <Center
-                pos={"absolute"}
-                right={0}
-                top={0}
-                p={`${HU * 0.2}px`}
-                w={`${WU * 1.7}px`}
-                h={`${HU * 1.7}px`}
-                bg={"black"}
-                borderBottomLeftRadius={`${HU * 0.7}px`}
-            >
-                <Text fontSize={`${WU}px`}>⚙</Text>
-            </Center>
             <Image
                 src={
                     props.profile.profile?.profile?.image_url ?? "/unknown.png"

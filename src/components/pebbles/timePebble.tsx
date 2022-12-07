@@ -37,7 +37,7 @@ export default function TimePebble(props: {
                 w={"100%"}
                 h={"100%"}
                 py={`${HU * 0.5}px`}
-                px={`${HU * 1}px`}
+                px={`${HU}px`}
                 justifyContent={"center"}
             >
                 {timeOptions.map((timeOption) => (
@@ -50,6 +50,8 @@ export default function TimePebble(props: {
                         onClick={() => props.setTime(timeOption)}
                         fontSize={`${WU * 0.9}`}
                         borderRadius={`${HU * 0.5}px`}
+                        w={"100%"}
+                        h={`${HU * 2.3}px`}
                     >
                         <Text>{wrapTimeString(timeOption)}</Text>
                     </Button>

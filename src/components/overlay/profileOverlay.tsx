@@ -140,7 +140,9 @@ export default function ProfileOverlay(props: {
                                 router.reload();
                             }}
                         >
-                            <Text h={"fit-content"}>Reset Storage 🔄</Text>
+                            <Text h={"fit-content"}>
+                                Reset Local Storage 🔄
+                            </Text>
                         </Button>
                     </GridItem>
                     <GridItem rowSpan={1} py={`${sizes.WU * 0.1}px`}>

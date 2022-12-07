@@ -1,4 +1,11 @@
-import { Flex, Link, Text, Button } from "@chakra-ui/react";
+import {
+    Flex,
+    Link,
+    Text,
+    Button,
+    SimpleGrid,
+    GridItem,
+} from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import { Dispatch, SetStateAction } from "react";
@@ -11,6 +18,7 @@ export default function InfoPebble(props: {
 }) {
     const HU = props.info.dims.height / 10;
     const WU = props.info.dims.width / 10;
+    const buttonHeight = HU * 1.7;
     return (
         <Flex
             w={`${props.info.dims.width}px`}
@@ -26,7 +34,7 @@ export default function InfoPebble(props: {
             transition={"0.1s ease-in-out"}
             justifyContent={"space-around"}
             alignItems={"center"}
-            p={`${HU}px`}
+            p={`${HU * 0.5}px`}
         >
             <Flex flexDir={"column"}>
                 <Text
@@ -37,43 +45,12 @@ export default function InfoPebble(props: {
                     Pebbles
                 </Text>
             </Flex>
-            <Flex flexDir={"row"} my={`${HU * 0.25}px`}>
-                <Button
-                    bg={"red.500"}
-                    h={`${HU * 3}px`}
-                    w={`${WU * 4}px`}
-                    m={`${HU * 0.25}px`}
-                    boxShadow={"#c33 0px 1px 8px"}
-                    borderRadius={{ base: "5px", md: "15px" }}
-                    _hover={{ transform: "scale(1.02)", bg: "red.600" }}
-                    _active={{ transform: "scale(0.98)", bg: "red.700" }}
-                    onClick={() => {
-                        props.setOverlay({ hidden: false, type: "bug" });
-                    }}
-                >
-                    <Flex
-                        h={`${HU * 3}px`}
-                        w={`${WU * 4}px`}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                    >
-                        <Text
-                            fontSize={{
-                                base: `${HU * 0.8}px`,
-                                md: `${HU * 0.75}px`,
-                            }}
-                            textAlign={"center"}
-                            fontWeight={"semibold"}
-                        >
-                            Report a Bug
-                        </Text>
-                    </Flex>
-                </Button>
+            <SimpleGrid columns={2}>
                 <Link
                     bg={"blue.500"}
-                    h={`${HU * 3}px`}
+                    h={`${buttonHeight}px`}
                     w={`${WU * 4}px`}
-                    m={`${HU * 0.25}px`}
+                    m={`${HU * 0.15}px`}
                     boxShadow={"#33c 0px 1px 8px"}
                     borderRadius={{ base: "5px", md: "15px" }}
                     href={"https://www.buymeacoffee.com/alfieranstead"}
@@ -96,7 +73,7 @@ export default function InfoPebble(props: {
                     isExternal
                 >
                     <Flex
-                        h={`${HU * 3}px`}
+                        h={`${buttonHeight}px`}
                         w={`${WU * 4}px`}
                         alignItems={"center"}
                         justifyContent={"center"}
@@ -109,11 +86,110 @@ export default function InfoPebble(props: {
                             textAlign={"center"}
                             fontWeight={"semibold"}
                         >
-                            Support Pebbles!
+                            Donate 💰
                         </Text>
                     </Flex>
                 </Link>
-            </Flex>
+                <Link
+                    bg={"blue.500"}
+                    h={`${buttonHeight}px`}
+                    w={`${WU * 4}px`}
+                    m={`${HU * 0.15}px`}
+                    boxShadow={"#33c 0px 1px 8px"}
+                    borderRadius={{ base: "5px", md: "15px" }}
+                    href={"https://www.alfieranstead.com"}
+                    _hover={{ transform: "scale(1.02)", bg: "blue.600" }}
+                    _active={{ transform: "scale(0.98)", bg: "blue.700" }}
+                    isExternal
+                >
+                    <Flex
+                        h={`${buttonHeight}px`}
+                        w={`${WU * 4}px`}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                    >
+                        <Text
+                            fontSize={{
+                                base: `${HU * 0.8}px`,
+                                md: `${HU * 0.75}px`,
+                            }}
+                            textAlign={"center"}
+                            fontWeight={"semibold"}
+                        >
+                            Contact 💬
+                        </Text>
+                    </Flex>
+                </Link>
+                <Button
+                    bg={"red.500"}
+                    h={`${buttonHeight}px`}
+                    w={`${WU * 4}px`}
+                    m={`${HU * 0.15}px`}
+                    boxShadow={"#c33 0px 1px 8px"}
+                    borderRadius={{ base: "5px", md: "15px" }}
+                    _hover={{ transform: "scale(1.02)", bg: "red.600" }}
+                    _active={{
+                        transform: "scale(0.98)",
+                        bg: "red.700",
+                    }}
+                    onClick={() => {
+                        props.setOverlay({
+                            hidden: false,
+                            type: "bug",
+                        });
+                    }}
+                >
+                    <Flex
+                        h={`${buttonHeight}px`}
+                        w={`${WU * 4}px`}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                    >
+                        <Text
+                            fontSize={{
+                                base: `${HU * 0.8}px`,
+                                md: `${HU * 0.75}px`,
+                            }}
+                            textAlign={"center"}
+                            fontWeight={"semibold"}
+                        >
+                            Report a Bug ⚠️
+                        </Text>
+                    </Flex>
+                </Button>
+                <Button
+                    bg={"red.500"}
+                    h={`${buttonHeight}px`}
+                    w={`${WU * 4}px`}
+                    m={`${HU * 0.15}px`}
+                    boxShadow={"#c33 0px 1px 8px"}
+                    borderRadius={{ base: "5px", md: "15px" }}
+                    _hover={{ transform: "scale(1.02)", bg: "red.600" }}
+                    _active={{ transform: "scale(0.98)", bg: "red.700" }}
+                    onClick={() => {
+                        props.setOverlay({ hidden: false, type: "bug" });
+                    }}
+                >
+                    <Flex
+                        h={`${buttonHeight}px`}
+                        w={`${WU * 4}px`}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                    >
+                        <Text
+                            fontSize={{
+                                base: `${HU * 0.8}px`,
+                                md: `${HU * 0.75}px`,
+                            }}
+                            textAlign={"center"}
+                            fontWeight={"semibold"}
+                        >
+                            Log Out 👋
+                        </Text>
+                    </Flex>
+                </Button>
+            </SimpleGrid>
+
             <Flex
                 flexDir={"column"}
                 h={`${HU * 2}px`}
