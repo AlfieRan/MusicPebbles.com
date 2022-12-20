@@ -88,7 +88,7 @@ function ArtistObject(props: {
             flexDir={"row"}
             bg={"whiteAlpha.200"}
             w={{ base: `${props.WU * 9.2}px`, md: `${props.WU * 4.5}px` }}
-            borderRadius={{ base: "5px", md: "10px" }}
+            borderRadius={{ base: "2px", md: "5px" }}
             px={{ base: `${props.WU * 0.15}px`, md: `${props.WU * 0.075}px` }}
             py={{ base: `${props.WU * 0.1}px`, md: `${props.WU * 0.05}px` }}
             my={{ base: `${props.WU * 0.075}px`, md: `${props.WU * 0.025}px` }}
@@ -97,7 +97,7 @@ function ArtistObject(props: {
         >
             <Flex>
                 <Flex
-                    borderRadius={{ base: "sm", md: "md" }}
+                    borderRadius={"2px"}
                     overflow={"hidden"}
                     mr={`${props.WU * 0.1}px`}
                     w={{

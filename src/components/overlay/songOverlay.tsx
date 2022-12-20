@@ -162,10 +162,7 @@ export default function SongOverlay(props: {
                         <Flex w={`${props.WU * 7}px`}>
                             <Flex
                                 overflow={"hidden"}
-                                borderRadius={`${Math.min(
-                                    props.WU * 0.1,
-                                    5
-                                )}px`}
+                                borderRadius={"2px"}
                                 height={"auto"}
                                 w={{
                                     base: `${
