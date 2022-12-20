@@ -33,6 +33,34 @@ export async function getSession(
     return JSON.parse(profile);
 }
 
+export async function killSession(
+    req: NextApiRequest,
+    redisClient: Redis
+): Promise<boolean> {
+    const key = sessionKeyFromRequest(req, "auth");
+
+    // check is user is logged in
+    if (key === false) {
+        return false;
+    }
+
+    // get user id
+    const userId = await redisClient.get(`jwt:${key}`);
+
+    if (!userId) {
+        return false;
+    }
+
+    console.log(`Killing session for user ${userId}, deleting all data.`);
+    // delete user's profile
+    await redisClient.del(`spotify:${userId}:profile`);
+
+    // delete user's auth key
+    await redisClient.del(`jwt:${key}`);
+
+    return true;
+}
+
 export function sessionKeyFromRequest(
     req: NextApiRequest,
     cookieName: string

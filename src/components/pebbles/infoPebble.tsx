@@ -1,24 +1,20 @@
-import {
-    Flex,
-    Link,
-    Text,
-    Button,
-    SimpleGrid,
-    GridItem,
-} from "@chakra-ui/react";
+import { Flex, Link, Text, Button, SimpleGrid } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import { Dispatch, SetStateAction } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
+import { useRouter } from "next/router";
 
 export default function InfoPebble(props: {
     info: pebblePhysics;
     setHovering: setHoveringType;
     setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
+    const router = useRouter();
     const HU = props.info.dims.height / 10;
     const WU = props.info.dims.width / 10;
     const buttonHeight = HU * 1.7;
+
     return (
         <Flex
             w={`${props.info.dims.width}px`}
@@ -167,7 +163,11 @@ export default function InfoPebble(props: {
                     _hover={{ transform: "scale(1.02)", bg: "red.600" }}
                     _active={{ transform: "scale(0.98)", bg: "red.700" }}
                     onClick={() => {
-                        props.setOverlay({ hidden: false, type: "bug" });
+                        fetch("/api/oauth/logout")
+                            .then(() => {
+                                router.push("/").catch(console.error);
+                            })
+                            .catch(console.error);
                     }}
                 >
                     <Flex
