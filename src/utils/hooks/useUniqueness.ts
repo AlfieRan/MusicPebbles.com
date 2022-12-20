@@ -127,7 +127,10 @@ function getUniquenessForTime(artists: artistsType): SingleUniqueness {
     return {
         rating,
         colour: getUniquenessColour(rating),
-        details: getUniquenessDetails(rating, artists),
+        details: getUniquenessDetails(
+            rating,
+            sortedArtists.map((artist) => artist.artist)
+        ),
         artists: sortedArtists,
     };
 }
@@ -188,21 +191,29 @@ function getUniquenessDetails(rating: number, artists?: artistsType): string {
         ? "Do you only listen to artists who live in caves? Your taste is way too underground for any normal person, please just go outside."
         : rating >= 70
         ? "You definitely do something with computers for a living, probably modding discord servers. You're a little too niche for me."
+        : rating >= 65
+        ? "Okay, you're a little too niche for me, but I can see why you like this music. Just please don't tell me you're a reddit user."
         : rating >= 60
         ? "Your taste is pretty underground, but you're not too far gone. Stay off tiktok and you might be somewhat tolerable."
         : rating >= 55
-        ? "100% a soundcloud user. You're not too bad, but you're not great either. You're just kinda there."
+        ? `Your taste is pretty mainstream, but you appear to be a human. Your music taste is probably the only normal thing about you.`
+        : rating >= 50
+        ? "Okay, you're pretty normal. kind of boring, but normal. Maybe try listening to some music that's not on the radio."
         : rating >= 45
-        ? "Your taste is pretty mainstream, but you also appreciate some smaller artists. You may not be normal in many ways but at least your music taste is."
+        ? "You're a little too mainstream for me, try listening to some artists that don't have a Wikipedia page."
+        : rating >= 40
+        ? "Wow, you're really mainstream. You probably listen to the radio, and are either over 35 or upper class 🥲 (if so, please donate!)"
         : rating >= 35
         ? `"My favourite artist is this really underground group called ${
-              artists !== undefined ? artists[0].name : "The Beatles"
-          }, you should check them out." You're pretty normal, but you're also pretty boring.`
+              artists !== undefined
+                  ? artists[artists.length - 1].name
+                  : "The Beatles"
+          }, you should check them out." - You, probably.`
         : rating >= 25
         ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
         : rating >= 15
         ? "Your taste is so mainstream that it's almost offensive. Please listen to something new right now."
-        : "How did you even get a score this low, I genuinely didn't know that was possible. You're definitely a lizard pretending to be a person. (Hi Zuckberg!)";
+        : "How did you even get a score this low, I genuinely didn't know that was possible. Are you Mark Zuckerberg?";
 }
 
 function getUniquenessColour(rating: number): string {

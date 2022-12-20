@@ -41,7 +41,7 @@ export default function UniquePebble(props: {
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={`${HU * 0.75}px`}
-            boxShadow={"#333 2px 4px 8px"}
+            boxShadow={"#000 2px 2px 10px"}
             overflow={"hidden"}
             bg={"blackAlpha.600"}
             pos={"absolute"}
@@ -117,45 +117,21 @@ export default function UniquePebble(props: {
                     </Flex>
                     <Flex
                         ml={`${WU * 0.5}px`}
+                        p={`${HU * 0.25}px`}
                         w={`${WU * 6}px`}
-                        h={`${HU * 2}px`}
                         flexDir={"column"}
                         justifyContent={"center"}
                         alignItems={"center"}
+                        bg={"blackAlpha.400"}
+                        borderRadius={`${HU * 0.5}px`}
                     >
                         <Flex flexDir={"row"} justifyContent={"space-evenly"}>
-                            {props.uniqueness.uniqueness[props.time].artists
-                                .slice(0, 3)
-                                .map((artist, index) => (
-                                    <Flex
-                                        h={`${HU * 4}px`}
-                                        w={`${WU * 2}px`}
-                                        px={`${WU * 0.1}px`}
-                                        py={`${HU * 0.1}px`}
-                                        key={
-                                            artist.artist.name +
-                                            "uniquePreview" +
-                                            Math.random()
-                                        }
-                                        flexDir={"column"}
-                                        pointerEvents={"none"}
-                                    >
-                                        <Image
-                                            src={artist.artist.images[0].url}
-                                            alt={artist.artist.name}
-                                            width={
-                                                artist.artist.images[0].width *
-                                                WU *
-                                                1.8
-                                            }
-                                            height={
-                                                artist.artist.images[0].height *
-                                                HU *
-                                                3.6
-                                            }
-                                        />
-                                    </Flex>
-                                ))}
+                            <Text fontSize={`${HU * 0.75}px`}>
+                                {
+                                    props.uniqueness.uniqueness[props.time]
+                                        .details
+                                }
+                            </Text>
                         </Flex>
                     </Flex>
                 </Flex>

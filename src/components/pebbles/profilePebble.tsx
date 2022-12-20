@@ -28,7 +28,7 @@ export default function ProfilePebble(props: {
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={`${HU * 0.75}px`}
-            boxShadow={"#333 2px 4px 8px"}
+            boxShadow={"#000 2px 2px 10px"}
             overflow={"hidden"}
             bg={"blackAlpha.600"}
             pos={"absolute"}

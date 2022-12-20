@@ -190,6 +190,7 @@ export default function UniqueOverlay(props: {
                         }}
                         overflow={"hidden"}
                         borderRadius={{ base: "5px", md: "10px" }}
+                        bg={"whiteAlpha.400"}
                     >
                         <Image
                             src={
@@ -222,7 +223,7 @@ export default function UniqueOverlay(props: {
                             <Flex
                                 key={"UniquenessOverlay" + artist.artist.id}
                                 bg={"blackAlpha.500"}
-                                borderRadius={{ base: "5px", md: "10px" }}
+                                borderRadius={{ base: "2px", md: "5px" }}
                                 m={{
                                     base: `${props.WU * 0.1}px`,
                                     md: `${props.WU * 0.02}px`,
@@ -353,6 +354,7 @@ export default function UniqueOverlay(props: {
                                             base: `${props.WU * 2.5}px`,
                                             md: `${props.WU}px`,
                                         }}
+                                        bg={"blackAlpha.500"}
                                     >
                                         <Image
                                             src={

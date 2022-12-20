@@ -1,4 +1,4 @@
-import { Center, Flex, Text, Image } from "@chakra-ui/react";
+import { Center, Flex, Text, Image, Link } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { profileHookType } from "../../utils/types/state";
@@ -59,7 +59,7 @@ export default function ArtistPebble(props: {
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={`${HU * 0.375}px`}
-            boxShadow={"#333 2px 4px 8px"}
+            boxShadow={"#000 2px 2px 10px"}
             py={`${HU * 0.25}px`}
             px={`${WU * 0.25}px`}
             flexDir={"column"}
@@ -98,10 +98,15 @@ export default function ArtistPebble(props: {
                         h={`${HU * 8.5}px`}
                         w={`${WU * 9.5}px`}
                     >
-                        <Flex flexDir={"row"} mx={"10px"} my={"5px"}>
+                        <Flex
+                            flexDir={"row"}
+                            mx={"10px"}
+                            my={"5px"}
+                            justifyContent={"space-between"}
+                        >
                             <Flex
                                 h={"fit-content"}
-                                borderRadius={`${Math.min(WU * 0.1, 5)}px`}
+                                borderRadius={`${Math.min(WU * 0.1, 3)}px`}
                                 overflow={"hidden"}
                             >
                                 <Image
@@ -117,36 +122,111 @@ export default function ArtistPebble(props: {
                             </Flex>
                             <Flex
                                 ml={0.3 * WU}
-                                flexDir={"column"}
-                                h={2 * HU}
-                                maxW={5 * WU}
+                                flexDir={{ base: "column", md: "row" }}
+                                h={2.4 * HU}
+                                w={`${9 * WU - 2.4 * HU - 10}px`}
+                                px={`${0.2 * WU}px`}
                                 pb={0.1 * HU}
-                                justifyContent={"center"}
+                                justifyContent={{
+                                    base: "space-around",
+                                    md: "space-between",
+                                }}
                                 overflow={"hidden"}
                             >
-                                <Text fontSize={`${HU * 0.5}px`}>
-                                    1. {artists[0].name}
-                                </Text>
-                                <Text
-                                    fontSize={`${WU * 0.33}px`}
-                                    color={"whiteAlpha.500"}
+                                <Flex flexDir={"column"}>
+                                    <Text fontSize={`${HU * 0.45}px`}>
+                                        1. {artists[0].name}
+                                    </Text>
+                                    <Text
+                                        fontSize={`${WU * 0.33}px`}
+                                        color={"whiteAlpha.500"}
+                                    >
+                                        {getArtistGenres(artists[0])}
+                                    </Text>
+                                </Flex>
+                                <Flex
+                                    flexDir={"row"}
+                                    alignItems={"center"}
+                                    justifyContent={{
+                                        base: "center",
+                                        md: "flex-end",
+                                    }}
                                 >
-                                    {getArtistGenres(artists[0])}
-                                </Text>
+                                    <Link
+                                        href={artists[0].external_urls.spotify}
+                                        _hover={{
+                                            transform: "scale(1.1)",
+                                        }}
+                                        _active={{
+                                            transform: "scale(0.9)",
+                                        }}
+                                        h={{
+                                            base: `${0}px`,
+                                            md: `${WU * 0.6}px`,
+                                        }}
+                                        w={{
+                                            base: `${0}px`,
+                                            md: `${WU * 0.6}px`,
+                                        }}
+                                        minH={{ base: "0px", md: "21px" }}
+                                        minW={{ base: "0px", md: "21px" }}
+                                        isExternal
+                                    >
+                                        <Image
+                                            src={
+                                                "/spotifyBranding/icons/white.png"
+                                            }
+                                            alt={"Spotify Icon"}
+                                        />
+                                    </Link>
+                                    <Link
+                                        href={artists[0].external_urls.spotify}
+                                        _hover={{ transform: "scale(1.02)" }}
+                                        _active={{ transform: "scale(0.98)" }}
+                                        transition={"all 0.1s ease-in-out"}
+                                        isExternal
+                                    >
+                                        <Flex
+                                            w={{
+                                                base: `${WU * 2.5}px`,
+                                                md: "0px",
+                                            }}
+                                            h={{
+                                                base: `${WU}px`,
+                                                md: "0px",
+                                            }}
+                                            minW={{ base: "70px", md: "0px" }}
+                                            minH={{ base: "21px", md: "0px" }}
+                                            pos={"relative"}
+                                            justifyContent={"center"}
+                                            alignItems={"center"}
+                                        >
+                                            <Image
+                                                src={
+                                                    "/spotifyBranding/logos/white.png"
+                                                }
+                                                className={"object-contain"}
+                                                alt={"Spotify Logo"}
+                                                boxSize={"full"}
+                                            />
+                                        </Flex>
+                                    </Link>
+                                </Flex>
                             </Flex>
                         </Flex>
                         {artists.slice(1, 5).map((artist, index) => (
                             <Flex
                                 key={index}
                                 flexDir={"row"}
+                                justifyContent={"space-between"}
                                 mx={`${WU * 0.2}px`}
                                 my={`${HU * 0.025}px`}
                                 h={`${HU * 1.2}px`}
-                                w={`${WU * 8.5}px`}
+                                w={`${WU * 9.1}px`}
                             >
                                 <Flex
                                     h={"fit-content"}
-                                    borderRadius={`${Math.min(WU * 0.1, 5)}px`}
+                                    borderRadius={`${Math.min(WU * 0.1, 3)}px`}
                                     overflow={"hidden"}
                                 >
                                     <Image
@@ -161,11 +241,15 @@ export default function ArtistPebble(props: {
                                     />
                                 </Flex>
                                 <Flex
-                                    ml={3}
+                                    ml={"5px"}
                                     flexDir={"column"}
-                                    maxW={"70%"}
+                                    maxW={"80%"}
                                     maxH={"100%"}
                                     h={`${HU}px`}
+                                    w={{
+                                        base: `${WU * 6}px`,
+                                        md: `${WU * 7}px`,
+                                    }}
                                     justifyContent={"center"}
                                     overflow={"hidden"}
                                 >
@@ -179,6 +263,39 @@ export default function ArtistPebble(props: {
                                     >
                                         {getArtistGenres(artist)}
                                     </Text>
+                                </Flex>
+                                <Flex
+                                    h={"100%"}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                >
+                                    <Link
+                                        href={artist.external_urls.spotify}
+                                        _hover={{
+                                            transform: "scale(1.1)",
+                                        }}
+                                        _active={{
+                                            transform: "scale(0.9)",
+                                        }}
+                                        h={{
+                                            base: `${WU * 0.75}px`,
+                                            md: `${WU * 0.5}px`,
+                                        }}
+                                        w={{
+                                            base: `${WU * 0.75}px`,
+                                            md: `${WU * 0.5}px`,
+                                        }}
+                                        minH={"21px"}
+                                        minW={"21px"}
+                                        isExternal
+                                    >
+                                        <Image
+                                            src={
+                                                "/spotifyBranding/icons/white.png"
+                                            }
+                                            alt={"Spotify Icon"}
+                                        />
+                                    </Link>
                                 </Flex>
                             </Flex>
                         ))}

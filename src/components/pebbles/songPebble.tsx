@@ -1,4 +1,4 @@
-import { Flex, Text, Image } from "@chakra-ui/react";
+import { Flex, Text, Image, Link } from "@chakra-ui/react";
 import { pebblePhysics } from "../../utils/types/pebbles";
 import { audioPlayerType, profileHookType } from "../../utils/types/state";
 import { songType, timeFrameType } from "../../utils/types/spotify";
@@ -57,7 +57,7 @@ export default function SongPebble(props: {
             top={`${props.info.pos.y}px`}
             left={`${props.info.pos.x}px`}
             borderRadius={`${HU * 0.375}px`}
-            boxShadow={"#333 2px 4px 8px"}
+            boxShadow={"#000 2px 2px 10px"}
             overflow={"hidden"}
             bg={"blackAlpha.600"}
             pos={"absolute"}
@@ -101,39 +101,47 @@ export default function SongPebble(props: {
                             <Flex
                                 flexDir={"row"}
                                 key={`${song.name}_preview`}
+                                justifyContent={"space-between"}
                                 mx={`${WU * 0.25}px`}
                                 my={`${HU * 0.05}px`}
                                 h={`${HU * 1.5}px`}
                                 w={`${WU * 9}px`}
                             >
-                                <Flex
-                                    alignItems={"center"}
-                                    borderRadius={`${Math.min(WU * 0.1, 5)}px`}
-                                    overflow={"hidden"}
-                                >
-                                    <Image
-                                        src={
-                                            song.album.images[0].url ??
-                                            "/unknown.png"
-                                        }
-                                        alt={`${song.name} album art`}
-                                        width={
-                                            song.album.images[0].width *
-                                            HU *
-                                            1.4
-                                        }
-                                        height={
-                                            song.album.images[0].width *
-                                            HU *
-                                            1.4
-                                        }
-                                    />
+                                <Flex alignItems={"center"}>
+                                    <Flex
+                                        borderRadius={`${Math.min(
+                                            WU * 0.1,
+                                            3
+                                        )}px`}
+                                        overflow={"hidden"}
+                                    >
+                                        <Image
+                                            src={
+                                                song.album.images[0].url ??
+                                                "/unknown.png"
+                                            }
+                                            alt={`${song.name} album art`}
+                                            width={
+                                                song.album.images[0].width *
+                                                HU *
+                                                1.4
+                                            }
+                                            height={
+                                                song.album.images[0].width *
+                                                HU *
+                                                1.4
+                                            }
+                                        />
+                                    </Flex>
                                 </Flex>
 
                                 <Flex
                                     flexDir={"column"}
-                                    ml={2}
-                                    maxW={`${WU * 9 - HU * 1.5}px`}
+                                    ml={{ base: "2px", md: "5px" }}
+                                    w={{
+                                        base: `${WU * 8 - HU * 1.5}px`,
+                                        md: `${WU * 8.3 - HU * 1.5}px`,
+                                    }}
                                 >
                                     <Text
                                         fontSize={
@@ -183,6 +191,39 @@ export default function SongPebble(props: {
                                             .map((artist) => artist.name)
                                             .join(", ")}
                                     </Text>
+                                </Flex>
+                                <Flex
+                                    h={"100%"}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                >
+                                    <Link
+                                        href={song.external_urls.spotify}
+                                        _hover={{
+                                            transform: "scale(1.1)",
+                                        }}
+                                        _active={{
+                                            transform: "scale(0.9)",
+                                        }}
+                                        h={{
+                                            base: `${WU * 0.75}px`,
+                                            md: `${WU * 0.5}px`,
+                                        }}
+                                        w={{
+                                            base: `${WU * 0.75}px`,
+                                            md: `${WU * 0.5}px`,
+                                        }}
+                                        minH={"21px"}
+                                        minW={"21px"}
+                                        isExternal
+                                    >
+                                        <Image
+                                            src={
+                                                "/spotifyBranding/icons/white.png"
+                                            }
+                                            alt={"Spotify Icon"}
+                                        />
+                                    </Link>
                                 </Flex>
                             </Flex>
                         ))}
