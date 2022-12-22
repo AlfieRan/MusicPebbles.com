@@ -45,3 +45,27 @@ export type overlayStateType =
     | bugComponentOverlay
     | popUpComponentOverlay
     | hiddenOverlay;
+
+type profileOverlayButtonColourType =
+    | "red"
+    | "blue-highlight"
+    | "red-highlight"
+    | "none";
+
+interface profileOverlayButtonLinkType {
+    type: "link";
+    href: string;
+    text: string;
+    color: profileOverlayButtonColourType;
+}
+
+interface profileoOverlayButtonButtonType {
+    type: "button";
+    onClick: () => void;
+    text: string;
+    color: profileOverlayButtonColourType;
+}
+
+export type profileOverlayButtonType =
+    | profileOverlayButtonLinkType
+    | profileoOverlayButtonButtonType;

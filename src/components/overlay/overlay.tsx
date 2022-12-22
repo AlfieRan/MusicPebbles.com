@@ -11,6 +11,7 @@ import ArtistOverlay from "./artistOverlay";
 import BugOverlay from "./bugOverlay";
 import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 import PopUp from "./popUp";
+import { Dispatch, SetStateAction } from "react";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -20,6 +21,7 @@ export function Overlay(props: {
     profile: profileHookType;
     uniqueness: useUniquenessType;
     closePopUp: () => void;
+    setOverlay: Dispatch<SetStateAction<overlayStateType>>;
 }) {
     const screenHook = useScreen();
     const HU = screenHook.height / 10;
@@ -60,6 +62,7 @@ export function Overlay(props: {
                                 HU={HU}
                                 profile={props.profile}
                                 exit={props.hide}
+                                setOverlay={props.setOverlay}
                             />
                         )}
                         {props.info.type === "unique" && (

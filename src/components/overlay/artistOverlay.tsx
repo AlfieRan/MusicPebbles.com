@@ -97,7 +97,6 @@ function ArtistObject(props: {
         >
             <Flex>
                 <Flex
-                    borderRadius={"2px"}
                     overflow={"hidden"}
                     mr={`${props.WU * 0.1}px`}
                     w={{

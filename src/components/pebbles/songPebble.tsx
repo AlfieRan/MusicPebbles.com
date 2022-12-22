@@ -108,13 +108,7 @@ export default function SongPebble(props: {
                                 w={`${WU * 9}px`}
                             >
                                 <Flex alignItems={"center"}>
-                                    <Flex
-                                        borderRadius={`${Math.min(
-                                            WU * 0.1,
-                                            3
-                                        )}px`}
-                                        overflow={"hidden"}
-                                    >
+                                    <Flex overflow={"hidden"}>
                                         <Image
                                             src={
                                                 song.album.images[0].url ??

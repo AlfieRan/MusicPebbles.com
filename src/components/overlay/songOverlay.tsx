@@ -42,7 +42,7 @@ export default function SongOverlay(props: {
             alignItems={"center"}
             bg={"MidGrey"}
             px={{ base: `${props.WU * 0.25}px`, md: `${props.WU * 0.1}px` }}
-            py={4}
+            py={{ base: `${props.WU * 0.25}px`, md: `${props.WU * 0.1}px` }}
             borderRadius={"10px"}
             w={{
                 base: `${props.WU * 9.5}px`,
@@ -52,67 +52,110 @@ export default function SongOverlay(props: {
             key={"SongOverlay"}
         >
             <Flex
-                w={"100%"}
-                flexDir={"column"}
-                bg={"whiteAlpha.300"}
-                p={{ base: `${props.WU * 0.25}px`, md: `${props.WU * 0.1}px` }}
+                flexDir={"row"}
+                w={{
+                    base: `${props.WU * 9}px`,
+                    md: `${props.WU * 7.8}px`,
+                }}
                 borderRadius={{ base: "5px", md: "10px" }}
+                justifyContent={"space-between"}
+                alignItems={{ base: "center", md: "flex-start" }}
             >
-                <Flex
-                    flexDir={"row"}
-                    w={"100%"}
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                    mb={2}
-                >
-                    <AudioControls
-                        audioPlayer={props.audioPlayer}
-                        WU={Math.min(props.HU, props.WU * 1.2, 65) * 3.2}
-                        HU={Math.min(props.HU, props.WU * 1.2, 65)}
-                    />
-                    <ExitButton
-                        fn={props.exit}
-                        size={Math.min(props.HU, props.WU * 1.2, 65)}
-                    />
-                </Flex>
-                <Flex flexDir={"row"} w={"100%"}>
+                <Flex h={"100%"} alignItems={"center"}>
                     <Flex
-                        maxH={`${props.HU}px`}
                         w={{
-                            base: `${props.WU * 8.8}px`,
-                            md: `${props.WU * 7.4}px`,
+                            base: `${props.WU * 2}px`,
+                            md: `${props.WU * 1.3}px`,
                         }}
-                        justifyContent={"center"}
+                        pos={"relative"}
                         flexDir={"column"}
-                        my={1}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        overflow={"hidden"}
+                        onClick={() => {
+                            if (props.audioPlayer.playing !== undefined) {
+                                window.open(
+                                    props.audioPlayer.playing.external_urls
+                                        .spotify,
+                                    "_blank"
+                                );
+                            } else {
+                                console.error(
+                                    "Song clicked, with none playing."
+                                );
+                            }
+                        }}
                     >
-                        <Text
-                            fontSize={{
-                                base: `${props.WU * 0.4}px`,
-                                md: `${props.WU * 0.16}px`,
+                        <Image
+                            src={props.audioPlayer.playing?.album.images[0].url}
+                            className={"object-contain"}
+                            alt={"Currently playing song"}
+                        />
+                    </Flex>
+                </Flex>
+                <Flex
+                    w={{
+                        base: `${props.WU * 6.8}px`,
+                        md: `${props.WU * 6.4}px`,
+                    }}
+                    flexDir={"column"}
+                >
+                    <Flex
+                        flexDir={"row"}
+                        w={"100%"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
+                        mb={"1px"}
+                    >
+                        <AudioControls
+                            audioPlayer={props.audioPlayer}
+                            WU={Math.min(props.HU, props.WU * 1.2, 65) * 3.2}
+                            HU={Math.min(props.HU, props.WU * 1.2, 65)}
+                        />
+                        <ExitButton
+                            fn={props.exit}
+                            size={Math.min(props.HU, props.WU * 1.2, 65)}
+                        />
+                    </Flex>
+                    <Flex flexDir={"row"} w={"100%"}>
+                        <Flex
+                            maxH={`${props.HU}px`}
+                            w={{
+                                base: `${props.WU * 8.8}px`,
+                                md: `${props.WU * 7.4}px`,
                             }}
+                            justifyContent={"center"}
+                            flexDir={"column"}
+                            my={"1px"}
                         >
-                            {currentSong.song}
-                        </Text>
-                        <Text
-                            fontSize={{
-                                base: `${props.WU * 0.4}px`,
-                                md: `${props.WU * 0.12}px`,
-                            }}
-                            hidden={currentSong.album === ""}
-                            color={"whiteAlpha.700"}
-                        >
-                            {currentSong.album}
-                        </Text>
-                        <Text
-                            fontSize={{
-                                base: `${props.WU * 0.4}px`,
-                                md: `${props.WU * 0.14}px`,
-                            }}
-                            hidden={currentSong.artist === ""}
-                        >
-                            {currentSong.artist}
-                        </Text>
+                            <Text
+                                fontSize={{
+                                    base: `${props.WU * 0.4}px`,
+                                    md: `${props.WU * 0.16}px`,
+                                }}
+                            >
+                                {currentSong.song}
+                            </Text>
+                            <Text
+                                fontSize={{
+                                    base: `${props.WU * 0.4}px`,
+                                    md: `${props.WU * 0.12}px`,
+                                }}
+                                hidden={currentSong.album === ""}
+                                color={"whiteAlpha.700"}
+                            >
+                                {currentSong.album}
+                            </Text>
+                            <Text
+                                fontSize={{
+                                    base: `${props.WU * 0.4}px`,
+                                    md: `${props.WU * 0.14}px`,
+                                }}
+                                hidden={currentSong.artist === ""}
+                            >
+                                {currentSong.artist}
+                            </Text>
+                        </Flex>
                     </Flex>
                 </Flex>
             </Flex>
@@ -137,7 +180,7 @@ export default function SongOverlay(props: {
                     <Flex
                         key={"SongOverlay" + songIndex + "Song" + song.id}
                         bg={"blackAlpha.400"}
-                        borderRadius={"10px"}
+                        borderRadius={{ base: "2px", md: "5px" }}
                         w={{
                             base: `${props.WU * 9}px`,
                             md: `${props.WU * 3.75}px`,
@@ -162,7 +205,6 @@ export default function SongOverlay(props: {
                         <Flex w={`${props.WU * 7}px`}>
                             <Flex
                                 overflow={"hidden"}
-                                borderRadius={"2px"}
                                 height={"auto"}
                                 w={{
                                     base: `${

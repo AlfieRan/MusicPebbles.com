@@ -224,9 +224,10 @@ export default function UniqueOverlay(props: {
                                 key={"UniquenessOverlay" + artist.artist.id}
                                 bg={"blackAlpha.500"}
                                 borderRadius={{ base: "2px", md: "5px" }}
+                                p={{ base: "1px", md: "2.5px" }}
                                 m={{
                                     base: `${props.WU * 0.1}px`,
-                                    md: `${props.WU * 0.02}px`,
+                                    md: `${props.WU * 0.03}px`,
                                 }}
                                 pos={"relative"}
                                 overflow={"hidden"}

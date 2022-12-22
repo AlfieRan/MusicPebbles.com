@@ -28,7 +28,6 @@ export default function AudioControls(props: {
                 _hover={{ bg: "blackAlpha.500", transform: "scale(1.05)" }}
                 _active={{ bg: "blackAlpha.700", transform: "scale(0.95)" }}
                 onClick={redirectToSpotify}
-                fontSize={`${props.WU * 0.12}px`}
                 w={`${props.WU * 0.31}px`}
                 h={`${props.HU}px`}
                 size={"0"}
@@ -36,8 +35,8 @@ export default function AudioControls(props: {
                 minH={0}
             >
                 <Flex
-                    w={"75%"}
-                    h={"75%"}
+                    w={"60%"}
+                    h={"60%"}
                     p={"10%"}
                     pos={"relative"}
                     alignItems={"center"}

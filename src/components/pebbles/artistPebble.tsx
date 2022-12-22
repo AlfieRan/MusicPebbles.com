@@ -104,11 +104,7 @@ export default function ArtistPebble(props: {
                             my={"5px"}
                             justifyContent={"space-between"}
                         >
-                            <Flex
-                                h={"fit-content"}
-                                borderRadius={`${Math.min(WU * 0.1, 3)}px`}
-                                overflow={"hidden"}
-                            >
+                            <Flex h={"fit-content"} overflow={"hidden"}>
                                 <Image
                                     src={artists[0].images[0].url}
                                     alt={"Artist Image"}
@@ -224,11 +220,7 @@ export default function ArtistPebble(props: {
                                 h={`${HU * 1.2}px`}
                                 w={`${WU * 9.1}px`}
                             >
-                                <Flex
-                                    h={"fit-content"}
-                                    borderRadius={`${Math.min(WU * 0.1, 3)}px`}
-                                    overflow={"hidden"}
-                                >
+                                <Flex h={"fit-content"} overflow={"hidden"}>
                                     <Image
                                         src={artist.images[0].url}
                                         alt={"Artist Image"}

@@ -90,6 +90,7 @@ export default function Pebbles() {
                     profile={profile}
                     uniqueness={uniqueness}
                     closePopUp={popUp.closePopUp}
+                    setOverlay={setOverlayState}
                 />
                 <ProfilePebble
                     info={pebbleState.profile}

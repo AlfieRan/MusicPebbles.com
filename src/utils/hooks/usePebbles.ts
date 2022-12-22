@@ -29,11 +29,11 @@ const pebbleSizesLarge = {
         height: 1,
     },
     genre: {
-        width: 2,
+        width: 1,
         height: 1,
     },
     playing: {
-        width: 1,
+        width: 2,
         height: 1,
     },
     time: {
@@ -43,10 +43,6 @@ const pebbleSizesLarge = {
 };
 
 const pebbleOverridesSmall = {
-    playing: {
-        width: 2,
-        height: 1,
-    },
     song: {
         width: 2,
         height: 3,
@@ -55,9 +51,11 @@ const pebbleOverridesSmall = {
         width: 2,
         height: 3,
     },
+    genre: {
+        width: 2,
+        height: 1,
+    },
 };
-
-const maxHeight = 5;
 
 // TODO: make this work for any screen size, currently only works well on desktop
 export function usePebbles() {
@@ -149,7 +147,7 @@ export function usePebbles() {
                 unique: getGridItemPosition(pebbleSizes.unique, { x: 2, y: 0 }),
                 genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 2 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
-                    x: 2,
+                    x: 1,
                     y: 2,
                 }),
                 time: getGridItemPosition(pebbleSizes.time, { x: 4, y: 0 }),

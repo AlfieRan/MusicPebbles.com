@@ -23,20 +23,11 @@ export default function AudioPebble(props: {
         setWU(props.info.dims.width / 8);
     }, [props.info.dims.height, props.info.dims.width]);
 
-    const [mode, setMode] = useState<"wide" | "normal">("normal");
     const [currentSong, setCurrentSong] = useState<songOverlayInfo>({
         song: "No Song Playing",
         artist: "",
         album: "",
     });
-
-    useEffect(() => {
-        if (WU > 1.1 * HU) {
-            setMode("wide");
-        } else {
-            setMode("normal");
-        }
-    }, [HU, WU]);
 
     useEffect(() => {
         setCurrentSong(wrapNames(props.audioPlayer, 25));
@@ -86,27 +77,14 @@ export default function AudioPebble(props: {
                 borderRadius={"10px"}
             >
                 {props.audioPlayer.playing !== undefined ? (
-                    <Center
-                        flexDir={mode === "normal" ? "column" : "row"}
-                        w={"100%"}
-                        h={"100%"}
-                    >
+                    <Center flexDir={"row"} w={"100%"} h={"100%"}>
                         <Flex
-                            w={
-                                mode === "normal"
-                                    ? `${HU * 4}px`
-                                    : `${WU * 2}px`
-                            }
-                            h={
-                                mode === "normal"
-                                    ? `${HU * 4}px`
-                                    : `${WU * 3}px`
-                            }
+                            w={`${WU * 2}px`}
+                            h={`${WU * 3}px`}
                             pos={"relative"}
                             flexDir={"column"}
                             justifyContent={"center"}
                             alignItems={"center"}
-                            borderRadius={`${WU * 0.2}px`}
                             overflow={"hidden"}
                             onMouseOver={openHover}
                             onMouseLeave={closeHover}
@@ -123,62 +101,22 @@ export default function AudioPebble(props: {
                         </Flex>
                         <Flex
                             flexDir={"column"}
-                            w={
-                                mode === "normal"
-                                    ? `${WU * 7}px`
-                                    : `${WU * 5}px`
-                            }
-                            h={
-                                mode === "normal"
-                                    ? `${HU * 2.7}px`
-                                    : `${HU * 6.5}px`
-                            }
-                            px={mode === "wide" ? `${WU * 0.25}px` : ""}
+                            w={`${WU * 5}px`}
+                            h={`${HU * 6.5}px`}
+                            px={`${WU * 0.25}px`}
                             justifyContent={"center"}
-                            alignItems={mode === "normal" ? "center" : ""}
+                            alignItems={""}
                         >
                             <Flex
-                                w={
-                                    mode === "normal"
-                                        ? `${WU * 7}px`
-                                        : `${WU * 5}px`
-                                }
-                                h={
-                                    mode === "normal"
-                                        ? `${HU * 3}px`
-                                        : `${HU * 3.5}px`
-                                }
+                                w={`${WU * 5}px`}
+                                h={`${HU * 3.5}px`}
                                 overflow={"hidden"}
                                 my={1}
                                 justifyContent={"center"}
                             >
-                                <Flex h={`${HU}px`} hidden={mode === "wide"}>
-                                    <motion.div
-                                        className={"flex w-fit-content h-fit"}
-                                        initial={{ x: "90%" }}
-                                        animate={{ x: ["90%", "-90%"] }}
-                                        transition={{
-                                            duration: 15,
-                                            repeatDelay: 0,
-                                            ease: "linear",
-                                            repeat: Infinity,
-                                        }}
-                                    >
-                                        <Text
-                                            w={"fit-content"}
-                                            h={"fit-content"}
-                                            whiteSpace={"nowrap"}
-                                            textAlign={"center"}
-                                            fontSize={`${HU * 0.5}px`}
-                                        >
-                                            {`${props.audioPlayer.playing.name} - ${props.audioPlayer.playing.album.name} - ${props.audioPlayer.playing.artists[0].name}`}
-                                        </Text>
-                                    </motion.div>
-                                </Flex>
                                 <Flex
                                     w={"100%"}
                                     h={"100%"}
-                                    hidden={mode === "normal"}
                                     flexDir={"column"}
                                     pb={`${HU * 0.5}px`}
                                     fontSize={`${HU * 0.7}px`}
@@ -192,8 +130,8 @@ export default function AudioPebble(props: {
                             </Flex>
                             <AudioControls
                                 audioPlayer={props.audioPlayer}
-                                HU={mode === "normal" ? HU * 1.5 : HU * 1.75}
-                                WU={mode === "normal" ? WU * 6 : WU * 5}
+                                HU={HU * 1.75}
+                                WU={WU * 5}
                             />
                         </Flex>
                     </Center>
