@@ -174,6 +174,7 @@ export default async function callback(
             redisClient,
             accessToken.data.access_token
         );
+
         const fullProfile: profileFull = {
             display_name: userProfile.data.display_name,
             id: userProfile.data.id,

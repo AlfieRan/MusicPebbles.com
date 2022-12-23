@@ -57,6 +57,13 @@ const pebbleOverridesSmall = {
     },
 };
 
+const pebbleOverridesMedium = {
+    artist: {
+        width: 2,
+        height: 2,
+    },
+};
+
 // TODO: make this work for any screen size, currently only works well on desktop
 export function usePebbles() {
     const [pebbleState, setPebbleState] = useState<pebbleObjType>({
@@ -80,10 +87,14 @@ export function usePebbles() {
         let pebbleSizes = pebbleSizesLarge;
         const padding = Math.max(screenHook.width / 50, 10);
 
-        if (screenHook.width < screenHook.height) {
+        if (screenHook.width * 1.5 < screenHook.height) {
             overflow = true;
             gridSize = { w: 2, h: 10 };
             pebbleSizes = { ...pebbleSizesLarge, ...pebbleOverridesSmall };
+        } else if (screenHook.width < screenHook.height) {
+            overflow = true;
+            gridSize = { w: 3, h: 6 };
+            pebbleSizes = { ...pebbleSizesLarge, ...pebbleOverridesMedium };
         }
         let gridItemSize =
             (screenHook.width - padding * (gridSize.w + 1)) / gridSize.w;
@@ -154,7 +165,7 @@ export function usePebbles() {
             };
             setPebbleState(newPebbleState);
             setComponentHeight(screenHook.height);
-        } else {
+        } else if (gridSize.w === 2) {
             const newPebbleState: pebbleObjType = {
                 profile: getGridItemPosition(pebbleSizes.profile, {
                     x: 0,
@@ -172,6 +183,26 @@ export function usePebbles() {
             };
             setPebbleState(newPebbleState);
             setComponentHeight(gridSize.h * (padding + gridItemSize) + padding);
+        } else if (gridSize.w === 3) {
+            const newPebbleState: pebbleObjType = {
+                profile: getGridItemPosition(pebbleSizes.profile, {
+                    x: 2,
+                    y: 0,
+                }),
+                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 1 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 0.5, y: 4 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 0 }),
+                genre: getGridItemPosition(pebbleSizes.genre, { x: 2, y: 2 }),
+                playing: getGridItemPosition(pebbleSizes.playing, {
+                    x: 0.5,
+                    y: 3,
+                }),
+                time: getGridItemPosition(pebbleSizes.time, { x: 2, y: 1 }),
+            };
+            setPebbleState(newPebbleState);
+            setComponentHeight(screenHook.height);
+        } else {
+            console.error("Invalid grid size");
         }
     }, [screenHook]);
 

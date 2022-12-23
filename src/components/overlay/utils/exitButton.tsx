@@ -5,8 +5,8 @@ export default function ExitButton(props: { fn: () => void; size: number }) {
         <Button
             w={`${props.size}px`}
             h={`${props.size}px`}
-            minH={0}
-            minW={0}
+            minH={"10px"}
+            minW={"10px"}
             p={`${props.size * 0.2}px`}
             onClick={props.fn}
             bg={"red.500"}
