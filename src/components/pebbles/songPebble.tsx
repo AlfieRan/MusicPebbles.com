@@ -4,6 +4,7 @@ import { audioPlayerType, profileHookType } from "../../utils/types/state";
 import { songType, timeFrameType } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { overlayStateType } from "../../utils/types/overlay";
+import { shortString } from "../../utils/other/basics";
 
 export default function SongPebble(props: {
     info: pebblePhysics;
@@ -107,10 +108,20 @@ export default function SongPebble(props: {
                                           url: "/unknown.png",
                                       };
 
+                            const songData = {
+                                name: shortString(song.name),
+                                album: shortString(song.album.name),
+                                artist: shortString(
+                                    song.artists
+                                        .map((artist) => artist.name)
+                                        .join(", ")
+                                ),
+                            };
+
                             return (
                                 <Flex
                                     flexDir={"row"}
-                                    key={`${song.name}_preview`}
+                                    key={`${songData.name}_preview`}
                                     justifyContent={"space-between"}
                                     mx={`${WU * 0.25}px`}
                                     my={`${HU * 0.05}px`}
@@ -121,7 +132,7 @@ export default function SongPebble(props: {
                                         <Flex overflow={"hidden"}>
                                             <Image
                                                 src={songImage.url}
-                                                alt={`${song.name} album art`}
+                                                alt={`${songData.name} album art`}
                                                 width={
                                                     songImage.width * HU * 1.4
                                                 }
@@ -141,52 +152,29 @@ export default function SongPebble(props: {
                                         }}
                                     >
                                         <Text
-                                            fontSize={
-                                                song.name.length < 35
-                                                    ? `${
-                                                          HU === WU
-                                                              ? WU * 0.35
-                                                              : HU * 0.27
-                                                      }px`
-                                                    : `${
-                                                          HU === WU
-                                                              ? WU * 0.3
-                                                              : HU * 0.23
-                                                      }px`
-                                            }
+                                            fontSize={`${
+                                                HU === WU
+                                                    ? WU * 0.35
+                                                    : HU * 0.27
+                                            }px`}
                                         >
-                                            {`${i + 1}. ${song.name}`.substring(
-                                                0,
-                                                45
-                                            )}
+                                            {`${i + 1}. ${songData.name}`}
                                         </Text>
 
                                         <Text
-                                            fontSize={
-                                                song.album.name.length < 35
-                                                    ? `${
-                                                          HU === WU
-                                                              ? WU * 0.3
-                                                              : HU * 0.22
-                                                      }px`
-                                                    : `${
-                                                          HU === WU
-                                                              ? WU * 0.25
-                                                              : HU * 0.2
-                                                      }px`
-                                            }
+                                            fontSize={`${
+                                                HU === WU ? WU * 0.3 : HU * 0.22
+                                            }px`}
                                             color={"whiteAlpha.500"}
                                         >
-                                            {song.album.name}
+                                            {songData.album}
                                         </Text>
                                         <Text
                                             fontSize={`${
                                                 HU === WU ? WU * 0.3 : HU * 0.23
                                             }px`}
                                         >
-                                            {song.artists
-                                                .map((artist) => artist.name)
-                                                .join(", ")}
+                                            {songData.artist}
                                         </Text>
                                     </Flex>
                                     <Flex

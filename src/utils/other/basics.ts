@@ -1,7 +1,3 @@
-export function min(a: number, b: number) {
-    return a < b ? a : b;
-}
-
 export function Sigmoid(x: number) {
     return 1 / (1 + Math.exp(-x));
 }
@@ -23,4 +19,11 @@ export function parseRating(num: number): string {
     }
 
     return num + ending;
+}
+
+export function shortString(str: string, limit: number = 30) {
+    if (str.length > limit) {
+        return str.substring(0, limit) + "...";
+    }
+    return str;
 }

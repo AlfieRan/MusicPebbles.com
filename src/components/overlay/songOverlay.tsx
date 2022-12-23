@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import AudioControls from "../other/audioControls";
 import { wrapNames } from "../../utils/other/wrapNames";
 import ExitButton from "./utils/exitButton";
+import { shortString } from "../../utils/other/basics";
 
 export default function SongOverlay(props: {
     audioPlayer: audioPlayerType;
@@ -187,6 +188,15 @@ export default function SongOverlay(props: {
                         song.album.images.length > 0
                             ? song.album.images[0]
                             : { width: 1, height: 1, url: "/unknown.png" };
+
+                    const songData = {
+                        name: shortString(song.name),
+                        album: shortString(song.album.name),
+                        artist: shortString(
+                            song.artists.map((artist) => artist.name).join(", ")
+                        ),
+                    };
+
                     return (
                         <Flex
                             key={"SongOverlay" + songIndex + "Song" + song.id}
@@ -236,14 +246,14 @@ export default function SongOverlay(props: {
                                 >
                                     <Image
                                         src={songImage.url}
-                                        alt={"Album Cover for " + song.name}
+                                        alt={"Album Cover for " + songData.name}
                                     />
                                 </Flex>
                                 <Flex
                                     ml={`${props.WU / 10}px`}
                                     maxW={{
                                         base: `${props.WU * 4.75}px`,
-                                        md: `${props.WU * 5}px`,
+                                        md: `${props.WU * 2.7}px`,
                                     }}
                                     flexDir={"column"}
                                 >
@@ -253,7 +263,7 @@ export default function SongOverlay(props: {
                                             md: `${props.WU / 9}px`,
                                         }}
                                     >
-                                        {`${songIndex + 1}. ${song.name}`}
+                                        {`${songIndex + 1}. ${songData.name}`}
                                     </Text>
                                     <Text
                                         fontSize={{
@@ -262,7 +272,7 @@ export default function SongOverlay(props: {
                                         }}
                                         color={"whiteAlpha.700"}
                                     >
-                                        {song.album.name}
+                                        {songData.album}
                                     </Text>
                                     <Text
                                         fontSize={{
@@ -270,9 +280,7 @@ export default function SongOverlay(props: {
                                             md: `${props.WU / 10}px`,
                                         }}
                                     >
-                                        {song.artists
-                                            .map((artist) => artist.name)
-                                            .join(", ")}
+                                        {songData.artist}
                                     </Text>
                                 </Flex>
                             </Flex>

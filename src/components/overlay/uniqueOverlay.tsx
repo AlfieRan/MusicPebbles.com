@@ -13,7 +13,7 @@ import { profileHookType } from "../../utils/types/state";
 import { useEffect, useState } from "react";
 import { sleep } from "../../utils/other/time";
 import { fadeBetween } from "../../utils/other/Colours";
-import { parseRating } from "../../utils/other/basics";
+import { parseRating, shortString } from "../../utils/other/basics";
 
 const timeQuadraticAdjustment = 2; // must be between 0 and 2
 const timeQuadraticAdjustment2 = (1 - timeQuadraticAdjustment) / 100;
@@ -53,13 +53,6 @@ export default function UniqueOverlay(props: {
             });
             await sleep(sleepTime);
         }
-    }
-
-    function shortString(str: string, limit: number = 30) {
-        if (str.length > limit) {
-            return str.substring(0, limit) + "...";
-        }
-        return str;
     }
 
     useEffect(() => {
