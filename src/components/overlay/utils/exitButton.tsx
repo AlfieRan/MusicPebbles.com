@@ -18,6 +18,8 @@ export default function ExitButton(props: { fn: () => void; size: number }) {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
+                width={`${props.size * 0.6}`}
+                height={`${props.size * 0.6}`}
             >
                 <path
                     strokeLinecap="round"
