@@ -1,8 +1,17 @@
 import { Center, Flex, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import Pebbles from "../pebbles/Pebbles";
+import { useScreen } from "../../utils/hooks/useScreen";
+import { useEffect, useState } from "react";
 
 export function Main() {
+    const screenSize = useScreen();
+    const [loadingAnimSize, setLoadingAnimSize] = useState(500);
+
+    useEffect(() => {
+        setLoadingAnimSize(Math.min(screenSize.height, screenSize.width) * 0.5);
+    }, [screenSize]);
+
     return (
         <Center
             h={"full"}
@@ -22,12 +31,12 @@ export function Main() {
             >
                 <motion.div
                     className={
-                        "flex absolute overflow-hidden border-white bg-gray-600 h-96 w-96 justify-center items-center"
+                        "flex absolute overflow-hidden border-white bg-gray-600 justify-center items-center border-[1px]"
                     }
                     animate={{
-                        scale: [5, 1.3, 1.5, 1.5, 0],
+                        scale: [1.5, 1, 1.3, 1.3, 0],
                         borderRadius: ["0%", "0%", "50%", "50%", "50%"],
-                        borderWidth: ["0px", "1px", "2px", "1px", "1px"],
+                        borderWidth: ["1px", "1px", "2px", "1px", "1px"],
                         background: [
                             "#161616",
                             "#161616",
@@ -47,7 +56,14 @@ export function Main() {
                     }}
                     initial={{ borderRadius: "0%" }}
                 >
-                    <Text>Pebbles</Text>
+                    <Center
+                        w={`${loadingAnimSize}px`}
+                        h={`${loadingAnimSize}px`}
+                    >
+                        <Text fontSize={{ base: "md", md: "lg" }}>
+                            MusicPebbles.com
+                        </Text>
+                    </Center>
                 </motion.div>
             </Flex>
             <motion.div

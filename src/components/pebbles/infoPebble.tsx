@@ -31,18 +31,17 @@ export default function InfoPebble(props: {
         >
             <Flex flexDir={"column"}>
                 <Text
-                    fontSize={`${HU * 1.5}px`}
+                    fontSize={`${HU * 0.85}px`}
                     textAlign={"center"}
                     fontWeight={"semibold"}
                 >
-                    Pebbles
+                    MusicPebbles.com
                 </Text>
             </Flex>
             <Button
                 bg={"red.500"}
                 h={`${HU * 2.5}px`}
                 w={`${WU === HU ? HU * 7 : WU * 6}px`}
-                m={`${HU * 0.1}px`}
                 boxShadow={"#c33 0px 1px 8px"}
                 borderRadius={{ base: "5px", md: "15px" }}
                 _hover={{ transform: "scale(1.02)", bg: "red.600" }}
@@ -75,12 +74,7 @@ export default function InfoPebble(props: {
                     </Text>
                 </Flex>
             </Button>
-            <Flex
-                flexDir={"column"}
-                h={`${HU * 2}px`}
-                textAlign={"center"}
-                mt={`${HU * 0.1}px`}
-            >
+            <Flex flexDir={"column"} h={`${HU * 2}px`} textAlign={"center"}>
                 <Text fontSize={{ base: `${HU * 0.9}px`, md: `${HU * 0.7}px` }}>
                     An Alfie Ranstead Project
                 </Text>

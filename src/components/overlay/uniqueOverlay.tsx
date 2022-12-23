@@ -359,8 +359,10 @@ export default function UniqueOverlay(props: {
                                     >
                                         <Image
                                             src={
-                                                artist.artist.images[0].url ??
-                                                "/unknown.png"
+                                                artist.artist.images.length > 0
+                                                    ? artist.artist.images[0]
+                                                          .url
+                                                    : "/unknown.png"
                                             }
                                             alt={artist.artist.name}
                                         />

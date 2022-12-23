@@ -77,64 +77,70 @@ export default function AudioPebble(props: {
                 borderRadius={"10px"}
             >
                 {props.audioPlayer.playing !== undefined ? (
-                    <Center flexDir={"row"} w={"100%"} h={"100%"}>
-                        <Flex
-                            w={`${WU * 2}px`}
-                            h={`${WU * 3}px`}
-                            pos={"relative"}
-                            flexDir={"column"}
-                            justifyContent={"center"}
-                            alignItems={"center"}
-                            overflow={"hidden"}
-                            onMouseOver={openHover}
-                            onMouseLeave={closeHover}
-                            onClick={redirectToSpotify}
-                        >
-                            <Image
-                                src={
-                                    props.audioPlayer.playing.album.images[0]
-                                        .url
-                                }
-                                className={"object-contain"}
-                                alt={"Currently playing song"}
-                            />
-                        </Flex>
-                        <Flex
-                            flexDir={"column"}
-                            w={`${WU * 5}px`}
-                            h={`${HU * 6.5}px`}
-                            px={`${WU * 0.25}px`}
-                            justifyContent={"center"}
-                            alignItems={""}
-                        >
-                            <Flex
-                                w={`${WU * 5}px`}
-                                h={`${HU * 3.5}px`}
-                                overflow={"hidden"}
-                                my={1}
-                                justifyContent={"center"}
-                            >
+                    (() => {
+                        const playingImage =
+                            props.audioPlayer.playing.album.images.length > 0
+                                ? props.audioPlayer.playing.album.images[0].url
+                                : "/unknown.png";
+
+                        return (
+                            <Center flexDir={"row"} w={"100%"} h={"100%"}>
                                 <Flex
-                                    w={"100%"}
-                                    h={"100%"}
+                                    w={`${WU * 2}px`}
+                                    h={`${WU * 3}px`}
+                                    pos={"relative"}
                                     flexDir={"column"}
-                                    pb={`${HU * 0.5}px`}
-                                    fontSize={`${HU * 0.7}px`}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                    overflow={"hidden"}
+                                    onMouseOver={openHover}
+                                    onMouseLeave={closeHover}
+                                    onClick={redirectToSpotify}
                                 >
-                                    <Text>{currentSong.song}</Text>
-                                    <Text color={"whiteAlpha.700"}>
-                                        {currentSong.album}
-                                    </Text>
-                                    <Text>{currentSong.artist}</Text>
+                                    <Image
+                                        src={playingImage}
+                                        className={"object-contain"}
+                                        alt={"Currently playing song"}
+                                    />
                                 </Flex>
-                            </Flex>
-                            <AudioControls
-                                audioPlayer={props.audioPlayer}
-                                HU={HU * 1.75}
-                                WU={WU * 5}
-                            />
-                        </Flex>
-                    </Center>
+                                <Flex
+                                    flexDir={"column"}
+                                    w={`${WU * 5}px`}
+                                    h={`${HU * 6.5}px`}
+                                    px={`${WU * 0.25}px`}
+                                    justifyContent={"center"}
+                                    alignItems={""}
+                                >
+                                    <Flex
+                                        w={`${WU * 5}px`}
+                                        h={`${HU * 3.5}px`}
+                                        overflow={"hidden"}
+                                        my={1}
+                                        justifyContent={"center"}
+                                    >
+                                        <Flex
+                                            w={"100%"}
+                                            h={"100%"}
+                                            flexDir={"column"}
+                                            pb={`${HU * 0.5}px`}
+                                            fontSize={`${HU * 0.7}px`}
+                                        >
+                                            <Text>{currentSong.song}</Text>
+                                            <Text color={"whiteAlpha.700"}>
+                                                {currentSong.album}
+                                            </Text>
+                                            <Text>{currentSong.artist}</Text>
+                                        </Flex>
+                                    </Flex>
+                                    <AudioControls
+                                        audioPlayer={props.audioPlayer}
+                                        HU={HU * 1.75}
+                                        WU={WU * 5}
+                                    />
+                                </Flex>
+                            </Center>
+                        );
+                    })()
                 ) : (
                     <Center textAlign={"center"}>No Song Playing</Center>
                 )}

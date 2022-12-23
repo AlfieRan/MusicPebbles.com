@@ -83,6 +83,11 @@ function ArtistObject(props: {
     rating: number;
     WU: number;
 }) {
+    const artistImage =
+        props.artist.images.length > 0
+            ? props.artist.images[0]
+            : { width: 1, height: 1, url: "/unknown.png" };
+
     return (
         <Flex
             flexDir={"row"}
@@ -100,24 +105,16 @@ function ArtistObject(props: {
                     overflow={"hidden"}
                     mr={`${props.WU * 0.1}px`}
                     w={{
-                        base: `${
-                            props.WU * 2 * props.artist.images[0].width
-                        }px`,
-                        md: `${
-                            props.WU * 0.5 * props.artist.images[0].width
-                        }px`,
+                        base: `${props.WU * 2 * artistImage.width}px`,
+                        md: `${props.WU * 0.5 * artistImage.width}px`,
                     }}
                     h={{
-                        base: `${
-                            props.WU * 2 * props.artist.images[0].height
-                        }px`,
-                        md: `${
-                            props.WU * 0.5 * props.artist.images[0].height
-                        }px`,
+                        base: `${props.WU * 2 * artistImage.height}px`,
+                        md: `${props.WU * 0.5 * artistImage.height}px`,
                     }}
                 >
                     <Image
-                        src={props.artist.images[0].url ?? "/unknown.png"}
+                        src={artistImage.url}
                         alt={"Artist Image of " + props.artist.name}
                     />
                 </Flex>

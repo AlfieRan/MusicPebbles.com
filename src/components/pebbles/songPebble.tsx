@@ -97,130 +97,134 @@ export default function SongPebble(props: {
                         h={`${HU * 8.5}px`}
                         w={`${WU * 9.5}px`}
                     >
-                        {songs.slice(0, 5).map((song, i) => (
-                            <Flex
-                                flexDir={"row"}
-                                key={`${song.name}_preview`}
-                                justifyContent={"space-between"}
-                                mx={`${WU * 0.25}px`}
-                                my={`${HU * 0.05}px`}
-                                h={`${HU * 1.5}px`}
-                                w={`${WU * 9}px`}
-                            >
-                                <Flex alignItems={"center"}>
-                                    <Flex overflow={"hidden"}>
-                                        <Image
-                                            src={
-                                                song.album.images[0].url ??
-                                                "/unknown.png"
+                        {songs.slice(0, 5).map((song, i) => {
+                            const songImage =
+                                song.album.images.length > 0
+                                    ? song.album.images[0]
+                                    : {
+                                          width: 1,
+                                          height: 1,
+                                          url: "/unknown.png",
+                                      };
+
+                            return (
+                                <Flex
+                                    flexDir={"row"}
+                                    key={`${song.name}_preview`}
+                                    justifyContent={"space-between"}
+                                    mx={`${WU * 0.25}px`}
+                                    my={`${HU * 0.05}px`}
+                                    h={`${HU * 1.5}px`}
+                                    w={`${WU * 9}px`}
+                                >
+                                    <Flex alignItems={"center"}>
+                                        <Flex overflow={"hidden"}>
+                                            <Image
+                                                src={songImage.url}
+                                                alt={`${song.name} album art`}
+                                                width={
+                                                    songImage.width * HU * 1.4
+                                                }
+                                                height={
+                                                    songImage.width * HU * 1.4
+                                                }
+                                            />
+                                        </Flex>
+                                    </Flex>
+
+                                    <Flex
+                                        flexDir={"column"}
+                                        ml={{ base: "2px", md: "5px" }}
+                                        w={{
+                                            base: `${WU * 8 - HU * 1.5}px`,
+                                            md: `${WU * 8.3 - HU * 1.5}px`,
+                                        }}
+                                    >
+                                        <Text
+                                            fontSize={
+                                                song.name.length < 35
+                                                    ? `${
+                                                          HU === WU
+                                                              ? WU * 0.35
+                                                              : HU * 0.27
+                                                      }px`
+                                                    : `${
+                                                          HU === WU
+                                                              ? WU * 0.3
+                                                              : HU * 0.23
+                                                      }px`
                                             }
-                                            alt={`${song.name} album art`}
-                                            width={
-                                                song.album.images[0].width *
-                                                HU *
-                                                1.4
+                                        >
+                                            {`${i + 1}. ${song.name}`.substring(
+                                                0,
+                                                45
+                                            )}
+                                        </Text>
+
+                                        <Text
+                                            fontSize={
+                                                song.album.name.length < 35
+                                                    ? `${
+                                                          HU === WU
+                                                              ? WU * 0.3
+                                                              : HU * 0.22
+                                                      }px`
+                                                    : `${
+                                                          HU === WU
+                                                              ? WU * 0.25
+                                                              : HU * 0.2
+                                                      }px`
                                             }
-                                            height={
-                                                song.album.images[0].width *
-                                                HU *
-                                                1.4
-                                            }
-                                        />
+                                            color={"whiteAlpha.500"}
+                                        >
+                                            {song.album.name}
+                                        </Text>
+                                        <Text
+                                            fontSize={`${
+                                                HU === WU ? WU * 0.3 : HU * 0.23
+                                            }px`}
+                                        >
+                                            {song.artists
+                                                .map((artist) => artist.name)
+                                                .join(", ")}
+                                        </Text>
+                                    </Flex>
+                                    <Flex
+                                        h={"100%"}
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                    >
+                                        <Link
+                                            href={song.external_urls.spotify}
+                                            _hover={{
+                                                transform: "scale(1.1)",
+                                            }}
+                                            _active={{
+                                                transform: "scale(0.9)",
+                                            }}
+                                            h={{
+                                                base: `${WU * 0.75}px`,
+                                                md: `${WU * 0.5}px`,
+                                            }}
+                                            w={{
+                                                base: `${WU * 0.75}px`,
+                                                md: `${WU * 0.5}px`,
+                                            }}
+                                            minH={"21px"}
+                                            minW={"21px"}
+                                            isExternal
+                                        >
+                                            <Image
+                                                src={
+                                                    "/spotifyBranding/icons/white.png"
+                                                }
+                                                alt={"Spotify Icon"}
+                                            />
+                                        </Link>
                                     </Flex>
                                 </Flex>
-
-                                <Flex
-                                    flexDir={"column"}
-                                    ml={{ base: "2px", md: "5px" }}
-                                    w={{
-                                        base: `${WU * 8 - HU * 1.5}px`,
-                                        md: `${WU * 8.3 - HU * 1.5}px`,
-                                    }}
-                                >
-                                    <Text
-                                        fontSize={
-                                            song.name.length < 35
-                                                ? `${
-                                                      HU === WU
-                                                          ? WU * 0.35
-                                                          : HU * 0.27
-                                                  }px`
-                                                : `${
-                                                      HU === WU
-                                                          ? WU * 0.3
-                                                          : HU * 0.23
-                                                  }px`
-                                        }
-                                    >
-                                        {`${i + 1}. ${song.name}`.substring(
-                                            0,
-                                            45
-                                        )}
-                                    </Text>
-
-                                    <Text
-                                        fontSize={
-                                            song.album.name.length < 35
-                                                ? `${
-                                                      HU === WU
-                                                          ? WU * 0.3
-                                                          : HU * 0.22
-                                                  }px`
-                                                : `${
-                                                      HU === WU
-                                                          ? WU * 0.25
-                                                          : HU * 0.2
-                                                  }px`
-                                        }
-                                        color={"whiteAlpha.500"}
-                                    >
-                                        {song.album.name}
-                                    </Text>
-                                    <Text
-                                        fontSize={`${
-                                            HU === WU ? WU * 0.3 : HU * 0.23
-                                        }px`}
-                                    >
-                                        {song.artists
-                                            .map((artist) => artist.name)
-                                            .join(", ")}
-                                    </Text>
-                                </Flex>
-                                <Flex
-                                    h={"100%"}
-                                    justifyContent={"center"}
-                                    alignItems={"center"}
-                                >
-                                    <Link
-                                        href={song.external_urls.spotify}
-                                        _hover={{
-                                            transform: "scale(1.1)",
-                                        }}
-                                        _active={{
-                                            transform: "scale(0.9)",
-                                        }}
-                                        h={{
-                                            base: `${WU * 0.75}px`,
-                                            md: `${WU * 0.5}px`,
-                                        }}
-                                        w={{
-                                            base: `${WU * 0.75}px`,
-                                            md: `${WU * 0.5}px`,
-                                        }}
-                                        minH={"21px"}
-                                        minW={"21px"}
-                                        isExternal
-                                    >
-                                        <Image
-                                            src={
-                                                "/spotifyBranding/icons/white.png"
-                                            }
-                                            alt={"Spotify Icon"}
-                                        />
-                                    </Link>
-                                </Flex>
-                            </Flex>
-                        ))}
+                            );
+                        })}
                     </Flex>
                 </Flex>
             ) : (
