@@ -172,6 +172,7 @@ export default function ShareOverlay(props: {
                     <ExitButton
                         fn={props.exit}
                         size={Math.min(sizes.WU, sizes.HU)}
+                        noBg={true}
                     />
                 </Flex>
                 <Flex flexDir={"column"}>

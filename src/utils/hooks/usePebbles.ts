@@ -172,12 +172,12 @@ export function usePebbles() {
                     y: 1,
                 }),
                 artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 3 }),
-                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 6 }),
-                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 0 }),
-                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 9 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 7 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 2 }),
+                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
                     x: 0,
-                    y: 2,
+                    y: 6,
                 }),
                 time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 1 }),
             };

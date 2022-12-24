@@ -1,6 +1,10 @@
 import { Button } from "@chakra-ui/react";
 
-export default function ExitButton(props: { fn: () => void; size: number }) {
+export default function ExitButton(props: {
+    fn: () => void;
+    size: number;
+    noBg?: boolean;
+}) {
     return (
         <Button
             w={`${props.size}px`}
@@ -9,7 +13,7 @@ export default function ExitButton(props: { fn: () => void; size: number }) {
             minW={"10px"}
             p={`${props.size * 0.2}px`}
             onClick={props.fn}
-            bg={"red.500"}
+            bg={props.noBg ? "blackAlpha.400" : "red.500"}
             _hover={{ bg: "red.600", transform: "scale(1.05)" }}
             _active={{ bg: "red.700", transform: "scale(0.95)" }}
         >
