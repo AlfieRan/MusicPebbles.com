@@ -3,6 +3,7 @@ import { pebblePhysics } from "../../utils/types/pebbles";
 import { setHoveringType } from "../../utils/types/state";
 import { timeFrameType } from "../../utils/types/spotify";
 import { Dispatch, SetStateAction } from "react";
+import { wrapTimeString } from "../../utils/other/time";
 
 export default function TimePebble(props: {
     info: pebblePhysics;
@@ -59,12 +60,4 @@ export default function TimePebble(props: {
             </Flex>
         </Center>
     );
-}
-
-function wrapTimeString(time: timeFrameType) {
-    return time === "short_term"
-        ? "Last 4 Weeks"
-        : time === "medium_term"
-        ? "Last 6 Months"
-        : "All Time";
 }

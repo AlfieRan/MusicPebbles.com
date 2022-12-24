@@ -21,6 +21,7 @@ import { useScreen } from "../../utils/hooks/useScreen";
 import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 import { imageType, timeFrameType } from "../../utils/types/spotify";
 import { shortString } from "../../utils/other/basics";
+import { wrapTimeString } from "../../utils/other/time";
 
 // share overlay should be 9:16 aspect ratio for social media
 
@@ -50,6 +51,18 @@ export default function ShareOverlay(props: {
         height: 1,
         url: "/unknown.png",
     });
+
+    const [displayName, setDisplayName] = useState<string>("unknown");
+
+    useEffect(() => {
+        if (props.profile.profile.profile === undefined) {
+            setDisplayName("unknown");
+            return;
+        }
+        setDisplayName(
+            shortString(props.profile.profile.profile.display_name, 27)
+        );
+    }, [props.profile.profile.profile]);
 
     useEffect(() => {
         if (props.profile.profile.artists === undefined) {
@@ -336,12 +349,25 @@ export default function ShareOverlay(props: {
                         justifyContent={"flex-end"}
                     >
                         <Text
-                            fontSize={`${sizes.WU * 0.7}px`}
+                            fontSize={`${
+                                displayName.length < 15
+                                    ? sizes.WU * 0.7
+                                    : displayName.length < 20
+                                    ? sizes.WU * 0.6
+                                    : displayName.length < 25
+                                    ? sizes.WU * 0.48
+                                    : sizes.WU * 0.38
+                            }px`}
                             fontWeight={"semibold"}
                             textAlign={"left"}
                         >
-                            {props.profile.profile.profile?.display_name ??
-                                "unknown"}
+                            {displayName}
+                        </Text>
+                        <Text
+                            fontSize={`${sizes.WU * 0.4}px`}
+                            textAlign={"left"}
+                        >
+                            {wrapTimeString(props.timeFrame)}
                         </Text>
                     </Flex>
                 </Flex>
