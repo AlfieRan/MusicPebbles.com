@@ -143,7 +143,7 @@ export function usePebbles() {
             const height =
                 gridItem.height * gridItemSize +
                 padding * (gridItem.height - 1);
-            console.log("gridItem size:", gridItemSize, "width:", width);
+
             return { dims: { width, height }, pos: { x, y } };
         }
 
