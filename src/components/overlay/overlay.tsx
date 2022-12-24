@@ -12,6 +12,7 @@ import BugOverlay from "./bugOverlay";
 import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 import PopUp from "./popUp";
 import { Dispatch, SetStateAction } from "react";
+import ShareOverlay from "./shareOverlay";
 
 export function Overlay(props: {
     info: overlayStateType;
@@ -89,6 +90,14 @@ export function Overlay(props: {
                         )}
                         {props.info.type === "popup" && (
                             <PopUp WU={WU} HU={HU} exit={props.closePopUp} />
+                        )}
+                        {props.info.type === "share" && (
+                            <ShareOverlay
+                                uniqueness={props.uniqueness}
+                                timeFrame={props.time}
+                                profile={props.profile}
+                                exit={props.hide}
+                            />
                         )}
                     </motion.div>
                 )}

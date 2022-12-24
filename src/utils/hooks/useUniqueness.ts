@@ -10,7 +10,7 @@ import {
     artistsType,
     artistType,
 } from "../types/spotify";
-import { uniqueSigmoid } from "../other/basics";
+import { shortString, uniqueSigmoid } from "../other/basics";
 import { fadeBetween } from "../other/Colours";
 
 const frequencyDependency = 0.35;
@@ -204,11 +204,9 @@ function getUniquenessDetails(rating: number, artists?: artistsType): string {
         : rating >= 40
         ? "Wow, you're really mainstream. You probably listen to the radio, and are either over 35 or upper class 🥲 (if so, please donate!)"
         : rating >= 35
-        ? `"My favourite artist is this really underground group called ${
-              artists !== undefined
-                  ? artists[artists.length - 1].name
-                  : "The Beatles"
-          }, you should check them out." - You, probably.`
+        ? `"My favourite artist is this really underground group called ${getShortTopArtist(
+              artists
+          )}, you should check them out." - You, probably.`
         : rating >= 25
         ? "Do you only listen to artists who live in mansions? Your taste is very mainstream, try listening to something different once in a while."
         : rating >= 15
@@ -218,4 +216,15 @@ function getUniquenessDetails(rating: number, artists?: artistsType): string {
 
 function getUniquenessColour(rating: number): string {
     return fadeBetween("#ff0000", "#11ff00", 100, rating);
+}
+
+function getShortTopArtist(artists: artistsType | undefined) {
+    if (artists === undefined) return "The Beatles";
+
+    let topArtist = "The Beatles";
+    for (let i = 1; i < Math.min(artists.length, 5); i++) {
+        if (artists[i].name.length < 30) topArtist = artists[i].name;
+    }
+
+    return topArtist;
 }

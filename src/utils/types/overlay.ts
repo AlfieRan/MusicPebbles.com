@@ -33,6 +33,11 @@ export interface popUpComponentOverlay {
     type: "popup";
 }
 
+export interface shareComponentOverlay {
+    hidden: false;
+    type: "share";
+}
+
 export interface hiddenOverlay {
     hidden: true;
 }
@@ -44,6 +49,7 @@ export type overlayStateType =
     | profileComponentOverlay
     | bugComponentOverlay
     | popUpComponentOverlay
+    | shareComponentOverlay
     | hiddenOverlay;
 
 type profileOverlayButtonColourType =
