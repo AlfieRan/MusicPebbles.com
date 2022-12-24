@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <header>
-                <title>Pebbles</title>
+                <title>MusicPebbles.com</title>
             </header>
             <ChakraProvider theme={theme}>
                 <Flex
