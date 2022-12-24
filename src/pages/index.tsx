@@ -46,7 +46,7 @@ const Page = () => {
                     borderRadius={"20px"}
                 >
                     <Text fontSize={"3xl"} fontWeight={"semibold"}>
-                        Pebbles
+                        MusicPebbles.com
                     </Text>
                     <Text fontSize={"md"}>
                         The Spotify dashboard that&apos;s actually useful.
@@ -133,7 +133,7 @@ const Page = () => {
                         )}
                     </Link>
                     <Text fontSize={"xs"} color={"whiteAlpha.600"}>
-                        Pebbles is not affiliated with Spotify
+                        MusicPebbles.com is not affiliated with Spotify
                     </Text>
                 </Flex>
             </Flex>
