@@ -21,11 +21,9 @@ export async function getSession(
         return false;
     }
 
-    // get user profile 9eazdm7wc849guoo15lt5r7os
+    // get user profile
     const profile = await redisClient.get(`spotify:${userId}:profile`);
-    // const profile = await redisClient.get(
-    //     `spotify:id:profile`
-    // );
+    // const profile = await redisClient.get(`spotify:id:profile`);
 
     // make sure user's profile exists
     if (!profile) {

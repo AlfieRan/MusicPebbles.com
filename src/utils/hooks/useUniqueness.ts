@@ -10,7 +10,7 @@ import {
     artistsType,
     artistType,
 } from "../types/spotify";
-import { shortString, uniqueSigmoid } from "../other/basics";
+import { uniqueSigmoid } from "../other/basics";
 import { fadeBetween } from "../other/Colours";
 
 const frequencyDependency = 0.35;
@@ -30,7 +30,7 @@ const emptyArtistUniqueObject = {
     userRating: 0,
 };
 
-const emptyUnqiueObject = {
+export const emptyUniqueObject = {
     rating: 50,
     colour: "#FFD700",
     details: getUniquenessDetails(50),
@@ -55,9 +55,9 @@ export type useUniquenessType = {
 
 export function useUniqueness(): useUniquenessType {
     const [uniqueness, setUniqueness] = useState<Uniqueness>({
-        short_term: emptyUnqiueObject,
-        medium_term: emptyUnqiueObject,
-        long_term: emptyUnqiueObject,
+        short_term: emptyUniqueObject,
+        medium_term: emptyUniqueObject,
+        long_term: emptyUniqueObject,
     });
     const [loading, setLoading] = useState({
         short_term: true,

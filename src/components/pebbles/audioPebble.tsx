@@ -5,7 +5,6 @@ import {
     setHoveringType,
     songOverlayInfo,
 } from "../../utils/types/state";
-import { motion } from "framer-motion";
 import AudioControls from "../other/audioControls";
 import { useEffect, useState } from "react";
 import { wrapNames } from "../../utils/other/wrapNames";

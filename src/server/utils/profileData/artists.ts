@@ -1,4 +1,3 @@
-import { profileFull } from "../../../utils/types/oauth";
 import {
     artistApiResponseType,
     artistsType,

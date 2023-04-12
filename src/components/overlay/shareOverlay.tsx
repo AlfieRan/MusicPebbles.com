@@ -1,22 +1,13 @@
 import {
-    Button,
     Flex,
-    Link,
     Text,
-    Grid,
-    GridItem,
     Image,
     CircularProgress,
     CircularProgressLabel,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { profileHookType } from "../../utils/types/state";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ExitButton from "./utils/exitButton";
-import {
-    overlayStateType,
-    profileOverlayButtonType,
-} from "../../utils/types/overlay";
 import { useScreen } from "../../utils/hooks/useScreen";
 import { useUniquenessType } from "../../utils/hooks/useUniqueness";
 import { imageType, timeFrameType } from "../../utils/types/spotify";
@@ -29,13 +20,24 @@ export default function ShareOverlay(props: {
     profile: profileHookType;
     uniqueness: useUniquenessType;
     timeFrame: timeFrameType;
-    exit: () => void;
+    exit?: () => void;
 }) {
     const screenHook = useScreen();
-    const internalVerticalPadding = 0.4;
+    const internalVerticalPadding = 0.35;
     const [sizes, setSizes] = useState<{ WU: number; HU: number }>(
         getSizes(screenHook)
     );
+    const [profileId, setProfileId] = useState<string>("");
+
+    useEffect(() => {
+        if (props.profile.profile.profile === undefined) {
+            setProfileId("");
+            return;
+        }
+
+        setProfileId(props.profile.profile.profile.id);
+    }, [props.profile.profile.profile]);
+
     const [Loading, setLoading] = useState(true);
 
     const [topArtistImage, setTopArtistImage] = useState<imageType>({
@@ -169,11 +171,15 @@ export default function ShareOverlay(props: {
                             MusicPebbles.com
                         </Text>
                     </Flex>
-                    <ExitButton
-                        fn={props.exit}
-                        size={Math.min(sizes.WU, sizes.HU)}
-                        noBg={true}
-                    />
+                    <Flex flexDir={"row"} hidden={props.exit === undefined}>
+                        <ExitButton
+                            fn={
+                                props.exit !== undefined ? props.exit : () => {}
+                            }
+                            size={Math.min(sizes.WU, sizes.HU)}
+                            noBg={true}
+                        />
+                    </Flex>
                 </Flex>
                 <Flex flexDir={"column"}>
                     <Flex
@@ -321,55 +327,57 @@ export default function ShareOverlay(props: {
                         </Flex>
                     </Flex>
                 </Flex>
-                <Flex
-                    w={`${sizes.WU * 9.2}px`}
-                    alignItems={"center"}
-                    flexDir={"row"}
-                >
+                <Flex w={`${sizes.WU * 9.2}px`} flexDir={"column"}>
                     <Flex
-                        h={"fit-content"}
-                        overflow={"hidden"}
-                        borderRadius={`${sizes.WU * 0.1}px`}
-                        minW={`${sizes.WU * 2}px`}
-                        boxShadow={"#333 2px 4px 8px"}
+                        w={`${sizes.WU * 9.2}px`}
+                        alignItems={"center"}
+                        flexDir={"row"}
                     >
-                        <Image
-                            src={
-                                props.profile.profile.profile?.image_url ??
-                                "/unknown.png"
-                            }
-                            alt={"Artist Image"}
-                            width={topSongImage.width * sizes.WU * 2}
-                            height={topSongImage.height * sizes.WU * 2}
-                        />
-                    </Flex>
-                    <Flex
-                        flexDir={"column"}
-                        w={"100%"}
-                        ml={`${sizes.WU * 0.3}px`}
-                        justifyContent={"flex-end"}
-                    >
-                        <Text
-                            fontSize={`${
-                                displayName.length < 15
-                                    ? sizes.WU * 0.7
-                                    : displayName.length < 20
-                                    ? sizes.WU * 0.6
-                                    : displayName.length < 25
-                                    ? sizes.WU * 0.48
-                                    : sizes.WU * 0.38
-                            }px`}
-                            fontWeight={"semibold"}
-                            textAlign={"left"}
+                        <Flex
+                            h={"fit-content"}
+                            overflow={"hidden"}
+                            borderRadius={`${sizes.WU * 0.1}px`}
+                            minW={`${sizes.WU * 2}px`}
+                            boxShadow={"#333 2px 4px 8px"}
                         >
-                            {displayName}
-                        </Text>
-                        <Text
-                            fontSize={`${sizes.WU * 0.4}px`}
-                            textAlign={"left"}
+                            <Image
+                                src={
+                                    props.profile.profile.profile?.image_url ??
+                                    "/unknown.png"
+                                }
+                                alt={"Artist Image"}
+                                width={topSongImage.width * sizes.WU * 2}
+                                height={topSongImage.height * sizes.WU * 2}
+                            />
+                        </Flex>
+                        <Flex
+                            flexDir={"column"}
+                            w={"100%"}
+                            ml={`${sizes.WU * 0.3}px`}
+                            justifyContent={"flex-end"}
                         >
-                            {wrapTimeString(props.timeFrame)}
-                        </Text>
+                            <Text
+                                fontSize={`${
+                                    displayName.length < 15
+                                        ? sizes.WU * 0.7
+                                        : displayName.length < 20
+                                        ? sizes.WU * 0.6
+                                        : displayName.length < 25
+                                        ? sizes.WU * 0.48
+                                        : sizes.WU * 0.38
+                                }px`}
+                                fontWeight={"semibold"}
+                                textAlign={"left"}
+                            >
+                                {displayName}
+                            </Text>
+                            <Text
+                                fontSize={`${sizes.WU * 0.4}px`}
+                                textAlign={"left"}
+                            >
+                                {wrapTimeString(props.timeFrame)}
+                            </Text>
+                        </Flex>
                     </Flex>
                 </Flex>
             </Flex>

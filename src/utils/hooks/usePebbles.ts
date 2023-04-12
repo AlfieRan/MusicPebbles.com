@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    emptyPebblePhysics,
-    pebbleObjType,
-    screenType,
-} from "../types/pebbles";
+import { emptyPebblePhysics, pebbleObjType } from "../types/pebbles";
 import { useScreen } from "./useScreen";
 
 // There are 2 screen sizes: small and large.
@@ -169,17 +165,17 @@ export function usePebbles() {
             const newPebbleState: pebbleObjType = {
                 profile: getGridItemPosition(pebbleSizes.profile, {
                     x: 0,
-                    y: 1,
+                    y: 0,
                 }),
-                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 3 }),
-                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 7 }),
-                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 2 }),
-                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 0 }),
+                artist: getGridItemPosition(pebbleSizes.artist, { x: 0, y: 2 }),
+                song: getGridItemPosition(pebbleSizes.song, { x: 0, y: 6 }),
+                unique: getGridItemPosition(pebbleSizes.unique, { x: 0, y: 5 }),
+                genre: getGridItemPosition(pebbleSizes.genre, { x: 0, y: 9 }),
                 playing: getGridItemPosition(pebbleSizes.playing, {
                     x: 0,
-                    y: 6,
+                    y: 1,
                 }),
-                time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 1 }),
+                time: getGridItemPosition(pebbleSizes.time, { x: 1, y: 0 }),
             };
             setPebbleState(newPebbleState);
             setComponentHeight(gridSize.h * (padding + gridItemSize) + padding);

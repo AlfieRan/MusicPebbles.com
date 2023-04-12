@@ -212,7 +212,7 @@ export default function UniqueOverlay(props: {
                 >
                     {props.uniqueness.uniqueness[props.timeFrame].artists
                         .slice(0, 10)
-                        .map((artist, index) => (
+                        .map((artist) => (
                             <Flex
                                 key={"UniquenessOverlay" + artist.artist.id}
                                 bg={"blackAlpha.500"}

@@ -1,5 +1,4 @@
 import { artistApiResponseType, songApiResponseType } from "./spotify";
-import { uniqueHookType } from "./uniqueness";
 
 export interface songComponentOverlay {
     hidden: false;
@@ -65,7 +64,7 @@ interface profileOverlayButtonLinkType {
     color: profileOverlayButtonColourType;
 }
 
-interface profileoOverlayButtonButtonType {
+interface profileOverlayButtonButtonType {
     type: "button";
     onClick: () => void;
     text: string;
@@ -74,4 +73,4 @@ interface profileoOverlayButtonButtonType {
 
 export type profileOverlayButtonType =
     | profileOverlayButtonLinkType
-    | profileoOverlayButtonButtonType;
+    | profileOverlayButtonButtonType;
