@@ -65,3 +65,8 @@ The additional development environment variable `LOCAL` can also be set to enabl
 tools, this is only turned on if it is set exactly to `true` and not any other value. This is not required and will be
 ignored if not set.
 
+
+# Built by Alfie Ranstead
+This project was built by [Alfie Ranstead](https://alfieranstead.com) and is licensed under the MIT License.
+Please feel free to use this project as you wish, but if you do please credit me and link back to this repository.
+Pull requests are welcome, and if you have any questions or issues please feel free to open an issue on the repository.
