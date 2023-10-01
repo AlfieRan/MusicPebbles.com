@@ -8,11 +8,8 @@ export default function PopUp(props: {
     // TODO: This is buggy if it is displayed as soon as the page loads, but it works fine if it is displayed after a few seconds, so display it after a few seconds
     return (
         <Flex
-            flexDir={"column"}
-            bg={"MidGrey"}
+            className={"flex flex-col bg-black-500 py-3 rounded-lg"}
             px={`${props.WU * 0.3}px`}
-            py={3}
-            borderRadius={"10px"}
             key={"PopUpOverlay"}
         >
             <Flex
@@ -40,14 +37,9 @@ export default function PopUp(props: {
                         Project.
                     </Text>
                     <Flex
-                        flexDir={"row"}
-                        my={4}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                        bg={"whiteAlpha.200"}
-                        py={2}
-                        px={3}
-                        borderRadius={{ base: "7px", md: "15px" }}
+                        className={
+                            "flex-row my-4 items-center justify-center bg-black-400 py-2 px-3 rounded-lg"
+                        }
                     >
                         <Text
                             fontSize={{

@@ -79,11 +79,9 @@ export default function ProfileOverlay(props: {
     const router = useRouter();
     return (
         <Flex
-            flexDir={"column"}
-            bg={"MidGrey"}
+            className={"flex-col bg-black-500 rounded-lg"}
             px={`${sizes.WU * 0.4}px`}
             py={`${sizes.WU * 0.25}px`}
-            borderRadius={"10px"}
             w={`${sizes.WU * 9}px`}
             key={"ProfileOverlay"}
         >

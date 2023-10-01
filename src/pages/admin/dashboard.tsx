@@ -3,7 +3,8 @@ import { Center, Flex, Table, Text, Button } from "@chakra-ui/react";
 import { ApiError, errorReports } from "../../utils/types/errors";
 import { useScreen } from "../../utils/hooks/useScreen";
 
-type selectionViews = "errors" | "reports";
+const selectionViews = ["errors", "reports"] as const;
+type SelectionViews = typeof selectionViews[number];
 
 const Page = () => {
     const [errors, setErrors] = useState<ApiError[]>([]);
@@ -13,8 +14,7 @@ const Page = () => {
         error: "",
     });
     const screenHook = useScreen();
-    const selectionOptions: selectionViews[] = ["errors", "reports"];
-    const [selected, setSelected] = useState<selectionViews>("errors");
+    const [selected, setSelected] = useState<SelectionViews>("errors");
 
     useEffect(() => {
         const fetchErrors = async () => {
@@ -74,7 +74,7 @@ const Page = () => {
                         w={"90vw"}
                         justifyContent={"space-around"}
                     >
-                        {selectionOptions.map((option) => (
+                        {selectionViews.map((option) => (
                             <Button
                                 onClick={() => setSelected(option)}
                                 key={option}

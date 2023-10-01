@@ -65,14 +65,12 @@ export default function UniqueOverlay(props: {
 
     return (
         <Flex
-            flexDir={"column"}
-            bg={"MidGrey"}
+            className={
+                "flex-col bg-black-500 py-3 rounded-lg overflow-y-hidden"
+            }
             px={{ base: `${props.WU * 0.2}px`, md: `${props.WU * 0.1}px` }}
-            py={3}
-            borderRadius={"10px"}
             w={`${props.WU * 9.5}px`}
             maxH={`${props.HU * 8}px`}
-            overflowY={"hidden"}
             key={"ProfileOverlay"}
         >
             <Flex
@@ -90,7 +88,6 @@ export default function UniqueOverlay(props: {
                 mt={2}
                 p={{ base: `${props.WU * 0.2}px`, md: `${props.WU * 0.1}px` }}
                 borderRadius={{ base: "5px", md: "10px" }}
-                bg={"whiteAlpha.300"}
                 overflowY={"scroll"}
                 overflowX={"hidden"}
             >

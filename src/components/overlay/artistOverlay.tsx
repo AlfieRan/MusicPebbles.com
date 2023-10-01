@@ -30,14 +30,11 @@ export default function ArtistOverlay(props: {
 
     return (
         <Flex
-            flexDir={"column"}
-            bg={"MidGrey"}
+            className={"flex-col bg-black-500 rounded-lg items-center"}
             px={`${props.WU * 0.05}px`}
             py={3}
-            borderRadius={"10px"}
             w={`${props.WU * 9.5}px`}
             key={"ProfileOverlay"}
-            alignItems={"center"}
         >
             <Flex
                 flexDir={"row"}
@@ -90,15 +87,13 @@ function ArtistObject(props: {
 
     return (
         <Flex
-            flexDir={"row"}
-            bg={"whiteAlpha.200"}
+            className={"flex-row bg-black-400 justify-between"}
             w={{ base: `${props.WU * 9.2}px`, md: `${props.WU * 4.5}px` }}
             borderRadius={{ base: "2px", md: "5px" }}
             px={{ base: `${props.WU * 0.15}px`, md: `${props.WU * 0.075}px` }}
             py={{ base: `${props.WU * 0.1}px`, md: `${props.WU * 0.05}px` }}
             my={{ base: `${props.WU * 0.075}px`, md: `${props.WU * 0.025}px` }}
             mx={`${props.WU * 0.05}px`}
-            justifyContent={"space-between"}
         >
             <Flex>
                 <Flex

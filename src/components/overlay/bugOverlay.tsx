@@ -45,11 +45,8 @@ export default function BugOverlay(props: {
 
     return (
         <Flex
-            flexDir={"column"}
-            bg={"MidGrey"}
+            className={"flex-col bg-black-500 py-3 rounded-lg"}
             px={`${props.WU * 0.2}px`}
-            py={3}
-            borderRadius={"10px"}
             w={`${props.WU * 9.4}px`}
             key={"ProfileOverlay"}
         >
@@ -80,14 +77,18 @@ export default function BugOverlay(props: {
                             </Text>
                         </Flex>
                     )}
-                    <Textarea
+                    <textarea
+                        className={
+                            "w-full h-full bg-black-400 text-sm px-2 py-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        }
+                        style={{
+                            minHeight: `${props.HU * 2}px`,
+                            maxHeight: `${props.HU * 5}px`,
+                        }}
                         placeholder={"What went wrong?"}
                         value={bugReport}
                         onChange={(e) => setBugReport(e.target.value)}
-                        variant="filled"
-                        bg={"LightGrey"}
                         maxLength={1000}
-                        maxH={`${props.HU * 5}px`}
                     />
                     <Flex
                         w={"full"}
